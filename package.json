@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "mongodb": "^3.6.6",
     "puppeteer": "^9.1.1",
+    "template_func": "^1.0.11",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"

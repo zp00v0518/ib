@@ -7,6 +7,7 @@ const settings = {
     currMoment: 1262615400,
     maxLowPeriod: time.week * 26,
     startCash: 1000,
+    partPrice: 100,
   },
   mutations: {
     CURRMOMENT_INCREMENT(state) {

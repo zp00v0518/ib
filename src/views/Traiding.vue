@@ -4,22 +4,21 @@
       {{ isWork ? 'Pause' : 'Start' }}
     </button>
     <Settings></Settings>
+    <Portfolio></Portfolio>
   </div>
 </template>
 
 <script>
 import Settings from '../components/Settings'
+import Portfolio from '../components/Portfolio'
 
 export default {
   name: 'Traiding',
-  components: { Settings },
-  created() {
-    console.log(this.$api)
-  },
+  components: { Settings, Portfolio },
   data() {
     return {
       isWork: false,
-      timeout: 2000,
+      timeout: 50,
       lastTimestamp: 0,
     }
   },
@@ -48,8 +47,6 @@ export default {
           $store.commit('ADD_STOCKS_TO_LIST', { symbol, data: objData[symbol] })
         })
       });
-      console.log($store.state.stocks.list)
-
       $store.commit('CURRMOMENT_INCREMENT')
       if (this.isWork) {
         setTimeout(() => {

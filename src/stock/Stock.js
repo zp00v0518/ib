@@ -9,6 +9,7 @@ class Stock {
     this.price = 0
   }
   addData(data) {
+    if (this.data[data.timestamp]) return;
     this.data[data.timestamp] = data
     this.price = data.close
     this.setMaxLowPrice(data)
