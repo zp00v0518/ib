@@ -13,6 +13,8 @@ export default {
   data() {
     return {
       candidateToBy: [],
+			profit: 5,
+			loss: 30,
     }
   },
   computed: {
@@ -36,7 +38,6 @@ export default {
       this.getCandidateToBuy()
       this.buyStocks()
 			this.$store.commit('SET_COST_PORTFOLIO')
-			console.log(this.portfolio.list)
     },
     getCandidateToBuy() {
       this.candidateToBy = []

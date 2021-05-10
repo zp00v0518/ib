@@ -26,7 +26,8 @@ const portfolio = {
       })
       state.cost = sums.reduce((acc, value) => {
         return (acc += value)
-      }, 0)
+      }, 0);
+			console.log(list)
     },
   },
   actions: {

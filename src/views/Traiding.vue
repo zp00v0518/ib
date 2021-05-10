@@ -56,12 +56,13 @@ export default {
     },
     formatDataResponse() {
       const { settings } = this
-      const week = 60 * 60 * 24 * 7
+      const day =  60 * 60 * 24
+      const week = day * 7
       const week_26 = week * 26
       const template = {
         period: {
           symbols: [],
-          range: [settings.currMoment - week_26, settings.currMoment],
+          range: [settings.currMoment - day * 3, settings.currMoment],
         },
         moment: {
           timestamp: 1000,
