@@ -10,6 +10,10 @@ async function getSymbolsFromPeriod(range, symbols = []) {
   }
 	let needFields = null;
 	if (symbols.length > 0){
+		needFields = {
+			timestamp: 1,
+			_id: 0
+		};
 		symbols.forEach(item => {
 			needFields[item] = 1;
 		})

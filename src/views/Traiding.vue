@@ -19,16 +19,14 @@ export default {
   data() {
     return {
       isWork: false,
-      timeout: 500,
+      timeout: 2000,
+      lastTimestamp: 0,
     }
   },
   computed: {
     settings() {
       return this.$store.state.settings
     },
-  },
-  created() {
-    console.log(this.settings)
   },
   methods: {
     handlerStart() {
@@ -37,13 +35,22 @@ export default {
     },
     async goTraiding() {
       if (!this.isWork) return
+      const { $store } = this
       const message = {
         type: '/traiding',
         data: this.formatDataResponse(),
       }
       const response = await this.$api.get(message)
-      console.log(response);
-      this.$store.commit('CURRMOMENT_INCREMENT')
+      const { period } = response
+      period.forEach((objData) => {
+        Object.keys(objData).forEach((symbol) => {
+          if (symbol === 'timestamp') return;
+          $store.commit('ADD_STOCKS_TO_LIST', { symbol, data: objData[symbol] })
+        })
+      });
+      console.log($store.state.stocks.list)
+
+      $store.commit('CURRMOMENT_INCREMENT')
       if (this.isWork) {
         setTimeout(() => {
           this.goTraiding()
