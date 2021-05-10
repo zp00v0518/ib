@@ -29,6 +29,7 @@ function symbolTemplate(indicators, index) {
   el.low = quote.low[index];
   el.open = quote.open[index];
   el.volume = quote.volume[index];
+  el.high = quote.high[index];
   return el;
 }
 

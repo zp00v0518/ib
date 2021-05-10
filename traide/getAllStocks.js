@@ -28,7 +28,7 @@ async function getAllStocks() {
   }
   result = splitDataByTime(result);
   find.close();
-  // await insertSplitr(result);
+  await insertSplitr(result);
   console.timeEnd("start");
 }
 

@@ -1,9 +1,9 @@
 const getPeriodRequest = require('./getPeriodRequest')
 const getMomentResponse = require('./getMomentResponse')
 
-async function handlerTraidingRequest(data) {
-  const { type, period, moment } = data
-
+async function handlerTraidingRequest(payload) {
+  const { type, data } = payload;
+  const { period, moment } = data;
   let periodResult = {}
   let momentResult = {}
   periodResult = await getPeriodRequest(period)

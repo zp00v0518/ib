@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       isWork: false,
-      timeout: 10000,
+      timeout: 500,
     }
   },
   computed: {
@@ -42,6 +42,8 @@ export default {
         data: this.formatDataResponse(),
       }
       const response = await this.$api.get(message)
+      console.log(response);
+      this.$store.commit('CURRMOMENT_INCREMENT')
       if (this.isWork) {
         setTimeout(() => {
           this.goTraiding()
@@ -49,14 +51,16 @@ export default {
       }
     },
     formatDataResponse() {
+      const { settings } = this
+      const week = 60 * 60 * 24 * 7
+      const week_26 = week * 26
       const template = {
         period: {
-          all: false,
           symbols: [],
+          range: [settings.currMoment - week_26, settings.currMoment],
         },
         moment: {
           timestamp: 1000,
-          all: false,
           symbols: [],
         },
       }
