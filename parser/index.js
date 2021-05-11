@@ -1,20 +1,10 @@
 const puppeteer = require("puppeteer");
 const parseOneItem = require("./parseOneItem");
 const saveResultToDB = require("./saveResultToDB");
+const browserConfig = require("./browserConfig");
 const list = require("./list").flat(Infinity);
 // list.length = 20;
 
-const browserConfig = {
-  defaultViewport: null,
-  // args: ["--window-size=1920,1070"], // размер имеет значение
-  // devtools: true,
-  // headless: false,
-  // args: [
-  //   "--window-size=1920,1070",
-  //   "--window-position=-310,-1080",
-  //   '--log-level="1"',
-  // ],
-};
 const stosks = new Set(list);
 
 async function parse() {

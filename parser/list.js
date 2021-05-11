@@ -1,6 +1,5 @@
 const list = [
   [
-    "YTESTQFTACHYON",
     "HCMC",
     "RETC",
     "RNVA",

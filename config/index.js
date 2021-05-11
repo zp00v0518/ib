@@ -6,6 +6,7 @@ const config = {
     collections: {
       data: { name: "data" },
       splitByTime: { name: "splitByTime" },
+      checkToBuy: { name: "checkToBuy" },
     },
   },
   server: {

@@ -118,7 +118,7 @@ export default {
       if (item.buyPrice >= item.stock.price) {
         return +item.change < 0.5
       }
-      return +item.change > 1.1
+      return +item.change > 1.2
     },
     getCandidateToBuy() {
       this.candidateToBy = []
