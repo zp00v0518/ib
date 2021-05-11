@@ -2,9 +2,10 @@ import { time } from '../../utils'
 
 const settings = {
   state: {
-    startMoment: 1262615400,
+    // startMoment: 1262615400 + ((time.week / 1000) * 104),
     stepTime: 60 * 60 * 24,
     currMoment: 1262615400,
+    // currMoment: 1262615400 + ((time.week / 1000) * 260),
     maxLowPeriod: (time.week / 1000) * 13,
     startCash: 1000,
     partPrice: 100,

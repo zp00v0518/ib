@@ -1,9 +1,9 @@
 const portfolio = {
   state: {
-    curCash: 1000,
+    curCash: 3000,
     list: {},
     cost: 1000,
-		maxLength: 15
+		maxLength: 20
   },
   mutations: {
     REDUCE_CURCASH(state, value) {

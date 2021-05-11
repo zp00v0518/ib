@@ -64,7 +64,7 @@ export default {
       const template = {
         period: {
           symbols: [],
-          range: [settings.currMoment - week, settings.currMoment],
+          range: [settings.currMoment - day * 4, settings.currMoment],
         },
         moment: {
           timestamp: 1000,

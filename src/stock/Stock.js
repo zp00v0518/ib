@@ -25,7 +25,7 @@ class Stock {
   }
   setSplit(data){
     const {splits} = data;
-    this.qty = splits.denominator * this.qty;
+    // this.qty = splits.denominator * this.qty;
   }
   setMaxLowPrice(data) {
     this.setMaxPrice(data.open)
