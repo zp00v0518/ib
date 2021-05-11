@@ -41,9 +41,11 @@ export default {
       }
       const response = await this.$api.get(message)
       const { period } = response
-      period.forEach((objData) => {
+      const arr = period.pop();
+      if(!arr) return
+      [arr].forEach((objData) => {
         Object.keys(objData).forEach((symbol) => {
-          if (symbol === 'timestamp') return;
+          if (symbol === 'timestamp' || symbol === '_id') return;
           $store.commit('ADD_STOCKS_TO_LIST', { symbol, data: objData[symbol] })
         })
       });
@@ -62,7 +64,7 @@ export default {
       const template = {
         period: {
           symbols: [],
-          range: [settings.currMoment - day * 3, settings.currMoment],
+          range: [settings.currMoment - day * 4, settings.currMoment],
         },
         moment: {
           timestamp: 1000,
