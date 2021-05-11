@@ -16,6 +16,7 @@
         <th>Now Price</th>
         <th>Change price</th>
         <th>Now Cost</th>
+        <th>Days in Portfolio</th>
       </thead>
       <tbody>
         <tr
@@ -28,8 +29,14 @@
           <td>{{ item.qty }}</td>
           <td>{{ item.buyPrice.toFixed(4) }}</td>
           <td>{{ getNowPrice(item.stock) }}</td>
-					<td class="portfolio__table__row--change" :class="{down: +item.change < 1}">{{item.change}}</td>
+          <td
+            class="portfolio__table__row--change"
+            :class="{ down: +item.change < 1 }"
+          >
+            {{ item.change }}
+          </td>
           <td>{{ getNowCost(item.stock, item.qty) }}</td>
+          <td>{{ Math.floor((settings.currMoment - item.dateBuy) / 60 / 60 / 24) }}</td>
         </tr>
       </tbody>
     </table>
@@ -71,7 +78,8 @@ export default {
     setpartPrice() {
       const { portfolio } = this
       const { maxLength, cost } = portfolio
-			const value = Math.floor(cost / maxLength) < 100 ? 100 : Math.floor(cost / maxLength);
+      const value =
+        Math.floor(cost / maxLength) < 100 ? 100 : Math.floor(cost / maxLength)
       this.$store.commit('SET_PARTPRICE', value)
     },
     getNowPrice(stock) {
@@ -108,9 +116,9 @@ export default {
     },
     checkToSell(item) {
       if (item.buyPrice >= item.stock.price) {
-				return +item.change < 0.7
+        return +item.change < 0.5
       }
-      return +item.change > 1.03
+      return +item.change > 1.1
     },
     getCandidateToBuy() {
       this.candidateToBy = []
@@ -120,9 +128,11 @@ export default {
         if (checkToBuy(item)) {
           this.candidateToBy.push(item)
         }
-      });
-			const listUse = Object.keys(portfolio.list);
-			this.candidateToBy = this.candidateToBy.filter(i => !listUse.includes(i.symbol))
+      })
+      const listUse = Object.keys(portfolio.list)
+      this.candidateToBy = this.candidateToBy.filter(
+        (i) => !listUse.includes(i.symbol)
+      )
     },
     checkToBuy(stock) {
       const { settings } = this
@@ -150,17 +160,18 @@ export default {
 </script>
 
 <style lang="scss">
-.portfolio{
-	&__table {
-		&__row {
-			&--change {
-				color: green;
-				font-weight: 600;
-				&.down{
-					color: red;
-				}
-			}
-		}
-	}
+.portfolio {
+  &__table {
+    &__row {
+      text-align: center;
+      &--change {
+        color: green;
+        font-weight: 600;
+        &.down {
+          color: red;
+        }
+      }
+    }
+  }
 }
 </style>

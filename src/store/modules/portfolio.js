@@ -18,6 +18,7 @@ const portfolio = {
         stock,
         qty,
         buyPrice: stock.price,
+        dateBuy: stock.timestamp
       }
     },
     SET_COST_PORTFOLIO(state) {
