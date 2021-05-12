@@ -3,6 +3,7 @@
 const querystring = require('querystring')
 
 async function parseOneItem(page, symbol) {
+  
   let endPeriod = Math.floor(Date.now() / 1000);
   const weekCount = 13;
   const stepToPast = 60 * 60 * 24 * 7 * weekCount;
@@ -24,10 +25,11 @@ async function parseOneItem(page, symbol) {
       end: query.period2,
     },
   }
+  if (!symbol) return result;
   const x = querystring.encode(query)
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?${x}`;
   const value = await getValue(page, url)
-  if (!value || !value.chart.result) {
+  if (!value || !value.chart || !value.chart.result || !value.chart.result[0]) {
     await page.close()
     return result
   }

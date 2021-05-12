@@ -6,6 +6,7 @@ const saveResultToDB = require('../saveResultToDB')
 const splitArrOnSmallArr = require('../splitArrOnSmallArr')
 const list = require('../list').flat(Infinity)
 const config = require('../../config')
+// list.length = 9;
 
 const stosks = new Set(list)
 const matrix = splitArrOnSmallArr(Array.from(stosks), 3)
@@ -42,14 +43,15 @@ async function parse() {
     return check
   });
   const symbolsList = result.map(i => i.symbol);
-  fs.writeFileSync('./parseResult.json', JSON.stringify(symbolsList));
+  fs.writeFileSync('./parser/parseForCheckBuyStocks/parseResult.json', JSON.stringify(symbolsList));
   await saveResultToDB(result, collectionName)
 }
 parse()
 
 function checkToBuy(values) {
+  if (!values) return false;
   const price = values[values.length - 1]
-  if (price > 90) return false;
+  if (!price || price > 90) return false;
   const min = Math.min(...values)
   const max = Math.max(...values)
   if (min / price > 0.8) return false
