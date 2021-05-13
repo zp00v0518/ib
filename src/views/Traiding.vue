@@ -3,6 +3,7 @@
     <button @click="handlerStart" class="traide__btn">
       {{ isWork ? 'Pause' : 'Start' }}
     </button>
+    <button @click="showStore">Show store</button>
     <Settings></Settings>
     <Portfolio></Portfolio>
   </div>
@@ -28,6 +29,9 @@ export default {
     },
   },
   methods: {
+    showStore(){
+      console.log(this.$store)
+    },
     handlerStart() {
       this.isWork = !this.isWork
       if (this.isWork) this.goTraiding()

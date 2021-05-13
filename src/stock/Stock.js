@@ -1,4 +1,5 @@
 import settings from '../store/modules/settings'
+import { time } from '../utils'
 
 class Stock {
   constructor(symbol) {
@@ -7,24 +8,24 @@ class Stock {
     this.maxPrice = 0
     this.lowPrice = 999999999999999
     this.price = 0
-    this.qty = 1;
+    this.qty = 1
     this.timestamp = 0
   }
   addData(data) {
     if (this.data[data.timestamp]) return
     this.data[data.timestamp] = data
-    this.timestamp = data.timestamp;
+    this.timestamp = data.timestamp
     this.setPrice(data)
     this.setMaxLowPrice(data)
   }
   setPrice(data) {
-    if (data.splits){
+    if (data.splits) {
       this.setSplit(data)
     }
-    this.price = data.open * this.qty;
+    this.price = data.open * this.qty
   }
-  setSplit(data){
-    const {splits} = data;
+  setSplit(data) {
+    const { splits } = data
     // this.qty = splits.denominator * this.qty;
   }
   setMaxLowPrice(data) {
@@ -35,7 +36,7 @@ class Stock {
   setLowPrice() {
     const { state } = settings
     const { currMoment, maxLowPeriod } = state
-    const endPeriod = currMoment - maxLowPeriod
+    const endPeriod = currMoment - (time.week / 1000) * maxLowPeriod
     let endData = this.data[endPeriod]
     if (!endData) {
       // endData = Object.values(this.data)[0]

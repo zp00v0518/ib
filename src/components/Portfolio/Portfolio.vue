@@ -6,7 +6,8 @@
       {{ new Date(settings.currMoment * 1000).toLocaleDateString() }}</span
     >
     <br />
-    <span><b>Cash: </b>{{ portfolio.curCash }}</span>
+    <span><b>Cash: </b>{{ portfolio.curCash.toFixed(2) }}</span> <br />
+    <span><b>Size: </b>{{ settings.partPrice.toFixed(2) }}</span>
     <table class="portfolio__table">
       <thead>
         <th>#</th>
@@ -55,8 +56,8 @@ export default {
   data() {
     return {
       candidateToBy: [],
-      profit: 5,
-      loss: 30,
+      count: -180,
+      add: 0,
     }
   },
   created() {
@@ -74,20 +75,23 @@ export default {
     },
   },
   watch: {
-    'settings.currMoment': function(currMoment) {
-      this.init(currMoment)
+    'settings.currMoment': function() {
+      this.init()
     },
   },
   methods: {
     setpartPrice() {
-      const { portfolio } = this
-      const { maxLength, cost } = portfolio
+      const { portfolio, settings } = this
+      const { maxLengthPortfolio } = settings
+      const { cost } = portfolio
       const value =
-        Math.floor(cost / maxLength) < 100 ? 100 : Math.floor(cost / maxLength)
+        Math.floor(cost / maxLengthPortfolio) < 100
+          ? 100
+          : Math.floor(cost / maxLengthPortfolio)
       this.$store.commit('SET_PARTPRICE', value)
     },
     getNowPrice(stock) {
-      if (!stock.price) return 'NaN'
+      if (!stock.price) return '----'
       const priceString = stock.price.toString()
       if (!priceString.includes('.')) {
         return priceString + '.00'
@@ -104,6 +108,12 @@ export default {
 
     init(currMoment) {
       const { settings, portfolio } = this
+      this.count++
+      if (this.count % 90 === 0) {
+        const add = settings.partPrice > 1500 ? 1500 : settings.partPrice
+        this.add += add
+        this.$store.commit('ADD_TO_CURCASH', 0)
+      }
       this.sellStocks()
       this.$store.commit('SET_COST_PORTFOLIO')
       this.setpartPrice()
@@ -115,13 +125,25 @@ export default {
     },
     checkSellLowStock() {
       const { portfolio, settings, stocks } = this
+      const { middle } = settings
+      if (settings.partPrice > portfolio.curCash) return
       const { list } = portfolio
       Object.keys(list).forEach((symbol) => {
         if (settings.partPrice > portfolio.curCash) return
-        if (list[symbol].change < 0.3) {
+        if (list[symbol].change < middle) {
           const stock = stocks[symbol]
           if (!stock) return
-          console.log(symbol);
+          const z = list[symbol]
+          console.log(
+            symbol,
+            `Change: ${z.change}  buyPrice: ${z.buyPrice.toFixed(
+              2
+            )}  nowPrice: ${z.stock.price}  qty: ${
+              z.qty
+            } sum: ${settings.partPrice.toFixed(
+              2
+            )} curCash: ${portfolio.curCash.toFixed(2)}`
+          )
           this.$store.dispatch('BUY_STOCK', { stock, sum: settings.partPrice })
           this.setpartPrice()
         }
@@ -137,10 +159,11 @@ export default {
       })
     },
     checkToSell(item) {
+      const { settings } = this
       if (item.buyPrice >= item.stock.price) {
-        return +item.change < 0.02
+        return +item.change < settings.checkSellBottom
       }
-      return +item.change > 1.15
+      return +item.change > settings.checkSellTop
     },
     getCandidateToBuy() {
       this.candidateToBy = []
@@ -159,11 +182,11 @@ export default {
     checkToBuy(stock) {
       const { settings } = this
       const { partPrice } = settings
-      if (stock.price < 0.5) return false
+      if (stock.price < settings.minPriceStock) return false
       if (stock.price > partPrice) return false
       if (!stock.lowPrice) return false
-      if (stock.lowPrice / stock.price > 0.6) return false
-      if (stock.maxPrice / stock.price < 1.4) return false
+      if (stock.lowPrice / stock.price > settings.checkBuyBottom) return false
+      if (stock.maxPrice / stock.price < settings.checkBuyTop) return false
       return true
     },
     buyStocks() {
@@ -171,9 +194,7 @@ export default {
       if (portfolio.curCash <= settings.partPrice) return
       const stock = this.getRandomStock()
       if (!stock) return
-      // const list = portfolio.list
-      // const isStock = list[stock.symbol]
-      // if (isStock && isStock.change > 0.5) return
+      console.log(`BUY: ${stock.symbol}  price: ${stock.price.toFixed(2)}`)
       this.$store.dispatch('BUY_STOCK', { stock, sum: settings.partPrice })
     },
     getRandomStock() {

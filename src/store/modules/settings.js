@@ -1,14 +1,17 @@
-import { time } from '../../utils'
-
 const settings = {
   state: {
-    // startMoment: 1262615400 + ((time.week / 1000) * 104),
     stepTime: 60 * 60 * 24,
     currMoment: 1262615400,
-    // currMoment: 1262615400 + ((time.week / 1000) * 156),
-    maxLowPeriod: (time.week / 1000) * 13,
-    startCash: 1000,
-    partPrice: 100,
+    maxLowPeriod: 13,
+    partPrice: 0,
+    middle: 0.5,
+    minPriceStock: 0.1,
+    checkBuyBottom: 0.8,
+    checkBuyTop: 1.3,
+    checkSellBottom: 0.1,
+    checkSellTop: 1.1,
+    maxLengthPortfolio: 15,
+    curCash: 3000,
   },
   mutations: {
     SET_PARTPRICE(state, value) {
@@ -17,8 +20,24 @@ const settings = {
     CURRMOMENT_INCREMENT(state) {
       state.currMoment += state.stepTime
     },
+    SET_SETTING(state, { field, value }) {
+      state[field] = value
+    },
   },
-  actions: {},
+  actions: {
+    SET_SETTINGS(ctx, fields) {
+      fields.forEach((item) => {
+        if (item.code === 'curCash') {
+          ctx.commit('ADD_TO_CURCASH', +item.value)
+          return
+        }
+        ctx.commit('SET_SETTING', {
+          field: item.code,
+          value: +item.value,
+        })
+      })
+    },
+  },
 }
 
 export default settings
