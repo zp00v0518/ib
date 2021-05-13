@@ -7,6 +7,7 @@ import config from '../config';
 
 const WS = new Api();
 // eslint-disable-next-line
+// WS.init(`wss://streamer.finance.yahoo.com/`, store);
 WS.init(`ws://${location.hostname}:${config.server.port.ws}`, store);
 
 const app = createApp(App);

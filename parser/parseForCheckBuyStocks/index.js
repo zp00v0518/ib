@@ -2,6 +2,7 @@ const fs = require('fs')
 const puppeteer = require('puppeteer')
 const browserConfig = require('../browserConfig')
 const parseOneItem = require('./parseOneItem')
+const checkToBuy = require('./checkToBuy')
 const saveResultToDB = require('../saveResultToDB')
 const splitArrOnSmallArr = require('../splitArrOnSmallArr')
 const list = require('../list').flat(Infinity)
@@ -48,13 +49,14 @@ async function parse() {
 }
 parse()
 
-function checkToBuy(values) {
-  if (!values) return false;
-  const price = values[values.length - 1]
-  if (!price || price > 90) return false;
-  const min = Math.min(...values)
-  const max = Math.max(...values)
-  if (min / price > 0.8) return false
-  if (max / price < 1.3) return false
-  return true
-}
+// function checkToBuy(values) {
+//   if (!values) return false;
+//   const price = values[values.length - 1]
+//   if (!price || price > 90) return false;
+//   const min = Math.min(...values)
+//   if(!min || min < 0.01) return false;
+//   const max = Math.max(...values)
+//   if (min / price > 0.8) return false
+//   if (max / price < 1.3) return false
+//   return true
+// }

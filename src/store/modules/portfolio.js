@@ -3,7 +3,7 @@ const portfolio = {
     curCash: 3000,
     list: {},
     cost: 1000,
-		maxLength: 20
+		maxLength: 15
   },
   mutations: {
     REDUCE_CURCASH(state, value) {
@@ -14,12 +14,22 @@ const portfolio = {
     },
     ADD_STOCK_TO_PORTFOLIO(state, payload) {
       const { stock, qty } = payload
+      const isStock = state.list[stock.symbol];
+      if ( isStock ){
+        // докупаю акции и устанавливаю среднюю цену
+        const prevCost = isStock.qty * isStock.buyPrice;
+        isStock.qty += qty;
+        const middle = (stock.price * qty + prevCost) / isStock.qty;
+        isStock.buyPrice = middle;
+        return;
+      }
       state.list[stock.symbol] = {
         stock,
         qty,
         buyPrice: stock.price,
         dateBuy: stock.timestamp
       }
+      return 123
     },
     SET_COST_PORTFOLIO(state) {
       const { list } = state
@@ -27,7 +37,7 @@ const portfolio = {
         const item = list[symbol]
         const cost = item.stock.price * item.qty
         item.cost = cost
-				item.change = (item.stock.price / item.buyPrice).toFixed(2);
+				item.change = +(item.stock.price / item.buyPrice).toFixed(2);
 				if (+item.change >= 1){
 					// console.log(item)
 				}
