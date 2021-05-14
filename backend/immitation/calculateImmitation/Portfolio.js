@@ -7,16 +7,7 @@ class Portfolio {
     this.cost = settings.curCash
     this.settings = settings
   }
-  buyStock(stock) {
-    const { settings, curCash } = this
-    const { partPrice } = settings
-    if (stock.price < curCash) return
-    const qty = Math.floor(partPrice / stock.price)
-    const purchase = qty * stock.price
-    this.addStockToPortfolio(stock, aty)
-    this.reduceCurCash(purchase)
-    this.countCost()
-  }
+
   addStockToPortfolio(stock, qty) {
     this.list[stock.symbol] = {
       stock,
@@ -56,11 +47,11 @@ class Portfolio {
     return true
   }
   sellStocks() {
-    const { list, checkToSell } = this
+    const { list } = this
     Object.keys(list).forEach((symbol) => {
       const item = list[symbol]
-      if (checkToSell(item)) {
-        sellStock(item)
+      if (this.checkToSell(item)) {
+        this.sellStock(item)
       }
     })
     this.countCost()
@@ -68,7 +59,7 @@ class Portfolio {
   sellStock(stock) {
     const sellPrice =
       stock.change > 1.2 ? stock.buyPrice * 1.2 : stock.stock.price
-    const sum = item.qty * sellPrice
+    const sum = stock.qty * sellPrice
     this.addToCurCash(sum)
     delete this.list[stock.symbol]
   }
@@ -86,6 +77,16 @@ class Portfolio {
     const targetStock = this.getRandomStock(candidateToBy)
     if (!targetStock) return
     this.buyStock(targetStock)
+  }
+  buyStock(stock) {
+    const { settings, curCash } = this
+    const { partPrice } = settings
+    if (stock.price  > curCash || stock.price > partPrice) return
+    const qty = Math.floor(partPrice / stock.price)
+    const purchase = qty * stock.price
+    this.addStockToPortfolio(stock, qty)
+    this.reduceCurCash(purchase)
+    this.countCost()
   }
   getCandidateToBuy(allStocks) {
     const { list } = this

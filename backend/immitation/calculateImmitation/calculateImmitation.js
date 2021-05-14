@@ -27,6 +27,7 @@ function calculateImmitation(allData) {
   const { maxLowPeriod, stepTime } = settings
   settings.currMoment = settings.currMoment + stepTime
   let allStocks = {}
+	// const log = getLogTemplate()
   Object.keys(allData).forEach((timestamp, index) => {
     settings.currMoment = +timestamp
     // const momentData = allData[timestamp];
