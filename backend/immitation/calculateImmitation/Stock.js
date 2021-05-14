@@ -46,22 +46,6 @@ class Stock {
   setMaxPrice(value) {
     if (this.maxPrice < value) this.maxPrice = this.qty * value
   }
-  // checkToBuy() {
-  //   const { settings, price, lowPrice, maxPrice } = this
-  //   if (price < settings.minPriceStock) return false
-  //   if (price > settings.partPrice) return false
-  //   if (!lowPrice) return false
-  //   if (lowPrice / price > settings.checkBuyBottom) return false
-  //   if (maxPrice / price < settings.checkBuyTop) return false
-  //   return true
-  // }
-  // checkToSell(portfolioItem) {
-  //   const { settings } = this
-  //   if (item.buyPrice >= item.stock.price) {
-  //     return +item.change < settings.checkSellBottom
-  //   }
-  //   return +item.change > settings.checkSellTop
-  // }
 }
 
 module.exports = Stock

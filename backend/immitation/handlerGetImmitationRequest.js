@@ -28,9 +28,14 @@ async function handlerGetImmitationRequest(requestData) {
 		const timestamp = item.timestamp;
 		delete item._id;
 		delete item.timestamp;
-		stockData[timestamp] = item;
+		stockData[timestamp] = item
 	})
-	calculateImmitation(stockData);
+  console.time('s')
+  for (let i = 0; i < 15; i++) {
+    const ops = Object.assign({}, settings)
+    calculateImmitation(stockData, ops);
+  }
+  console.timeEnd('s')
   return message
 }
 

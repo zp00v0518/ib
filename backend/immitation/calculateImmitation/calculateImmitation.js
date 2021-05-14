@@ -1,25 +1,9 @@
-const template_func = require('template_func')
 const Stock = require('./Stock')
 const Settings = require('./Settings')
 const Portfolio = require('./Portfolio')
 const time = require('../../../config').time
 
-let ops = {
-  stepTime: 60 * 60 * 24,
-  currMoment: 1262615400,
-  maxLowPeriod: 2,
-  partPrice: 0,
-  middle: 0.5,
-  minPriceStock: 0.1,
-  checkBuyBottom: 0.8,
-  checkBuyTop: 1.3,
-  checkSellBottom: 0.1,
-  checkSellTop: 1.1,
-  maxLengthPortfolio: 15,
-  curCash: 3000,
-}
-
-function calculateImmitation(allData) {
+function calculateImmitation(allData, ops) {
   const settings = new Settings(ops)
   const portfolio = new Portfolio(settings)
   settings.addPortfolio(portfolio)
@@ -36,17 +20,11 @@ function calculateImmitation(allData) {
     const dataByPeriod = getDataByPeriod([end, start], allData)
     setStocksToList(dataByPeriod, allStocks, settings)
 		portfolio.sellStocks();
-		portfolio.buyStocksWhoDown();
+		// portfolio.buyStocksWhoDown();
 		portfolio.buyStocks(allStocks, portfolio);
   })
   return
 }
-// function buyStocks(allStocks, portfolio){
-// 	const candidateToBy = getCandidateToBuy(allStocks, portfolio)
-// 	const targetStock = getRandomStock(candidateToBy)
-// 	if(!targetStock) return;
-// 	portfolio.buyStock(targetStock)
-// }
 function getDataByPeriod(range, data) {
   // const times = Object.keys(data)
   //   .map((i) => +i)
@@ -63,20 +41,7 @@ function getDataByPeriod(range, data) {
   })
   return result
 }
-// function getCandidateToBuy(allStocks, portfolio) {
-//   const candidateToBy = []
-//   Object.keys(allStocks).forEach((symbol) => {
-//     const stock = allStocks[symbol]
-//     if (portfolio.checkToBuy(stock)) {
-//       candidateToBy.push(stock)
-//     }
-//   })
-//   // const listUse = Object.keys(portfolio.list)
-//   // this.candidateToBy = this.candidateToBy.filter(
-//   // 	(i) => !listUse.includes(i.symbol)
-//   // )
-//   return candidateToBy
-// }
+
 function setStocksToList(dataByPeriod, allStocks, settings) {
   Object.keys(dataByPeriod).forEach((timestamp) => {
     const moment = dataByPeriod[timestamp]
@@ -93,8 +58,5 @@ function setStocksToList(dataByPeriod, allStocks, settings) {
   })
   return allStocks
 }
-// function getRandomStock(arr) {
-// 	const index = template_func.getRandomNumber(arr.length - 1)
-// 	return arr[index]
-// };
+
 module.exports = calculateImmitation
