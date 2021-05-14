@@ -30,7 +30,7 @@ async function handlerGetImmitationRequest(requestData) {
 		delete item.timestamp;
 		stockData[timestamp] = item;
 	})
-	calculateImmitation(stockData, settings);
+	calculateImmitation(stockData);
   return message
 }
 
