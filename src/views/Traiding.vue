@@ -29,12 +29,22 @@ export default {
     },
   },
   methods: {
-    showStore(){
+    showStore() {
       console.log(this.$store)
     },
     handlerStart() {
-      this.isWork = !this.isWork
-      if (this.isWork) this.goTraiding()
+      // this.isWork = !this.isWork
+      this.goImitation();
+      // if (this.isWork) this.goTraiding()
+    },
+    async goImitation(){
+      const {settings} = this;
+      const message = {
+        type: '/getImmitation',
+        data: settings
+      }
+      const response = await this.$api.get(message);
+      console.log(response);
     },
     async goTraiding() {
       if (!this.isWork) return
@@ -45,14 +55,14 @@ export default {
       }
       const response = await this.$api.get(message)
       const { period } = response
-      const arr = period.pop();
-      if(!arr) return
-      [arr].forEach((objData) => {
+      const arr = period.pop()
+      if (!arr) return
+      ;[arr].forEach((objData) => {
         Object.keys(objData).forEach((symbol) => {
-          if (symbol === 'timestamp' || symbol === '_id') return;
+          if (symbol === 'timestamp' || symbol === '_id') return
           $store.commit('ADD_STOCKS_TO_LIST', { symbol, data: objData[symbol] })
         })
-      });
+      })
       $store.commit('CURRMOMENT_INCREMENT')
       if (this.isWork) {
         setTimeout(() => {
@@ -62,7 +72,7 @@ export default {
     },
     formatDataResponse() {
       const { settings } = this
-      const day =  60 * 60 * 24
+      const day = 60 * 60 * 24
       const week = day * 7
       const week_26 = week * 26
       const template = {

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serv": "supervisor --inspect --watch backend --max-old-space-size=6144 server.js",
+    "serv": "supervisor --inspect --max-old-space-size=6144 --watch backend  server.js",
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"

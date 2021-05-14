@@ -1,4 +1,9 @@
-const getStocksByBasePeriod = require('./getStocksByBasePeriod');
-const getAllStocks = require('./getAllStocks');
+const getStocksByBasePeriod = require('./getStocksByBasePeriod')
+const getAllStocks = require('./getAllStocks')
+const handlerGetImmitationRequest = require('../backend/immitation/handlerGetImmitationRequest')
 
-getAllStocks();
+// getAllStocks();
+
+setTimeout(() => {
+	handlerGetImmitationRequest({ type: '', data: {} })
+}, 1000);
