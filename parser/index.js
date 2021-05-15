@@ -3,6 +3,7 @@ const parseOneItem = require("./parseOneItem");
 const saveResultToDB = require("./saveResultToDB");
 const browserConfig = require("./browserConfig");
 const list = require("./list").flat(Infinity);
+const config = require('../config')
 // list.length = 20;
 
 const stosks = new Set(list);
@@ -20,7 +21,8 @@ async function parse() {
     ++count;
   }
   console.timeEnd("start");
-  await saveResultToDB(result);
+  const collectionName = config.db.collections.data2.name
+  await saveResultToDB(result, collectionName);
   // 2075887433
 }
 parse();

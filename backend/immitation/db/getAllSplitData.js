@@ -10,11 +10,10 @@ async function getAllSplitData() {
   const data = []
   let start = startMoment
   const length = 12
-  let arr = Array.from({ length: 1 });
+  let arr = Array.from({ length: 3 });
 	arr = arr.map((i,index)=> index+1);
-	// const x = count / length;
-	const x = Math.floor(count / length / 4);
-
+	const x = count / length;
+	// const x = Math.floor(count / length / 5);
   for (const iterator of arr) {
 		const end = start + stepTime * x
     const range = [start, end]

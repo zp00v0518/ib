@@ -7,6 +7,7 @@ const config = {
       data: { name: "data" },
       splitByTime: { name: "splitByTime" },
       checkToBuy: { name: "checkToBuy" },
+      data2: { name: "data2005" },
     },
   },
   server: {

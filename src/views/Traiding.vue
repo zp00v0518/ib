@@ -33,9 +33,9 @@ export default {
       console.log(this.$store)
     },
     handlerStart() {
-      // this.isWork = !this.isWork
-      this.goImitation();
-      // if (this.isWork) this.goTraiding()
+      this.isWork = !this.isWork
+      // this.goImitation();
+      if (this.isWork) this.goTraiding()
     },
     async goImitation(){
       const {settings} = this;

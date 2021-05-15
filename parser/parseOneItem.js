@@ -5,13 +5,15 @@ const querystring = require("querystring");
 async function parseOneItem(page, symbol) {
   let stepDays = 60 * 60 * 24 * 728;
   let endPeriod = new Date("2021-05-06").getTime() / 1000;
-  const pastPeriod = new Date("2010-01-01").getTime() / 1000;
+  // const pastPeriod = new Date("2010-01-01").getTime() / 1000;
+  const pastPeriod = new Date("2005-01-01").getTime() / 1000;
   const query = {
     symbol,
     period1: endPeriod - stepDays,
     period2: endPeriod,
     useYfid: true,
-    interval: "1h",
+    interval: "1d",
+    // interval: "1h",
     includePrePost: true,
     events: "div%7Csplit%7Cearn",
   };

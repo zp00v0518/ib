@@ -4,16 +4,18 @@ const calculateImmitation = require('./calculateImmitation');
 let settings = {
   stepTime: 60 * 60 * 24,
   currMoment: 1262615400,
-  maxLowPeriod: 13,
+  maxLowPeriod: 13 * 7,
   partPrice: 0,
   middle: 0.5,
-  minPriceStock: 0.1,
+  minPriceStock: 0.4,
   checkBuyBottom: 0.8,
   checkBuyTop: 1.3,
   checkSellBottom: 0.1,
   checkSellTop: 1.1,
-  maxLengthPortfolio: 15,
+  maxLengthPortfolio: 20,
   curCash: 3000,
+  buyCount: 2,
+  addition: 500,
 }
 const stockData = {};
 async function handlerGetImmitationRequest(requestData) {
@@ -32,7 +34,7 @@ async function handlerGetImmitationRequest(requestData) {
 		delete item.timestamp;
 		stockData[timestamp] = item
 	})
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 10; i++) {
     const ops = Object.assign({}, settings)
     calculateImmitation(stockData, ops);
   }

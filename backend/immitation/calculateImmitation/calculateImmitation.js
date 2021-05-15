@@ -13,26 +13,38 @@ function calculateImmitation(allData, ops) {
   let allStocks = {}
   // const log = getLogTemplate()
   console.time('s')
+	let count = 0;
   Object.keys(allData).forEach((timestamp, index) => {
     settings.currMoment = +timestamp
     // const momentData = allData[timestamp];
     const start = settings.currMoment
     const end = start - maxLowPeriod * time.week
-    const dataByPeriod = getDataByPeriod([end, start], allData)
-
-		console.time('setStock')
-    setStocksToList(dataByPeriod, allStocks, settings, index)
-		console.timeEnd('setStock')
-		
+    const dataByPeriod = getDataByPeriod([start, start], allData)
+    // const dataByPeriod = getDataByPeriod([end, start], allData)
+		// console.time('setStock')
+    setStocksToList(dataByPeriod, allStocks, settings)
+		// console.timeEnd('setStock')
+		portfolio.countCost();
     portfolio.sellStocks()
     settings.setPartPrice()
-    portfolio.buyStocksWhoDown()
+		if (settings.buyCount > 0){
+			portfolio.buyStocksWhoDown()
+		}
+    settings.setPartPrice()
     portfolio.buyStocks(allStocks, portfolio)
-    // if (Number.isNaN(portfolio.cost)) {
-		// 	return
-    // }
+		if (index % 90 === 0){
+			portfolio.addToCurCash(settings.addition);
+			count += settings.addition
+		}
+		if(index > 30){
+			return;
+		}
+		if(portfolio.curCash < 0){
+			return
+		}
   })
   console.timeEnd('s')
+	console.log(`Размер портфолио: ${portfolio.cost}   Довложений:${count}`)
   return
 }
 
@@ -46,10 +58,7 @@ function getDataByPeriod(range, data) {
   return result
 }
 
-function setStocksToList(dataByPeriod, allStocks, settings, index) {
-	if(index > 90){
-		console.log(index)
-	}
+function setStocksToList(dataByPeriod, allStocks, settings) {
   Object.keys(dataByPeriod).forEach((timestamp) => {
     const moment = dataByPeriod[timestamp]
     Object.keys(moment).forEach((symbol) => {
