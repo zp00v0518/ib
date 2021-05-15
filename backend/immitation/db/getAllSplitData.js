@@ -9,10 +9,12 @@ async function getAllSplitData() {
   const count = await findMethod.count(collectionName)
   const data = []
   let start = startMoment
-  
+  const length = 12
   let arr = Array.from({ length: 1 });
 	arr = arr.map((i,index)=> index+1);
-	const x = count / 6 / 12;
+	// const x = count / length;
+	const x = Math.floor(count / length / 4);
+
   for (const iterator of arr) {
 		const end = start + stepTime * x
     const range = [start, end]

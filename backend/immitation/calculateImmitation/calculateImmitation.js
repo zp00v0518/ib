@@ -11,30 +11,34 @@ function calculateImmitation(allData, ops) {
   const { maxLowPeriod, stepTime } = settings
   settings.currMoment = settings.currMoment + stepTime
   let allStocks = {}
-	// const log = getLogTemplate()
+  // const log = getLogTemplate()
+  console.time('s')
   Object.keys(allData).forEach((timestamp, index) => {
     settings.currMoment = +timestamp
     // const momentData = allData[timestamp];
     const start = settings.currMoment
     const end = start - maxLowPeriod * time.week
     const dataByPeriod = getDataByPeriod([end, start], allData)
-    setStocksToList(dataByPeriod, allStocks, settings)
-		portfolio.sellStocks();
-		// portfolio.buyStocksWhoDown();
-		portfolio.buyStocks(allStocks, portfolio);
+
+		console.time('setStock')
+    setStocksToList(dataByPeriod, allStocks, settings, index)
+		console.timeEnd('setStock')
+		
+    portfolio.sellStocks()
+    settings.setPartPrice()
+    portfolio.buyStocksWhoDown()
+    portfolio.buyStocks(allStocks, portfolio)
+    // if (Number.isNaN(portfolio.cost)) {
+		// 	return
+    // }
   })
+  console.timeEnd('s')
   return
 }
+
 function getDataByPeriod(range, data) {
-  // const times = Object.keys(data)
-  //   .map((i) => +i)
-  //   .sort((a, b) => a - b)
-  // let endIndex = times.indexOf(range[0])
-  // endIndex = endIndex === -1 ? 0 : endIndex
-  // const startIndex = times.indexOf(range[1])
   const times = Object.keys(data)
   const needs = times.filter((i) => +i >= range[0] && +i <= range[1])
-  // const needs = times.splice(endIndex, startIndex)
   const result = {}
   needs.forEach((timestamp) => {
     result[timestamp] = data[timestamp]
@@ -42,7 +46,10 @@ function getDataByPeriod(range, data) {
   return result
 }
 
-function setStocksToList(dataByPeriod, allStocks, settings) {
+function setStocksToList(dataByPeriod, allStocks, settings, index) {
+	if(index > 90){
+		console.log(index)
+	}
   Object.keys(dataByPeriod).forEach((timestamp) => {
     const moment = dataByPeriod[timestamp]
     Object.keys(moment).forEach((symbol) => {

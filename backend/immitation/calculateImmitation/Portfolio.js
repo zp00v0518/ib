@@ -9,7 +9,17 @@ class Portfolio {
   }
 
   addStockToPortfolio(stock, qty) {
-    this.list[stock.symbol] = {
+    const { list } = this
+    const isStock = list[stock.symbol]
+    if (isStock) {
+      // докупаю акции и устанавливаю среднюю цену
+      const prevCost = isStock.qty * isStock.buyPrice
+      isStock.qty += qty
+      const middle = (stock.price * qty + prevCost) / isStock.qty
+      isStock.buyPrice = middle
+      return
+    }
+    list[stock.symbol] = {
       stock,
       qty,
       buyPrice: stock.price,
@@ -29,6 +39,9 @@ class Portfolio {
       const value = item.stock.price * item.qty
       item.cost = value
       item.change = +(item.stock.price / item.buyPrice).toFixed(2)
+      // if (item.change === 0) {
+      //   return value
+      // }
       return value
     })
     const baseCost = sums.reduce((acc, value) => {
@@ -56,12 +69,12 @@ class Portfolio {
     })
     this.countCost()
   }
-  sellStock(stock) {
+  sellStock(item) {
     const sellPrice =
-      stock.change > 1.2 ? stock.buyPrice * 1.2 : stock.stock.price
-    const sum = stock.qty * sellPrice
+      item.change > 1.2 ? item.buyPrice * 1.2 : item.stock.price
+    const sum = item.qty * sellPrice
     this.addToCurCash(sum)
-    delete this.list[stock.symbol]
+    delete this.list[item.stock.symbol]
   }
   checkToSell(item) {
     const { settings } = this
@@ -81,7 +94,7 @@ class Portfolio {
   buyStock(stock) {
     const { settings, curCash } = this
     const { partPrice } = settings
-    if (stock.price  > curCash || stock.price > partPrice) return
+    if (stock.price > curCash || stock.price > partPrice) return
     const qty = Math.floor(partPrice / stock.price)
     const purchase = qty * stock.price
     this.addStockToPortfolio(stock, qty)
@@ -106,7 +119,7 @@ class Portfolio {
     return arr[index]
   }
   buyStocksWhoDown() {
-    const { curCash, settings, list, countCost, buyStock } = this
+    const { curCash, settings, list } = this
     const { middle } = settings
     if (settings.partPrice > curCash) return
     Object.keys(list).forEach((symbol) => {
@@ -114,8 +127,8 @@ class Portfolio {
       if (list[symbol].change < middle) {
         const stock = list[symbol].stock
         if (!stock) return
-        buyStock(stock)
-        countCost()
+        this.buyStock(stock)
+        this.countCost()
       }
     })
   }

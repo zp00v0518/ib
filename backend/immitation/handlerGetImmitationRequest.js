@@ -4,7 +4,7 @@ const calculateImmitation = require('./calculateImmitation');
 let settings = {
   stepTime: 60 * 60 * 24,
   currMoment: 1262615400,
-  maxLowPeriod: 2,
+  maxLowPeriod: 13,
   partPrice: 0,
   middle: 0.5,
   minPriceStock: 0.1,
@@ -23,19 +23,19 @@ async function handlerGetImmitationRequest(requestData) {
     type,
     data: settings,
   }
+  console.time("Запрос")
   const allData = await getAllSplitData()
+  console.timeEnd("Запрос")
   allData.forEach(item => {
 		const timestamp = item.timestamp;
 		delete item._id;
 		delete item.timestamp;
 		stockData[timestamp] = item
 	})
-  console.time('s')
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 1; i++) {
     const ops = Object.assign({}, settings)
     calculateImmitation(stockData, ops);
   }
-  console.timeEnd('s')
   return message
 }
 

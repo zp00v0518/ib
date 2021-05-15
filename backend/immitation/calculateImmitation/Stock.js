@@ -12,7 +12,7 @@ class Stock {
     this.settings = settings
   }
   addData(data) {
-    if (this.data[data.timestamp]) return
+    if (this.data[data.timestamp] || !data.open) return
     this.data[data.timestamp] = data
     this.timestamp = data.timestamp
     this.setPrice(data)
@@ -23,6 +23,9 @@ class Stock {
       this.setSplit(data)
     }
     this.price = data.open * this.qty
+    if (this.price === 0) {
+      return 
+    }
   }
   setSplit(data) {
     const { splits } = data
