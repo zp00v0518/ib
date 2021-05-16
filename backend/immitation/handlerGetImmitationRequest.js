@@ -1,4 +1,5 @@
-const { getAllSplitData, saveHistoryInDB } = require('./db')
+const { getAllSplitData } = require('./db')
+const {saveHistoryInDB} = require('../history/db');
 const calculateImmitation = require('./calculateImmitation')
 
 let settings = {

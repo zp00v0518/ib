@@ -2,7 +2,7 @@ const Stock = require('./Stock')
 const Settings = require('./Settings')
 const Portfolio = require('./Portfolio')
 const History = require('./History')
-const time = require('../../../config').time
+// const time = require('../../../config').time
 
 function calculateImmitation(allData, ops) {
   const settings = new Settings(ops)
