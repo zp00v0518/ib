@@ -3,12 +3,40 @@
     <table v-if="isReady">
       <thead>
         <tr>
-					<th>#</th>
-				</tr>
+          <th>#</th>
+          <th>Max result</th>
+          <th>Max result</th>
+          <th>Min stock price</th>
+          <th>Add Sum</th>
+          <th>Add Period</th>
+          <th>Extra Buy Count</th>
+					<th>Extra buy coef</th>
+          <th>buy bottom</th>
+          <th>buy top</th>
+          <th>Sell bottom</th>
+          <th>Sell top</th>
+          <th>Portfolio length</th>
+          <th>Max-Low period</th>
+          <th>Include Dividends</th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in arr" :key="index">
           <td>{{ index + 1 }}</td>
+          <td>{{ item.maxCost.toFixed(2) }}</td>
+          <td>{{ item.minCost.toFixed(2) }}</td>
+          <td>{{ item.minPriceStock }}</td>
+          <td>{{ item.addition }}</td>
+          <td>{{ item.additionPeriod }}</td>
+          <td>{{ item.buyCount }}</td>
+          <td>{{ item.middle }}</td>
+          <td>{{ item.checkBuyBottom }}</td>
+          <td>{{ item.checkBuyTop }}</td>
+          <td>{{ item.checkSellBottom }}</td>
+          <td>{{ item.checkSellTop }}</td>
+          <td>{{ item.maxLengthPortfolio }}</td>
+          <td>{{ item.maxLowPeriod / 7 }}</td>
+          <td>{{ item.withDividends ? 'Yes' : 'No' }}</td>
         </tr>
       </tbody>
     </table>
@@ -41,7 +69,7 @@ export default {
       }
     },
     init(arr) {
-			console.log(arr);
+      console.log(arr[0])
       this.arr = arr
       this.isReady = true
     },
@@ -51,5 +79,36 @@ export default {
 
 <style lang="scss">
 .history-table {
+	padding: 0 24px;
+  table,
+  th,
+  td {
+    border: 1px solid;
+  }
+  table {
+		width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    thead {
+      font-weight: bold;
+      text-transform: capitalize;
+      background-color: #999999;
+    }
+    th,
+    td {
+      padding: 12px 8px;
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: #d6d6d6  !important;
+					cursor: pointer;
+        }
+				&:nth-child(even){
+					background-color: #ebebeb;
+				}
+      }
+    }
+  }
 }
 </style>
