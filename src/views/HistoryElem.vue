@@ -44,7 +44,7 @@ export default {
     init(ev) {
       this.isReady = true
       this.data = ev.data.sort((a, b) => {
-        this.getCostPortfolio(a) - this.getCostPortfolio(b)
+        return this.getCostPortfolio(a) - this.getCostPortfolio(b)
       })
     },
     getCostPortfolio(item) {
