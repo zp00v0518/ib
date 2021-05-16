@@ -17,7 +17,9 @@ async function parse() {
     console.log(`${count}:  ${value}`);
     const page = await browser.newPage();
     const data = await parseOneItem(page, value);
-    result.push(data);
+    if(data){
+      result.push(data);
+    }
     ++count;
   }
   console.timeEnd("start");

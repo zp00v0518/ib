@@ -35,10 +35,10 @@ class Portfolio {
     this.curCash += value
   }
   countCost() {
-    const { list } = this
+    const { list, settings } = this
     const sums = Object.keys(list).map((symbol) => {
       const item = list[symbol]
-      this.setDividends(item)
+      if (settings.withDividends) this.setDividends(item)
       const value = item.stock.price * item.qty
       item.cost = value
       item.change = +(item.stock.price / item.buyPrice).toFixed(3)

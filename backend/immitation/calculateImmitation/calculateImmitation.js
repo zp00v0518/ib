@@ -1,9 +1,11 @@
 const Stock = require('./Stock')
 const Settings = require('./Settings')
 const Portfolio = require('./Portfolio')
+const History = require('./History')
 const time = require('../../../config').time
+const {saveHistoryInDB} = require('../db');
 
-function calculateImmitation(allData, ops) {
+async function calculateImmitation(allData, ops) {
   const settings = new Settings(ops)
   const portfolio = new Portfolio(settings)
   settings.addPortfolio(portfolio)
@@ -13,38 +15,33 @@ function calculateImmitation(allData, ops) {
   let allStocks = {}
   // const log = getLogTemplate()
   console.time('s')
-	let count = 0;
+  let count = 0
+  const history = new History(settings)
   Object.keys(allData).forEach((timestamp, index) => {
     settings.currMoment = +timestamp
-    // const momentData = allData[timestamp];
     const start = settings.currMoment
     const end = start - maxLowPeriod * time.week
     const dataByPeriod = getDataByPeriod([start, start], allData)
     // const dataByPeriod = getDataByPeriod([end, start], allData)
-		// console.time('setStock')
     setStocksToList(dataByPeriod, allStocks, settings)
-		// console.timeEnd('setStock')
-		portfolio.countCost();
+    portfolio.countCost()
     portfolio.sellStocks()
     settings.setPartPrice()
-		if (settings.buyCount > 0){
-			portfolio.buyStocksWhoDown()
-		}
+    if (settings.buyCount > 0) {
+      portfolio.buyStocksWhoDown()
+    }
     settings.setPartPrice()
     portfolio.buyStocks(allStocks, portfolio)
-		if (index % 90 === 0){
-			portfolio.addToCurCash(settings.addition);
-			count += settings.addition
-		}
-		if(index > 30){
-			return;
-		}
-		if(portfolio.curCash < 0){
-			return
-		}
+    if (index % settings.additionPeriod === 0) {
+      portfolio.addToCurCash(settings.addition)
+      count += settings.addition
+    }
+		history.addItem(portfolio, timestamp);
   })
+	history.setItog(portfolio);
   console.timeEnd('s')
-	console.log(`Размер портфолио: ${portfolio.cost}   Довложений:${count}`)
+  console.log(`Размер портфолио: ${portfolio.cost}   Довложений:${count}`)
+	await saveHistoryInDB(history)
   return
 }
 
