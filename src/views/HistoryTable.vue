@@ -1,16 +1,16 @@
 <template>
   <div class="history-table">
-    <table v-if="isReady">
+    <table>
       <thead>
         <tr>
           <th>#</th>
           <th>Max result</th>
-          <th>Max result</th>
+          <th>Min result</th>
           <th>Min stock price</th>
           <th>Add Sum</th>
           <th>Add Period</th>
           <th>Extra Buy Count</th>
-					<th>Extra buy coef</th>
+          <th>Extra buy coef</th>
           <th>buy bottom</th>
           <th>buy top</th>
           <th>Sell bottom</th>
@@ -21,7 +21,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in arr" :key="index" @click="goToHistory(item)">
+        <tr
+          v-for="(item, index) in table"
+          :key="index"
+          @click="goToHistory(item)"
+        >
           <td>{{ index + 1 }}</td>
           <td>{{ item.maxCost.toFixed(2) }}</td>
           <td>{{ item.minCost.toFixed(2) }}</td>
@@ -46,13 +50,15 @@
 <script>
 export default {
   name: 'HistoryTable',
-  data() {
-    return {
-      isReady: false,
+  created() {
+    if (this.table.length === 0){
+      this.getData()
     }
   },
-  created() {
-    this.getData()
+  computed: {
+    table() {
+      return this.$store.state.history.table
+    },
   },
   methods: {
     async getData() {
@@ -69,26 +75,25 @@ export default {
       }
     },
     init(arr) {
-      this.arr = arr
-      this.isReady = true
+      this.$store.commit('SET_TABLE', arr)
     },
-		goToHistory(item){
-			this.$router.push(this.$route.path + `/${item._id}` )
-		}
+    goToHistory(item) {
+      this.$router.push(this.$route.path + `/${item._id}`)
+    },
   },
 }
 </script>
 
 <style lang="scss">
 .history-table {
-	padding: 0 24px;
+  padding: 0 24px;
   table,
   th,
   td {
     border: 1px solid;
   }
   table {
-		width: 100%;
+    width: 100%;
     text-align: center;
     border-collapse: collapse;
     thead {
@@ -103,12 +108,12 @@ export default {
     tbody {
       tr {
         &:hover {
-          background-color: #d6d6d6  !important;
-					cursor: pointer;
+          background-color: #d6d6d6 !important;
+          cursor: pointer;
         }
-				&:nth-child(even){
-					background-color: #ebebeb;
-				}
+        &:nth-child(even) {
+          background-color: #ebebeb;
+        }
       }
     }
   }

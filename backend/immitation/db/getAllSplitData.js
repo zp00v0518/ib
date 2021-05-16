@@ -8,7 +8,7 @@ async function getAllSplitData(settings) {
   const data = []
   let start = settings.currMoment
   const length = 12
-  let arr = Array.from({ length: 1 })
+  let arr = Array.from({ length: 6 })
   arr = arr.map((i, index) => index + 1)
   const x = Math.ceil(count / length)
   for (const iterator of arr) {
