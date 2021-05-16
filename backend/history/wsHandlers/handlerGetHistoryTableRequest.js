@@ -1,4 +1,4 @@
-const { getHistoryFromDB } = require('./db')
+const { getHistoryFromDB } = require('../db')
 
 async function handlerGetHistoryTableRequest(data) {
   const { type } = data
