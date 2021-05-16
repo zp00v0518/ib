@@ -1,3 +1,4 @@
 const saveHistoryInDB = require('./saveHistoryInDB')
+const getHistoryFromDB = require('./getHistoryFromDB')
 
-module.exports = { saveHistoryInDB }
+module.exports = { saveHistoryInDB, getHistoryFromDB }

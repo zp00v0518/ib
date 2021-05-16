@@ -8,7 +8,7 @@ class History {
 		delete this.portfolio;
   }
   setItog(portfolio) {
-    this.itog = portfolio.cost
+    // this.itog = portfolio.cost
   }
   addItem(portfolio, timestamp) {
     const item = Object.assign({}, portfolio)

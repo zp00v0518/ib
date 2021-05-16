@@ -40,7 +40,7 @@ async function handlerGetImmitationRequest(requestData) {
     delete item.timestamp
     stockData[timestamp] = item
   })
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 3; i++) {
     const ops = Object.assign({}, settings)
     const history = calculateImmitation(stockData, ops)
     await saveHistoryInDB(history)
