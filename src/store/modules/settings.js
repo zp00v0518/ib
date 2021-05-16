@@ -1,7 +1,8 @@
 const settings = {
   state: {
     stepTime: 60 * 60 * 24,
-    currMoment: 1262615400,
+    currMoment: 1104762600,
+    // currMoment: 1262615400,
     maxLowPeriod: 13,
     partPrice: 0,
     middle: 0.5,

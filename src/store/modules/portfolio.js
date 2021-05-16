@@ -20,6 +20,7 @@ const portfolio = {
         isStock.qty += qty
         const middle = (stock.price * qty + prevCost) / isStock.qty
         isStock.buyPrice = middle
+        isStock.buyCount++
         return
       }
       state.list[stock.symbol] = {
@@ -27,6 +28,7 @@ const portfolio = {
         qty,
         buyPrice: stock.price,
         dateBuy: stock.timestamp,
+        buyCount: 0
       }
       return 123
     },
