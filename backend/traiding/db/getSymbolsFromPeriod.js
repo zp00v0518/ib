@@ -1,5 +1,5 @@
 const config = require('../../../config')
-const { findMethod } = require('../../db/methods')
+const findMethod = require('../../db/methods/findMethod')
 
 async function getSymbolsFromPeriod(range, symbols = []) {
   const collectionName = config.db.collections.splitData2.name

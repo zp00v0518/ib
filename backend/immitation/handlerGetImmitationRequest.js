@@ -1,5 +1,5 @@
-const { getAllSplitData } = require('./db')
-const calculateImmitation = require('./calculateImmitation');
+const { getAllSplitData, saveHistoryInDB } = require('./db')
+const calculateImmitation = require('./calculateImmitation')
 
 let settings = {
   stepTime: 60 * 60 * 24,
@@ -11,18 +11,18 @@ let settings = {
   minPriceStock: 0.4,
   // checkBuyBottom: 0.5,
   checkBuyBottom: 0.8,
-  checkBuyTop: 1.6,
-  // checkBuyTop: 1.3,
+  // checkBuyTop: 1.6,
+  checkBuyTop: 1.3,
   checkSellBottom: 0.1,
   checkSellTop: 1.1,
   maxLengthPortfolio: 20,
   curCash: 3000,
   buyCount: 2,
   addition: 500,
-  additionPeriod: 360,
-  withDividends: false
+  additionPeriod: 180,
+  withDividends: false,
 }
-const stockData = {};
+const stockData = {}
 async function handlerGetImmitationRequest(requestData) {
   const { type, data } = requestData
   settings = Object.assign(settings, data)
@@ -30,18 +30,19 @@ async function handlerGetImmitationRequest(requestData) {
     type,
     data: settings,
   }
-  console.time("Запрос")
-  const allData = await getAllSplitData()
-  console.timeEnd("Запрос")
-  allData.forEach(item => {
-		const timestamp = item.timestamp;
-		delete item._id;
-		delete item.timestamp;
-		stockData[timestamp] = item
-	})
-  for (let i = 0; i < 20; i++) {
+  console.time('Запрос')
+  const allData = await getAllSplitData(settings)
+  console.timeEnd('Запрос')
+  allData.forEach((item) => {
+    const timestamp = item.timestamp
+    delete item._id
+    delete item.timestamp
+    stockData[timestamp] = item
+  })
+  for (let i = 0; i < 5; i++) {
     const ops = Object.assign({}, settings)
-    calculateImmitation(stockData, ops);
+    const history = calculateImmitation(stockData, ops)
+    await saveHistoryInDB(history)
   }
   return message
 }
