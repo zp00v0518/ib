@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in arr" :key="index">
+        <tr v-for="(item, index) in arr" :key="index" @click="goToHistory(item)">
           <td>{{ index + 1 }}</td>
           <td>{{ item.maxCost.toFixed(2) }}</td>
           <td>{{ item.minCost.toFixed(2) }}</td>
@@ -69,10 +69,12 @@ export default {
       }
     },
     init(arr) {
-      console.log(arr[0])
       this.arr = arr
       this.isReady = true
     },
+		goToHistory(item){
+			this.$router.push(this.$route.path + `/${item._id}` )
+		}
   },
 }
 </script>

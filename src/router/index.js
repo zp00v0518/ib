@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Traiding from '../views/Traiding.vue'
 import Test from '../views/Test.vue'
 import HistoryTable from '../views/HistoryTable.vue'
+import HistoryElem from '../views/HistoryElem.vue'
 
 const routes = [
   {
@@ -15,9 +16,14 @@ const routes = [
     component: Test,
   },
   {
-    path: '/history',
+    path: '/history_table',
     name: 'HistoryTable',
     component: HistoryTable,
+  },
+  {
+    path: '/history_table/:id',
+    name: 'HistoryElem',
+    component: HistoryElem,
   },
   {
     path: '/about',
