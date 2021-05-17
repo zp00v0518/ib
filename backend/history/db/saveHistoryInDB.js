@@ -13,6 +13,7 @@ async function saveHistoryInDB(history) {
   await updateMethod.connect(dbName)
   const query = Object.assign({}, history)
   delete query.data
+  delete query.addCount
   const insertMethod = new InsertDB(mongo)
   await insertMethod.connect(dbName)
   history.class = 'history'

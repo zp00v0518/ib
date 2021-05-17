@@ -38,6 +38,7 @@ function calculateImmitation(allData, ops) {
 		history.addItem(portfolio, timestamp);
   })
 	history.setItog(portfolio);
+  history.addCount = count;
   console.timeEnd('s')
   console.log(`Размер портфолио: ${portfolio.cost}   Довложений:${count}`)
   return history

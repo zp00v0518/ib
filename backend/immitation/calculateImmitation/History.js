@@ -4,7 +4,7 @@ class History {
       this[key] = settings[key]
     })
     this.data = {}
-    this.itog = -1
+    // this.itog = -1
 		delete this.portfolio;
   }
   setItog(portfolio) {
