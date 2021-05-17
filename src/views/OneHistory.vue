@@ -20,7 +20,6 @@ export default {
   name: 'OneHistory',
   components: { HistoryChart, PlayPortfolio },
   created() {
-    console.log('OneHistory')
     this.getData()
   },
   data() {
@@ -47,7 +46,6 @@ export default {
         id,
       }
       try {
-        console.log(123)
         const response = await this.$api.get(message)
         this.init(response.result)
       } catch (err) {
