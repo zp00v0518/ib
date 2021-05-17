@@ -1,19 +1,24 @@
 <template>
-  <div class="history_chart">
-    <HistoryChart
-      :data="history"
-      v-if="isReady"
-      :key="$route.params.id"
-      local
-    ></HistoryChart>
+  <div class="history_chart" v-if="isReady">
+    <button @click="isGo = !isGo">{{isGo ? 'Pause': 'Play'}}</button>
+    <div class="history_chart_body">
+      <HistoryChart
+        :data="history"
+        :key="$route.params.id"
+        local
+      ></HistoryChart>
+      <PlayPortfolio :data="history" :isGo="isGo" @reset="handlerReset"></PlayPortfolio>
+    </div>
   </div>
 </template>
 
 <script>
 import HistoryChart from '../components/HistoryChart'
+import PlayPortfolio from '../components/PlayPortfolio'
+
 export default {
   name: 'OneHistory',
-  components: { HistoryChart },
+  components: { HistoryChart, PlayPortfolio },
   created() {
     this.getData()
   },
@@ -21,6 +26,7 @@ export default {
     return {
       history: [],
       isReady: false,
+      isGo: false,
     }
   },
   computed: {
@@ -42,6 +48,7 @@ export default {
       try {
         const response = await this.$api.get(message)
         this.init(response.result)
+        console.log(response.result)
       } catch (err) {
         setTimeout(() => {
           this.getData()
@@ -66,6 +73,15 @@ export default {
   padding-right: 24px;
   .history-elem__item {
     width: 100%;
+  }
+  &_body {
+    display: flex;
+    .history-elem__item {
+      width: 40%
+    }
+    .play{
+      width: 40%
+    }
   }
 }
 </style>

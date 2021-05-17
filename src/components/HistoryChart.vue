@@ -10,11 +10,9 @@
       <div class="history-elem__item--title">
         ${{ getCostPortfolio(data).toLocaleString() }}
       </div>
-      <button>Play</button>
     </div>
     <div>
       <canvas></canvas>
-      
     </div>
   </article>
 </template>
