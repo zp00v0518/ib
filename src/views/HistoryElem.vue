@@ -5,7 +5,6 @@
       v-for="(item, index) in data"
       :key="index"
     >
-      <!-- <div>{{ getCostPortfolio(item) }}</div> -->
       <canvas>{{ setChart(item, index) }}</canvas>
     </article>
   </div>

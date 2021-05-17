@@ -1,4 +1,4 @@
-const { getHistoryFromDB } = require('../db')
+const { getSettingsFormDB } = require('../db')
 
 async function handlerGetHistoryTableRequest(data) {
   const { type } = data
@@ -6,7 +6,7 @@ async function handlerGetHistoryTableRequest(data) {
     type,
     result: [],
   }
-  const hist = await getHistoryFromDB()
+  const hist = await getSettingsFormDB()
   setMinMax(hist)
   message.result = hist
   return message

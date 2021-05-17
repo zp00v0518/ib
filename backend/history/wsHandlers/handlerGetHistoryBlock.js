@@ -1,4 +1,4 @@
-const { getHistoryFromDB } = require('../db')
+const { getSettingsFormDB } = require('../db')
 
 async function handlerGetHistoryBlock(data) {
   const { type, id } = data
@@ -6,7 +6,7 @@ async function handlerGetHistoryBlock(data) {
     type,
     result: [],
   }
-  const hist = await getHistoryFromDB(id)
+  const hist = await getSettingsFormDB(id)
   message.result = hist[0]
   return message
 }
