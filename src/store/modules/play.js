@@ -5,7 +5,7 @@ const play = {
   mutations: {
     ADD_DATA_CHART(state, payload) {
       const { id, data } = payload
-      state.charts[id] = []
+      if(!state.charts[id]) state.charts[id] = []
       state.charts[id].push(...data)
     },
     RESET_CHART_DATA(state, id) {

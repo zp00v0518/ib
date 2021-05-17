@@ -66,7 +66,7 @@ export default {
       lastIndex: 0,
       list: {},
       id: this.$route.params.id,
-      timeout: 500
+      timeout: 300
     }
   },
   watch: {
