@@ -11,9 +11,9 @@
         <div class="history-elem__item--title">
           ${{ getCostPortfolio(data).toLocaleString() }}        </div>
       </div>
-      <!-- <div v-if="saveHistory">
-        Дивиденды: <span>{{ saveHistory.dividends }}</span>
-      </div> -->
+      <div v-if="saveHistory">
+        Дивиденды: <span>{{ saveHistory.dividends.toFixed(2) }}</span>
+      </div>
     </div>
     <div ref="wrap">
       <canvas></canvas>
