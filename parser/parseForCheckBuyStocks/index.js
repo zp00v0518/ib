@@ -28,13 +28,6 @@ async function parse() {
     result.push(...f)
     ++count
   }
-  // for (const value of stosks) {
-  //   console.log(`${count}:  ${value}`)
-  //   const page = await browser.newPage()
-  //   const data = await parseOneItem(page, value)
-  //   result.push(data)
-  //   ++count
-  // }
   console.timeEnd('start')
   const collectionName = config.db.collections.checkToBuy.name
   result = result.filter((item) => {

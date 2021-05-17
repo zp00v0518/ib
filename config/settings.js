@@ -1,9 +1,10 @@
 const settings = {
 	stepTime: 60 * 60 * 24 * 2,
-  currMoment: 1104762600,
+  currMoment: 1567296000,
+  // currMoment: 1104762600,
   maxLowPeriod: 13 * 7,
   middle: 0.5,
-  minPriceStock: 0.4,
+  minPriceStock: 0.3,
   checkBuyBottom: 0.5,
   // checkBuyBottom: 0.8,
   checkBuyTop: 2,
@@ -16,7 +17,7 @@ const settings = {
   withDividends: false,
   partPrice: 0,
   maxLengthPortfolio: 20,
-  curCash: 10000,
+  curCash: 3000,
 }
 
 module.exports = settings

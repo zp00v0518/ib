@@ -4,12 +4,12 @@
       v-for="(item, index) in data"
       :key="index"
       :data="item"
+      :id="listIds[index]"
     ></HistoryChart>
   </div>
 </template>
 
 <script>
-import Chart from 'chart.js/auto'
 import HistoryChart from '../components/HistoryChart'
 
 export default {
@@ -19,14 +19,24 @@ export default {
     return {
       isReady: false,
       data: [],
+      listIds: [],
     }
   },
   created() {
     this.getData()
   },
+  computed: {
+    saveSettings() {
+      return this.$store.state.history.settings
+    },
+  },
   methods: {
     async getData() {
       const id = this.$route.params.id
+      if (this.saveSettings[id]) {
+        this.init(this.saveSettings[id])
+        return
+      }
       const message = {
         type: '/getHistoryBlock',
         id,
@@ -42,49 +52,23 @@ export default {
     },
     init(ev) {
       this.isReady = true
+      this.listIds = ev.list
       this.data = ev.data.sort((a, b) => {
         return this.getCostPortfolio(a) - this.getCostPortfolio(b)
+      })
+      this.$store.commit('ADD_SETTINGS_ELEM', { id: ev._id, data: ev })
+      this.data.forEach((elem) => {
+        const payload = {
+          data: elem,
+          id: elem._id,
+        }
+        this.$store.commit('ADD_HISTORY_ELEM', payload)
       })
     },
     getCostPortfolio(item) {
       const keys = Object.keys(item)
       const lastItemKey = keys[keys.length - 1]
       return item[lastItemKey].cost.toFixed(2)
-    },
-    setChart(item, index) {
-      const elems = this.$el.querySelectorAll('canvas')
-      if (elems.length === 0) {
-        setTimeout(() => {
-          this.setChart(item, index)
-        }, 200)
-        return
-      }
-      const ctx = elems[index].getContext('2d')
-      const data = {
-        labels: this.getLabelsForChart(item),
-        datasets: [
-          {
-            label: this.getCostPortfolio(item),
-            data: this.getDataForChart(item),
-            fill: true,
-            borderColor: 'rgb(75, 192, 192)',
-          },
-        ],
-      }
-      new Chart(ctx, {
-        type: 'line',
-        data,
-      })
-    },
-    getLabelsForChart(item) {
-      const result = Object.keys(item).map((time) =>
-        new Date(+time * 1000).toLocaleDateString()
-      )
-      return result
-    },
-    getDataForChart(item) {
-      const result = Object.keys(item).map((time) => item[time].cost)
-      return result
     },
   },
 }

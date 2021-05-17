@@ -3,6 +3,7 @@ import Traiding from '../views/Traiding.vue'
 import Test from '../views/Test.vue'
 import HistoryTable from '../views/HistoryTable.vue'
 import HistoryElem from '../views/HistoryElem.vue'
+import OneHistory from '../views/OneHistory.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/history_table/:id',
     name: 'HistoryElem',
     component: HistoryElem,
+  },
+  {
+    path: '/history/:id',
+    name: 'OneHistory',
+    component: OneHistory,
   },
   {
     path: '/about',

@@ -7,6 +7,7 @@ const handlers = {
   '/getImmitation': handlerGetImmitationRequest,
   '/getHistoryTable': history.handlerGetHistoryTableRequest,
   '/getHistoryBlock': history.handlerGetHistoryBlock,
+  '/getHistoryElem': history.handlerGetHistoryElem,
 }
 
 module.exports = handlers
