@@ -1,6 +1,8 @@
 const time = require("./time");
+const settings = require("./settings");
 
 const config = {
+  settings,
   db: {
     name: "ib",
     collections: {
