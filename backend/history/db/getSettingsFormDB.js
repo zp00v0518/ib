@@ -17,7 +17,7 @@ async function getSettingsFormDB(id) {
     const findHist = await getHistoryFromDB(item.list)
     item.data = []
     findHist.forEach((his) => {
-      item.data.push(his.data)
+      item.data.push(his)
     })
   }
 

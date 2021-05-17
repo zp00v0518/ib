@@ -18,9 +18,9 @@ function setMinMax(arr) {
     delete item.data
 		const values = []
     data.forEach((obj) => {
-      const keys = Object.keys(obj)
+      const keys = Object.keys(obj.data)
       const lastItemKey = keys[keys.length - 1]
-      values.push(obj[lastItemKey].cost)
+      values.push(obj.data[lastItemKey].cost)
     })
     item.maxCost = Math.max(...values)
     item.minCost = Math.min(...values)

@@ -8,6 +8,7 @@ class History {
 		delete this.portfolio;
   }
   setItog(portfolio) {
+    this.dividends = portfolio.dividends;
     // this.itog = portfolio.cost
   }
   addItem(portfolio, timestamp) {

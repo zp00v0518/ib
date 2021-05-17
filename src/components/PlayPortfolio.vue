@@ -21,6 +21,7 @@
         <th>Change price</th>
         <th>Now Cost</th>
         <th>Days in Portfolio</th>
+        <th>BuyCount</th>
       </thead>
       <tbody>
         <tr
@@ -41,10 +42,9 @@
           </td>
           <td>{{ item.cost.toFixed(2) }}</td>
           <td>
-            {{
-              Math.floor((item.timestamp - item.dateBuy) / 60 / 60 / 24)
-            }}
+            {{ Math.floor((item.timestamp - item.dateBuy) / 60 / 60 / 24) }}
           </td>
+          <td>{{item.buyCount}}</td>
         </tr>
       </tbody>
     </table>
@@ -63,8 +63,10 @@ export default {
       isPlay: this.isGo,
       cost: 0,
       timeLine: [],
-      lastIndex: 90,
-			list: {}
+      lastIndex: 0,
+      list: {},
+      id: this.$route.params.id,
+      timeout: 100
     }
   },
   watch: {
@@ -74,10 +76,10 @@ export default {
       }
       this.play()
     },
-		isPlay(e){
-			if (!e) return
-			this.$emit('reset');
-		}
+    isPlay(e) {
+      if (!e) return
+      this.$store.commit('RESET_CHART_DATA', this.id)
+    },
   },
   created() {
     this.createTimeline()
@@ -88,23 +90,34 @@ export default {
       this.timeLine = Object.keys(data).sort((a, b) => +a - +b)
     },
     play() {
-      if (!this.isGo) return
+      if (!this.isGo || !this.isPlay) return
       const key = this.timeLine[this.lastIndex]
       const item = this.data[key]
+      if(!item){
+        this.$emit('end-play')
+        return;
+      }
       this.setCost(item)
       this.setList(item)
       this.lastIndex++
       setTimeout(() => {
         this.play()
-      }, 300)
+      }, this.timeout)
     },
     setCost(item) {
+      if(!item) return;
       this.cost = item.cost.toFixed(2)
+      const payload = {
+        id: this.id,
+        data: [this.cost],
+      }
+      this.$store.commit('ADD_DATA_CHART', payload)
     },
     setList(item) {
+      if(!item) return;
       const { list } = item
       if (Object.keys(list).length === 0) return
-			this.list = list
+      this.list = list
     },
   },
 }

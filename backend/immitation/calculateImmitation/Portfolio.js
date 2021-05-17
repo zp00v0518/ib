@@ -5,6 +5,7 @@ class Portfolio {
     this.curCash = settings.curCash
     this.list = {}
     this.cost = settings.curCash
+    this.dividends = 0;
     this.settings = settings
   }
 
@@ -58,6 +59,7 @@ class Portfolio {
     const momentData = stock.data[settings.currMoment]
     if(!momentData || !momentData.dividends) return
     const sum = portfolioItem.qty * momentData.dividends.amount;
+    this.dividends += sum
     this.addToCurCash(sum)
   }
   checkToBuy(stock) {
@@ -139,7 +141,7 @@ class Portfolio {
       if (settings.partPrice > curCash) return
       const portFolioItem = list[symbol];
       if (portFolioItem.change > middle) return
-      if (portFolioItem.buyCount > settings.buyCount) return;
+      if (portFolioItem.buyCount >= settings.buyCount) return;
       const stock = portFolioItem.stock
       if (!stock) return
       this.buyStock(stock)

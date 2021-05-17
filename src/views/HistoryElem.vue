@@ -23,6 +23,7 @@ export default {
     }
   },
   created() {
+    console.log('HistoryElem')
     this.getData()
   },
   computed: {
@@ -47,28 +48,30 @@ export default {
       } catch (err) {
         setTimeout(() => {
           this.getData()
-        }, 200)
+        }, 1000)
       }
     },
     init(ev) {
       this.isReady = true
       this.listIds = ev.list
-      this.data = ev.data.sort((a, b) => {
-        return this.getCostPortfolio(a) - this.getCostPortfolio(b)
+      this.data = ev.data.map(i => i.data);
+      this.data = ev.data.sort((histA, histB) => {
+        return this.getCostPortfolio(histA.data) - this.getCostPortfolio(histB.data)
       })
       this.$store.commit('ADD_SETTINGS_ELEM', { id: ev._id, data: ev })
-      this.data.forEach((elem) => {
+      this.data.forEach((elem, index) => {
         const payload = {
           data: elem,
-          id: elem._id,
+          id: elem._id
         }
         this.$store.commit('ADD_HISTORY_ELEM', payload)
       })
     },
     getCostPortfolio(item) {
-      const keys = Object.keys(item)
+      const x = item;
+      const keys = Object.keys(x)
       const lastItemKey = keys[keys.length - 1]
-      return item[lastItemKey].cost.toFixed(2)
+      return x[lastItemKey].cost.toFixed(2)
     },
   },
 }

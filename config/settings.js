@@ -14,7 +14,7 @@ const settings = {
   buyCount: 2,
   addition: 500,
   additionPeriod: 180,
-  withDividends: false,
+  withDividends: true,
   partPrice: 0,
   maxLengthPortfolio: 20,
   curCash: 3000,

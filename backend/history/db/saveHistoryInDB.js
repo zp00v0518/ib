@@ -15,6 +15,7 @@ async function saveHistoryInDB(history) {
   delete query.data
   delete query.addCount
   delete query.partPrice
+  delete query.dividends
   const insertMethod = new InsertDB(mongo)
   await insertMethod.connect(dbName)
   history.class = 'history'

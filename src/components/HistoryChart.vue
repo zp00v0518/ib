@@ -1,17 +1,21 @@
 <template>
   <article class="history-elem__item">
-    <router-link
-      v-if="!local"
-      :to="'/history/' + id"
-      class="history-elem__item--title"
-      >${{ getCostPortfolio(data).toLocaleString() }}</router-link
-    >
-    <div v-else>
-      <div class="history-elem__item--title">
-        ${{ getCostPortfolio(data).toLocaleString() }}
-      </div>
-    </div>
     <div>
+      <router-link
+        v-if="!local"
+        :to="'/history/' + id"
+        class="history-elem__item--title"
+        >${{ getCostPortfolio(data).toLocaleString() }}</router-link
+      >
+      <div v-else>
+        <div class="history-elem__item--title">
+          ${{ getCostPortfolio(data).toLocaleString() }}        </div>
+      </div>
+      <!-- <div v-if="saveHistory">
+        Дивиденды: <span>{{ saveHistory.dividends }}</span>
+      </div> -->
+    </div>
+    <div ref="wrap">
       <canvas></canvas>
     </div>
   </article>
@@ -69,9 +73,36 @@ export default {
     return {
       chart: null,
       bottomLabels: this.getLabelsForChart(this.data),
-      chartData: this.getDataForChart(this.data),
       cost: this.getCostPortfolio(this.data),
       isPlay: true,
+    }
+  },
+  computed: {
+    chartData() {
+      return this.$store.state.play.charts[this.id]
+    },
+    saveHistory() {
+      return this.$store.state.history.history[this.id]
+    },
+  },
+  watch: {
+    chartData: {
+      immediate: true,
+      deep: true,
+      handler(e) {
+        if (this.chart) {
+          this.chart.data.datasets[0].data = e
+          const width = this.chart.canvas.width - 1
+          const height = this.chart.canvas.height - 1
+          this.chart.resize(width, height)
+        }
+      },
+    },
+  },
+  created() {
+    if (!this.chartData) {
+      const data = this.getDataForChart(this.data)
+      this.$store.commit('ADD_DATA_CHART', { id: this.$route.params.id, data })
     }
   },
   methods: {
@@ -80,15 +111,22 @@ export default {
       return colors[index]
     },
     setChart() {
-      const canvas = this.$el.querySelector('canvas')
+      let canvas = this.$el.querySelector('canvas')
+      if (!canvas) {
+        canvas = document.createElement('canvas')
+        this.$refs.wrap.appendChild(canvas)
+      }
       const ctx = canvas.getContext('2d')
+      let x = []
+      if (!this.chartData) {
+        x = this.getDataForChart(this.data)
+      }
       const data = {
         labels: this.bottomLabels,
-        // labels: this.getLabelsForChart(item),
         datasets: [
           {
             label: this.cost,
-            data: this.chartData,
+            data: this.chartData || x,
             fill: true,
             // borderColor: this.getColor(),
             borderColor: 'rgb(75, 192, 192)',
@@ -101,20 +139,23 @@ export default {
       })
     },
     getLabelsForChart(item) {
-      const result = Object.keys(item).map((time) =>
+      const x = item.data || item
+      const result = Object.keys(x).map((time) =>
         new Date(+time * 1000).toLocaleDateString()
       )
       return result
     },
     getDataForChart(item) {
-      const result = Object.keys(item).map((time) => item[time].cost)
+      const z = item.data || item
+      const result = Object.keys(z).map((time) => z[time].cost)
       return result
     },
     getCostPortfolio(item) {
-      const keys = Object.keys(item)
+      const x = item.data || item;
+      const keys = Object.keys(x)
       const lastItemKey = keys[keys.length - 1]
-      if (!item[lastItemKey]) return 0
-      return +item[lastItemKey].cost.toFixed(2)
+      if (!x[lastItemKey]) return 0
+      return +x[lastItemKey].cost.toFixed(2)
     },
   },
   mounted() {

@@ -4,10 +4,10 @@
     <div class="history_chart_body">
       <HistoryChart
         :data="history"
-        :key="$route.params.id"
+        :id='$route.params.id'
         local
       ></HistoryChart>
-      <PlayPortfolio :data="history" :isGo="isGo" @reset="handlerReset"></PlayPortfolio>
+      <PlayPortfolio :data="history" :isGo="isGo" @reset="handlerReset" @end-play="isGo = false"></PlayPortfolio>
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@ export default {
   name: 'OneHistory',
   components: { HistoryChart, PlayPortfolio },
   created() {
+    console.log('OneHistory')
     this.getData()
   },
   data() {
@@ -46,9 +47,9 @@ export default {
         id,
       }
       try {
+        console.log(123)
         const response = await this.$api.get(message)
         this.init(response.result)
-        console.log(response.result)
       } catch (err) {
         setTimeout(() => {
           this.getData()
