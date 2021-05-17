@@ -1,20 +1,20 @@
 <template>
   <div class="history-elem">
-    <article
-      class="history-elem__item"
+    <HistoryChart
       v-for="(item, index) in data"
       :key="index"
-    >
-      <canvas>{{ setChart(item, index) }}</canvas>
-    </article>
+      :data="item"
+    ></HistoryChart>
   </div>
 </template>
 
 <script>
 import Chart from 'chart.js/auto'
+import HistoryChart from '../components/HistoryChart'
 
 export default {
   name: 'HistoryElem',
+  components: { HistoryChart },
   data() {
     return {
       isReady: false,

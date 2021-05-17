@@ -13,10 +13,10 @@ const settings = {
   buyCount: 2,
   addition: 500,
   additionPeriod: 180,
-  withDividends: true,
+  withDividends: false,
   partPrice: 0,
   maxLengthPortfolio: 20,
-  curCash: 3000,
+  curCash: 10000,
 }
 
 module.exports = settings
