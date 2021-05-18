@@ -12,6 +12,7 @@ class Settings {
     this.checkSellTop = 1.1
     this.maxLengthPortfolio = 15
     this.curCash = 3000
+    this.icrementPortfolio = false
     const that = this
     Object.keys(settings).forEach((key) => {
       that[key] = settings[key]
@@ -24,7 +25,8 @@ class Settings {
     const value = this.portfolio.cost / this.maxLengthPortfolio
     this.partPrice = value < 100 ? 100 : value
   }
-  incrementPortfoliLength(index){
+  incrementPortfoliLength(index) {
+    if (!this.icrementPortfolio) return
     if (index % 270 !== 0) return
     this.maxLengthPortfolio++
   }
