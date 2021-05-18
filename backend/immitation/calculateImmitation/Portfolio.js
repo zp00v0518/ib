@@ -5,7 +5,8 @@ class Portfolio {
     this.curCash = settings.curCash
     this.list = {}
     this.cost = settings.curCash
-    this.dividends = 0;
+    this.dividends = 0
+    this.fixed = 0;
     this.settings = settings
   }
 
@@ -26,7 +27,7 @@ class Portfolio {
       qty,
       buyPrice: stock.price,
       dateBuy: stock.timestamp,
-      buyCount: 0
+      buyCount: 0,
     }
   }
   reduceCurCash(value) {
@@ -53,12 +54,12 @@ class Portfolio {
     }, 0)
     this.cost = baseCost + this.curCash
   }
-  setDividends(portfolioItem){
-    const {settings} = this;
-    const {stock} = portfolioItem
+  setDividends(portfolioItem) {
+    const { settings } = this
+    const { stock } = portfolioItem
     const momentData = stock.data[settings.currMoment]
-    if(!momentData || !momentData.dividends) return
-    const sum = portfolioItem.qty * momentData.dividends.amount;
+    if (!momentData || !momentData.dividends) return
+    const sum = portfolioItem.qty * momentData.dividends.amount
     this.dividends += sum
     this.addToCurCash(sum)
   }
@@ -68,7 +69,7 @@ class Portfolio {
     if (price < settings.minPriceStock) return false
     if (price > settings.partPrice) return false
     if (!lowPrice) return false
-    const bottomIndex = lowPrice / price;
+    const bottomIndex = lowPrice / price
     if (bottomIndex > settings.checkBuyBottom) return false
     const topIndex = maxPrice / price
     if (topIndex < settings.checkBuyTop) return false
@@ -87,7 +88,17 @@ class Portfolio {
   sellStock(item) {
     const sellPrice = item.change > 1.2 ? item.buyPrice * 1.2 : item.stock.price
     const sum = item.qty * sellPrice
-    this.addToCurCash(sum)
+    // TODO:  чуток прибыли откладываю в заначку
+    let x = 0
+    if (this.settings.fix) {
+      if (item.change >= this.settings.checkSellTop) {
+        const coef = (this.settings.checkSellTop - 1) * this.settings.fix
+        x = sum * coef
+        this.fixed += x
+      }
+    }
+
+    this.addToCurCash(sum - x)
     delete this.list[item.stock.symbol]
   }
   checkToSell(item) {
@@ -139,15 +150,16 @@ class Portfolio {
     if (settings.partPrice > curCash) return
     Object.keys(list).forEach((symbol) => {
       if (settings.partPrice > curCash) return
-      const portFolioItem = list[symbol];
+      const portFolioItem = list[symbol]
       if (portFolioItem.change > middle) return
-      if (portFolioItem.buyCount >= settings.buyCount) return;
+      if (portFolioItem.buyCount >= settings.buyCount) return
       const stock = portFolioItem.stock
       if (!stock) return
       this.buyStock(stock)
       this.countCost()
     })
   }
+
 }
 
 module.exports = Portfolio

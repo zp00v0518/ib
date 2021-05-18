@@ -24,6 +24,10 @@ class Settings {
     const value = this.portfolio.cost / this.maxLengthPortfolio
     this.partPrice = value < 100 ? 100 : value
   }
+  incrementPortfoliLength(index){
+    if (index % 270 !== 0) return
+    this.maxLengthPortfolio++
+  }
 }
 
 module.exports = Settings

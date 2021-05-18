@@ -4,8 +4,9 @@
       v-for="(item, index) in data"
       :key="index"
       :data="item"
-      :id="listIds[index]"
+      :id="item._id"
     ></HistoryChart>
+      <!-- :id="listIds[index]" -->
   </div>
 </template>
 

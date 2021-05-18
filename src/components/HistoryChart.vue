@@ -3,16 +3,20 @@
     <div>
       <router-link
         v-if="!local"
-        :to="'/history/' + id"
+        :to="'/history/' + data._id"
         class="history-elem__item--title"
         >${{ getCostPortfolio(data).toLocaleString() }}</router-link
       >
       <div v-else>
         <div class="history-elem__item--title">
-          ${{ getCostPortfolio(data).toLocaleString() }}        </div>
+          ${{ getCostPortfolio(data).toLocaleString() }}
+        </div>
       </div>
       <div v-if="saveHistory">
-        Дивиденды: <span>{{ saveHistory.dividends.toFixed(2) }}</span>
+        Дивиденды: <span>{{ saveHistory.dividends.toLocaleString() }}</span>
+      </div>
+      <div v-if="saveHistory">
+        Отложил: <span>{{ saveHistory.fixed.toLocaleString() }}</span>
       </div>
     </div>
     <div ref="wrap">
@@ -130,6 +134,15 @@ export default {
             fill: true,
             // borderColor: this.getColor(),
             borderColor: 'rgb(75, 192, 192)',
+            // borderWidth: 5,
+            pointRadius: 1,
+          },
+          {
+            label: this.saveHistory.fixed.toFixed(2),
+            data: this.getFixedData(this.data),
+            fill: true,
+            borderColor: 'red',
+            pointRadius: 1,
           },
         ],
       }
@@ -147,11 +160,19 @@ export default {
     },
     getDataForChart(item) {
       const z = item.data || item
-      const result = Object.keys(z).map((time) => z[time].cost)
+      const result = Object.keys(z).map(
+        // (time) => z[time].cost
+        (time) => z[time].cost + z[time].fixed
+      )
+      return result
+    },
+    getFixedData(item) {
+      const z = item.data || item
+      const result = Object.keys(z).map((time) => z[time].fixed)
       return result
     },
     getCostPortfolio(item) {
-      const x = item.data || item;
+      const x = item.data || item
       const keys = Object.keys(x)
       const lastItemKey = keys[keys.length - 1]
       if (!x[lastItemKey]) return 0

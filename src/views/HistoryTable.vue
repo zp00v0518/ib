@@ -15,6 +15,7 @@
           <th>buy top</th>
           <th>Sell bottom</th>
           <th>Sell top</th>
+          <th>Fix</th>
           <th>Portfolio length</th>
           <th>Max-Low period</th>
           <th>Include Dividends</th>
@@ -27,8 +28,8 @@
           @click="goToHistory(item)"
         >
           <td>{{ index + 1 }}</td>
-          <td>{{ item.maxCost.toFixed(2) }}</td>
-          <td>{{ item.minCost.toFixed(2) }}</td>
+          <td>{{ item.maxCost.toLocaleString(2) }}</td>
+          <td>{{ item.minCost.toLocaleString(2) }}</td>
           <td>{{ item.minPriceStock }}</td>
           <td>{{ item.addition }}</td>
           <td>{{ item.additionPeriod }}</td>
@@ -38,6 +39,7 @@
           <td>{{ item.checkBuyTop }}</td>
           <td>{{ item.checkSellBottom }}</td>
           <td>{{ item.checkSellTop }}</td>
+          <td>{{ item.fix }}</td>
           <td>{{ item.maxLengthPortfolio }}</td>
           <td>{{ item.maxLowPeriod / 7 }}</td>
           <td>{{ item.withDividends ? 'Yes' : 'No' }}</td>
@@ -51,7 +53,7 @@
 export default {
   name: 'HistoryTable',
   created() {
-    if (this.table.length === 0){
+    if (this.table.length === 0) {
       this.getData()
     }
   },
@@ -62,6 +64,7 @@ export default {
   },
   methods: {
     async getData() {
+      if (this.table.length > 0) return
       const message = {
         type: '/getHistoryTable',
       }

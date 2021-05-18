@@ -46,6 +46,7 @@ export default {
         id,
       }
       try {
+        console.log("OneHistory sendrequest");
         const response = await this.$api.get(message)
         this.init(response.result)
       } catch (err) {
