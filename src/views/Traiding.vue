@@ -37,14 +37,14 @@ export default {
       // this.goImitation();
       if (this.isWork) this.goTraiding()
     },
-    async goImitation(){
-      const {settings} = this;
+    async goImitation() {
+      const { settings } = this
       const message = {
         type: '/getImmitation',
-        data: settings
+        data: settings,
       }
-      const response = await this.$api.get(message);
-      console.log(response);
+      const response = await this.$api.get(message)
+      console.log(response)
     },
     async goTraiding() {
       if (!this.isWork) return
@@ -64,6 +64,10 @@ export default {
         })
       })
       $store.commit('CURRMOMENT_INCREMENT')
+      if (Number.isNaN($store.state.portfolio.cost)) {
+        console.log($store.state);
+        return
+      }
       if (this.isWork) {
         setTimeout(() => {
           this.goTraiding()

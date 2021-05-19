@@ -38,6 +38,7 @@ const portfolio = {
       const { list } = state
       const sums = Object.keys(list).map((symbol) => {
         const item = list[symbol]
+        if (!item.stock.price) return 0 
         const cost = item.stock.price * item.qty
         item.cost = cost
         item.change = +(item.stock.price / item.buyPrice).toFixed(2)
@@ -61,12 +62,13 @@ const portfolio = {
   actions: {
     BUY_STOCK(ctx, { stock, sum }) {
       const qty = Math.floor(sum / stock.price)
+      if (Number.isNaN(qty)) return
       const purchase = qty * stock.price
       ctx.commit('ADD_STOCK_TO_PORTFOLIO', { stock, qty })
       ctx.commit('REDUCE_CURCASH', purchase)
       ctx.commit('SET_COST_PORTFOLIO')
     },
-    SELL_STOCK(ctx, {item, settings}) {
+    SELL_STOCK(ctx, { item, settings }) {
       const sellPrice =
         item.change > 1.2 ? item.buyPrice * 1.2 : item.stock.price
       const sum = item.qty * sellPrice

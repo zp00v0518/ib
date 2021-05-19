@@ -41,12 +41,10 @@ class Portfolio {
     const sums = Object.keys(list).map((symbol) => {
       const item = list[symbol]
       if (settings.withDividends) this.setDividends(item)
+      if(!item.stock.price) return;
       const value = item.stock.price * item.qty
       item.cost = value
       item.change = +(item.stock.price / item.buyPrice).toFixed(3)
-      // if (item.change === 0) {
-      //   return value
-      // }
       return value
     })
     const baseCost = sums.reduce((acc, value) => {
