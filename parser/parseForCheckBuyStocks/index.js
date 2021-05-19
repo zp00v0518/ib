@@ -33,7 +33,8 @@ async function parse() {
   result = result.filter((item) => {
     const data = item.data[0]
     if (!data || !data.indicators || !data.indicators.quote || !data.indicators.quote[0]) return false;
-    const check = checkToBuy(data.indicators.quote[0].open)
+    const check = checkToBuy(data.indicators.quote[0].close)
+    // const check = checkToBuy(data.indicators.quote[0].open)
     return check
   });
   const symbolsList = result.map(i => i.symbol);

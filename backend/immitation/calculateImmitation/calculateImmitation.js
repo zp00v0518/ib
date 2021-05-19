@@ -24,7 +24,7 @@ function calculateImmitation(allData, ops) {
     // const dataByPeriod = getDataByPeriod([end, start], allData)
     setStocksToList(dataByPeriod, allStocks, settings)
     portfolio.countCost()
-    portfolio.sellStocks()
+    portfolio.sellStocks(timestamp)
     settings.setPartPrice()
     if (settings.buyCount > 0) {
       portfolio.buyStocksWhoDown()

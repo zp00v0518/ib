@@ -6,7 +6,7 @@ class Portfolio {
     this.list = {}
     this.cost = settings.curCash
     this.dividends = 0
-    this.fixed = 0;
+    this.fixed = 0
     this.settings = settings
   }
 
@@ -75,11 +75,11 @@ class Portfolio {
     if (topIndex < settings.checkBuyTop) return false
     return true
   }
-  sellStocks() {
+  sellStocks(timestamp) {
     const { list } = this
     Object.keys(list).forEach((symbol) => {
       const item = list[symbol]
-      if (this.checkToSell(item)) {
+      if (this.checkToSell(item, timestamp)) {
         this.sellStock(item)
       }
     })
@@ -101,8 +101,15 @@ class Portfolio {
     this.addToCurCash(sum - x)
     delete this.list[item.stock.symbol]
   }
-  checkToSell(item) {
+  checkToSell(item, timestamp) {
     const { settings } = this
+    const daysIn = (+timestamp - item.dateBuy) / 60 / 60 / 24
+    // if (daysIn > 370 && +item.change > 1) return true
+    // избавляюсь от акций, которые пришлось много докупать
+    if (item.buyCount === settings.buyCount) {
+      if (+item.change <= settings.checkSellBottom) return true
+      // if(+item.change >= 1.01 || +item.change <= settings.checkSellBottom) return true
+    }
     if (item.buyPrice >= item.stock.price) {
       return +item.change < settings.checkSellBottom
     }
@@ -159,7 +166,6 @@ class Portfolio {
       this.countCost()
     })
   }
-
 }
 
 module.exports = Portfolio

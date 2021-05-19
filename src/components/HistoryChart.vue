@@ -149,6 +149,9 @@ export default {
       this.chart = new Chart(ctx, {
         type: 'line',
         data,
+        options: {
+          animations: false,
+        },
       })
     },
     getLabelsForChart(item) {
