@@ -17,35 +17,6 @@ export default {
   name: 'Settings',
   data() {
     return {
-      // fields: [
-      //   { name: 'Стартовый капитал', value: this.settings.curCash, code: 'curCash' },
-      //   { name: 'Длина портфеля', value: 20, code: 'maxLengthPortfolio' },
-      //   {
-      //     name: 'Коеф. для продажи (верхний)',
-      //     value: 1.05,
-      //     code: 'checkSellTop',
-      //   },
-      //   {
-      //     name: 'Коеф. для продажи (нижний)',
-      //     value: 0.05,
-      //     code: 'checkSellBottom',
-      //   },
-      //   { name: 'Кол-во недель, для чекинга', value: 13, code: 'maxLowPeriod' },
-      //   {
-      //     name: 'Диапазон проверки (верхний)',
-      //     value: 3,
-      //     code: 'checkBuyTop',
-      //   },
-      //   {
-      //     name: 'Диапазон проверки (нижний)',
-      //     value: 0.5,
-      //     code: 'checkBuyBottom',
-      //   },
-      //   { name: 'Лимитная цена акции', value: 0.3, code: 'minPriceStock' },
-      //   { name: 'Коэф. усреднения', value: 0.5, code: 'middle' },
-      //   { name: 'Коэф. фиксации', value: 0.3, code: 'fix' },
-      //   { name: 'Кол-во докупок', value: 2, code: 'buyCount' },
-      // ],
       fields: [],
     }
   },

@@ -8,7 +8,7 @@
     <br />
     <span><b>Cash: </b>{{ portfolio.curCash.toLocaleString() }}</span> <br />
     <span><b>Fixed: </b>{{ portfolio.fixed.toLocaleString() }}</span> <br />
-    <span><b>Size: </b>{{ settings.partPrice.toLocaleString() }}</span> 
+    <span><b>Size: </b>{{ settings.partPrice.toLocaleString() }}</span>
     <table class="portfolio__table">
       <thead>
         <th>#</th>
@@ -59,10 +59,11 @@ export default {
       candidateToBy: [],
       count: -180,
       add: 0,
+      iteration: 0,
     }
   },
   created() {
-    this.setpartPrice()
+    this.setpartPrice(1)
   },
   computed: {
     stocks() {
@@ -83,8 +84,13 @@ export default {
   methods: {
     setpartPrice() {
       const { portfolio, settings } = this
-      const { maxLengthPortfolio } = settings
       const { cost } = portfolio
+      if (this.settings.icrementPortfolio) {
+        if (this.iteration % 270 !== 0) return
+        this.settings.maxLengthPortfolio++
+      }
+        const { maxLengthPortfolio } = settings
+
       const value =
         Math.floor(cost / maxLengthPortfolio) < 100
           ? 100
@@ -108,6 +114,7 @@ export default {
     },
 
     init(currMoment) {
+      this.iteration++
       const { settings, portfolio } = this
       this.count++
       if (this.count % 90 === 0) {
@@ -134,7 +141,7 @@ export default {
         if (list[symbol].change < middle) {
           const stock = stocks[symbol]
           if (!stock) return
-          if (stock.buyCount === settings.buyCount) return;
+          if (stock.buyCount === settings.buyCount) return
           const z = list[symbol]
           // console.log(
           //   symbol,
@@ -156,7 +163,7 @@ export default {
       Object.keys(portfolio.list).forEach((symbol) => {
         const item = portfolio.list[symbol]
         if (checkToSell(item)) {
-          $store.dispatch('SELL_STOCK', {item, settings})
+          $store.dispatch('SELL_STOCK', { item, settings })
         }
       })
     },
