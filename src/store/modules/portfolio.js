@@ -3,6 +3,8 @@ const portfolio = {
     curCash: 0,
     list: {},
     cost: 0,
+    dividends: 0,
+    fixed: 0,
   },
   mutations: {
     REDUCE_CURCASH(state, value) {
@@ -28,7 +30,7 @@ const portfolio = {
         qty,
         buyPrice: stock.price,
         dateBuy: stock.timestamp,
-        buyCount: 0
+        buyCount: 0,
       }
       return 123
     },
@@ -52,6 +54,9 @@ const portfolio = {
     REMOVE_STOCK_FROM_PORTFOLIO(state, symbol) {
       delete state.list[symbol]
     },
+    ADD_FIXED(state, value) {
+      state.fixed += value
+    },
   },
   actions: {
     BUY_STOCK(ctx, { stock, sum }) {
@@ -61,11 +66,19 @@ const portfolio = {
       ctx.commit('REDUCE_CURCASH', purchase)
       ctx.commit('SET_COST_PORTFOLIO')
     },
-    SELL_STOCK(ctx, item) {
+    SELL_STOCK(ctx, {item, settings}) {
       const sellPrice =
         item.change > 1.2 ? item.buyPrice * 1.2 : item.stock.price
       const sum = item.qty * sellPrice
       // console.log(`ПРОДАЖА: ${item.stock.symbol}  price: ${sellPrice.toFixed(2)}  buyPrice: ${item.buyPrice.toFixed(2)}  qty: ${item.qty} sum: ${sum.toFixed(2)}`)
+      let x = 0
+      if (settings.fix) {
+        if (+item.change >= settings.checkSellTop) {
+          const coef = (settings.checkSellTop - 1) * settings.fix
+          x = sum * coef
+          ctx.commit('ADD_FIXED', x)
+        }
+      }
       ctx.commit('ADD_TO_CURCASH', sum)
       ctx.commit('REMOVE_STOCK_FROM_PORTFOLIO', item.stock.symbol)
     },

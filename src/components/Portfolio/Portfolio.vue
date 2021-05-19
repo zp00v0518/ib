@@ -6,8 +6,9 @@
       {{ new Date(settings.currMoment * 1000).toLocaleDateString() }}</span
     >
     <br />
-    <span><b>Cash: </b>{{ portfolio.curCash.toFixed(2) }}</span> <br />
-    <span><b>Size: </b>{{ settings.partPrice.toFixed(2) }}</span>
+    <span><b>Cash: </b>{{ portfolio.curCash.toLocaleString() }}</span> <br />
+    <span><b>Fixed: </b>{{ portfolio.fixed.toLocaleString() }}</span> <br />
+    <span><b>Size: </b>{{ settings.partPrice.toLocaleString() }}</span> 
     <table class="portfolio__table">
       <thead>
         <th>#</th>
@@ -133,33 +134,39 @@ export default {
         if (list[symbol].change < middle) {
           const stock = stocks[symbol]
           if (!stock) return
+          if (stock.buyCount === settings.buyCount) return;
           const z = list[symbol]
-          console.log(
-            symbol,
-            `Change: ${z.change}  buyPrice: ${z.buyPrice.toFixed(
-              2
-            )}  nowPrice: ${z.stock.price}  qty: ${
-              z.qty
-            } sum: ${settings.partPrice.toFixed(
-              2
-            )} curCash: ${portfolio.curCash.toFixed(2)}`
-          )
+          // console.log(
+          //   symbol,
+          //   `Change: ${z.change}  buyPrice: ${z.buyPrice.toFixed(
+          //     2
+          //   )}  nowPrice: ${z.stock.price}  qty: ${
+          //     z.qty
+          //   } sum: ${settings.partPrice.toFixed(
+          //     2
+          //   )} curCash: ${portfolio.curCash.toFixed(2)}`
+          // )
           this.$store.dispatch('BUY_STOCK', { stock, sum: settings.partPrice })
           this.setpartPrice()
         }
       })
     },
     sellStocks() {
-      const { portfolio, checkToSell, $store } = this
+      const { portfolio, checkToSell, $store, settings } = this
       Object.keys(portfolio.list).forEach((symbol) => {
         const item = portfolio.list[symbol]
         if (checkToSell(item)) {
-          $store.dispatch('SELL_STOCK', item)
+          $store.dispatch('SELL_STOCK', {item, settings})
         }
       })
     },
     checkToSell(item) {
       const { settings } = this
+
+      if (item.buyCount === settings.buyCount) {
+        if (+item.change <= settings.checkSellBottom) return true
+      }
+
       if (item.buyPrice >= item.stock.price) {
         return +item.change < settings.checkSellBottom
       }
@@ -193,8 +200,8 @@ export default {
       const { settings, portfolio } = this
       if (portfolio.curCash <= settings.partPrice) return
       const stock = this.getRandomStock()
-      if (!stock) return
-      console.log(`BUY: ${stock.symbol}  price: ${stock.price.toFixed(2)}`)
+      if (!stock || !stock.price) return
+      // console.log(`BUY: ${stock.symbol}  price: ${stock.price.toFixed(2)}`)
       this.$store.dispatch('BUY_STOCK', { stock, sum: settings.partPrice })
     },
     getRandomStock() {
