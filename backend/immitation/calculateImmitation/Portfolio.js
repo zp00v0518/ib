@@ -110,13 +110,13 @@ class Portfolio {
     const { settings } = this
     const { checkSellTop } = settings
     // const sellPrice = item.buyPrice * item.change
-    const sellPrice = item.change > 1.5 ? item.buyPrice * 1.5 : item.stock.price
+    // const sellPrice = item.change > 1.5 ? item.buyPrice * 1.5 : item.stock.price
     
     // const sellPrice = item.stock.price;
-    // const sellPrice =
-    //   +item.change > checkSellTop
-    //     ? item.buyPrice * checkSellTop
-    //     : item.stock.price
+    const sellPrice =
+      +item.change > checkSellTop
+        ? item.buyPrice * checkSellTop
+        : item.stock.price
     if (item.change > 4){
       console.log()
     }
