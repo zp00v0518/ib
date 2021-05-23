@@ -13,6 +13,7 @@
           <th>Extra buy coef</th>
           <th>buy bottom</th>
           <th>buy top</th>
+          <th>Renko</th>
           <th>Sell bottom</th>
           <th>Sell top</th>
           <th>Fix</th>
@@ -37,9 +38,10 @@
           <td>{{ item.middle }}</td>
           <td>{{ item.checkBuyBottom }}</td>
           <td>{{ item.checkBuyTop }}</td>
+          <td>{{ item.renkoGrow }}</td>
           <td>{{ item.checkSellBottom }}</td>
           <td>{{ item.checkSellTop }}</td>
-          <td>{{ item.fix }}</td>
+          <td>{{ item.fix.toFixed(2) }}</td>
           <td>{{ item.maxLengthPortfolio }}</td>
           <td>{{ item.maxLowPeriod / 7 }}</td>
           <td>{{ item.withDividends ? 'Yes' : 'No' }}</td>

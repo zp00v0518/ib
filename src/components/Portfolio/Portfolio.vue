@@ -8,6 +8,7 @@
     <br />
     <span><b>Cash: </b>{{ portfolio.curCash.toLocaleString() }}</span> <br />
     <span><b>Fixed: </b>{{ portfolio.fixed.toLocaleString() }}</span> <br />
+    <span><b>Add: </b>{{ add.toLocaleString() }}</span> <br />
     <span><b>Size: </b>{{ settings.partPrice.toLocaleString() }}</span>
     <div class="content_wrap">
       <table class="portfolio__table">
@@ -20,6 +21,7 @@
           <th>Change price</th>
           <th>Now Cost</th>
           <th>Days in Portfolio</th>
+          <th>Bu Count</th>
         </thead>
         <tbody>
           <tr
@@ -44,6 +46,7 @@
                 Math.floor((settings.currMoment - item.dateBuy) / 60 / 60 / 24)
               }}
             </td>
+            <td>{{ item.buyCount }}</td>
           </tr>
         </tbody>
       </table>
@@ -132,9 +135,10 @@ export default {
       const { settings, portfolio } = this
       this.count++
       if (this.count % 90 === 0) {
-        const add = settings.partPrice > 1500 ? 1500 : settings.partPrice
+        const x = 500
+        const add = settings.partPrice > x ? x : settings.partPrice
         this.add += add
-        this.$store.commit('ADD_TO_CURCASH', 0)
+        this.$store.commit('ADD_TO_CURCASH', add)
       }
       this.sellStocks()
       this.$store.commit('SET_COST_PORTFOLIO')
@@ -142,7 +146,7 @@ export default {
       this.addDataToChart()
       if (settings.partPrice > portfolio.curCash) return
       this.checkSellLowStock()
-      if (settings.partPrice > portfolio.curCash) return
+      if (settings.partPrice * 3 > portfolio.curCash) return
       this.getCandidateToBuy()
       this.buyStocks()
     },
@@ -153,24 +157,23 @@ export default {
       const { list } = portfolio
       Object.keys(list).forEach((symbol) => {
         if (settings.partPrice > portfolio.curCash) return
-        if (list[symbol].change < middle) {
-          const stock = stocks[symbol]
-          if (!stock) return
-          if (stock.buyCount === settings.buyCount || !stock.price) return
-          const z = list[symbol]
-          // console.log(
-          //   symbol,
-          //   `Change: ${z.change}  buyPrice: ${z.buyPrice.toFixed(
-          //     2
-          //   )}  nowPrice: ${z.stock.price}  qty: ${
-          //     z.qty
-          //   } sum: ${settings.partPrice.toFixed(
-          //     2
-          //   )} curCash: ${portfolio.curCash.toFixed(2)}`
-          // )
-          this.$store.dispatch('BUY_STOCK', { stock, sum: settings.partPrice })
-          this.setpartPrice()
-        }
+        if (list[symbol].change > middle) return
+        const stock = stocks[symbol]
+        if (!stock || !stock.price) return
+        if (list[symbol].buyCount >= settings.buyCount) return
+        const z = list[symbol]
+        // console.log(
+        //   symbol,
+        //   `Change: ${z.change}  buyPrice: ${z.buyPrice.toFixed(
+        //     2
+        //   )}  nowPrice: ${z.stock.price}  qty: ${
+        //     z.qty
+        //   } sum: ${settings.partPrice.toFixed(
+        //     2
+        //   )} curCash: ${portfolio.curCash.toFixed(2)}`
+        // )
+        this.$store.dispatch('BUY_STOCK', { stock, sum: settings.partPrice })
+        this.setpartPrice()
       })
     },
     sellStocks() {
@@ -187,7 +190,7 @@ export default {
       const daysIn = (settings.currMoment - item.dateBuy) / 60 / 60 / 24
       if (daysIn > 360 + 180 && +item.change <= settings.middle) return true
       if (item.buyCount === settings.buyCount) {
-        if (+item.change <= settings.checkSellBottom) return true
+        if (+item.change <= settings.middle) return true
       }
 
       if (item.buyPrice >= item.stock.price) {
@@ -208,7 +211,7 @@ export default {
       this.candidateToBy = this.candidateToBy.filter(
         (i) => !listUse.includes(i.symbol)
       )
-      const z = this.candidateToBy.map(i => i.symbol);
+      const z = this.candidateToBy.map((i) => i.symbol)
       // console.log(z)
     },
     checkToBuy(stock) {
@@ -220,7 +223,7 @@ export default {
       const lowCoef = stock.lowPrice / stock.price
       const topCoef = stock.maxPrice / stock.price
       // if (lowCoef < settings.checkBuyBottom && topCoef < settings.checkBuyTop) return false
-      if (lowCoef > settings.checkBuyBottom) return false
+      // if (lowCoef > settings.checkBuyBottom) return false
       if (topCoef < settings.checkBuyTop) return false
       return true
     },

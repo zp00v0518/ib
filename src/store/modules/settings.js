@@ -1,16 +1,17 @@
 const settings = {
   state: {
     stepTime: 60 * 60 * 24,
-    currMoment: 1104762600,
+    // currMoment: 1104762600,
     // currMoment: 1262615400,
+    currMoment: 1567296000, //03-09-2019
     maxLowPeriod: 13,
     partPrice: 0,
     middle: 0.5,
     minPriceStock: 0.3,
     checkBuyBottom: 0.5,
-    checkBuyTop: 3,
+    checkBuyTop: 5,
     checkSellBottom: 0.05,
-    checkSellTop: 1.05,
+    checkSellTop: 1.2,
     maxLengthPortfolio: 20,
     curCash: 3000,
     fix: 0.3,

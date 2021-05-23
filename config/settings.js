@@ -1,6 +1,7 @@
 const settings = {
   stepTime: 60 * 60 * 24 * 2,
-  currMoment: 1262304000, //01-01-2010
+  // currMoment: 1262304000, //01-01-2010
+  currMoment: 1420070400, //01-01-2015
   // currMoment: 1567296000, //03-09-2019
   // currMoment: 1104762600,
   maxLowPeriod: 13 * 7,
@@ -10,15 +11,17 @@ const settings = {
   checkBuyTop: 3,
   checkSellBottom: 0.05,
   checkSellTop: 1.05,
-  fix: 0.3,
+  fix: 0.2,
   buyCount: 2,
   addition: 500,
   additionPeriod: 180,
-  withDividends: false,
+  withDividends: true,
   partPrice: 0,
   maxLengthPortfolio: 19,
   icrementPortfolio: true,
   curCash: 3000,
+  full_history: true,
+  renkoGrow: 15,
 }
 
 module.exports = settings

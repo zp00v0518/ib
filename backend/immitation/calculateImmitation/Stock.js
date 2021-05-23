@@ -1,5 +1,3 @@
-const time = require('../../../config').time
-
 class Stock {
   constructor(symbol, settings) {
     this.symbol = symbol
@@ -11,51 +9,45 @@ class Stock {
     this.timestamp = 0
     this.settings = settings
     this.minMaxArr = []
+    this.lastData = {}
   }
   addData(data) {
     if (this.data[data.timestamp] || !data.open) return
     this.data[data.timestamp] = data
     this.timestamp = data.timestamp
+    this.lastData = data
     this.setPrice(data)
-    this.setMaxLowPrice(data)
+    this.setMaxLowPrice()
   }
   setPrice(data) {
-    // if (data.splits) {
+    if (data.splits) {
       // this.setSplit(data)
-      // console.log(1)
-    // }
-    this.price = data.open * this.qty
+      if (data.splits.denominator < 3){
+        console.log()
+      }
+    }
+    this.price = data.close * this.qty
   }
   setSplit(data) {
     const { splits } = data
     this.qty = splits.denominator * this.qty;
   }
-  setMaxLowPrice(data) {
+  setMaxLowPrice() {
     const {minMaxArr, settings} = this;
     minMaxArr.push(this.price);
     if (minMaxArr.length > settings.maxLowPeriod){
       minMaxArr.shift();
     }
     if (minMaxArr.length < settings.maxLowPeriod) return;
-    this.setMaxPrice(data.open)
+    this.setMaxPrice()
     this.setLowPrice()
     return
   }
   setLowPrice() {
     this.lowPrice = Math.min(...this.minMaxArr);
-    // const { currMoment, maxLowPeriod } = this.settings
-    // const endPeriod = currMoment - (time.week / 1000) * maxLowPeriod
-    // let endData = this.data[endPeriod]
-    // if (!endData) {
-    //   // endData = Object.values(this.data)[0]
-    //   return
-    // }
-    // if (this.lowPrice > endData.open) this.lowPrice = this.qty * endData.open
   }
   setMaxPrice() {
     this.maxPrice = Math.max(...this.minMaxArr);
-    // if (this.maxPrice < value) this.maxPrice = this.price
-    // if (this.maxPrice < value) this.maxPrice = this.qty * value
   }
 }
 

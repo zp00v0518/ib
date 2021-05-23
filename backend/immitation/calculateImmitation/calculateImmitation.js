@@ -1,3 +1,4 @@
+const template_func = require('template_func')
 const Stock = require('./Stock')
 const Settings = require('./Settings')
 const Portfolio = require('./Portfolio')
@@ -5,6 +6,15 @@ const History = require('./History')
 // const time = require('../../../config').time
 
 function calculateImmitation(allData, ops) {
+  // ops.checkSellTop = template_func.getRandomNumber(1.05, 10);
+  // ops.checkBuyTop = template_func.getRandomNumber(1.5, 10);
+  // // ops.checkSellTop = +(Math.random()+1).toFixed(2);
+  // // ops.middle = +(Math.random()).toFixed(1);
+  // ops.fix = template_func.getRandomNumber();
+  // // ops.fix = +(Math.random()).toFixed(1);
+  // ops.buyCount = template_func.getRandomNumber(0, 25)
+  // ops.renkoGrow = template_func.getRandomNumber(1, 100)
+
   const settings = new Settings(ops)
   const portfolio = new Portfolio(settings)
   settings.addPortfolio(portfolio)
@@ -30,18 +40,27 @@ function calculateImmitation(allData, ops) {
       portfolio.buyStocksWhoDown()
     }
     settings.setPartPrice()
-    portfolio.buyStocks(allStocks, portfolio)
+    if (settings.partPrice < portfolio.cost){
+      portfolio.buyStocks(allStocks, portfolio)
+    }
     if (index % settings.additionPeriod === 0) {
       portfolio.addToCurCash(settings.addition)
       count += settings.addition
     }
-		history.addItem(portfolio, timestamp);
-    settings.incrementPortfoliLength(index);
+    history.addItem(portfolio, timestamp)
+    settings.incrementPortfoliLength(index)
   })
-	history.setItog(portfolio);
-  history.addCount = count;
+  history.setItog(portfolio)
+  history.addCount = count
   console.timeEnd('s')
-  console.log(`Размер портфолио: ${portfolio.cost + portfolio.fixed}   Довложений:${count}`)
+  // Размер портфолио: ${Math.floor(portfolio.cost + portfolio.fixed)},00
+  console.log(`
+  Размер портфолио: ${new Intl.NumberFormat('ru-RU').format(
+    portfolio.cost + portfolio.fixed
+  )} 
+  Кол-во продаж: ${portfolio.sellCount} 
+  Довложений:${count}
+  `)
   return history
 }
 

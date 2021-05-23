@@ -12,6 +12,14 @@
           ${{ getCostPortfolio(data).toLocaleString() }}
         </div>
       </div>
+      <br />
+      <div>
+        Общая сумма:
+        <span class="total-value">
+          ${{ (getCostPortfolio(data) + saveHistory.fixed).toLocaleString() }}
+        </span>
+      </div>
+
       <div v-if="saveHistory">
         Дивиденды: <span>{{ saveHistory.dividends.toLocaleString() }}</span>
       </div>
@@ -196,5 +204,9 @@ export default {
     font-weight: bold;
     font-size: 20px;
   }
+}
+.total-value {
+  font-weight: bold;
+  font-size: 20px;
 }
 </style>

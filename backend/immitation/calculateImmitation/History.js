@@ -5,12 +5,12 @@ class History {
     })
     this.data = {}
     // this.itog = -1
-		delete this.portfolio;
+    delete this.portfolio
   }
   setItog(portfolio) {
-    this.dividends = portfolio.dividends;
-    this.cost = portfolio.cost;
-    this.fixed = portfolio.fixed;
+    this.dividends = portfolio.dividends
+    this.cost = portfolio.cost
+    this.fixed = portfolio.fixed
   }
   addItem(portfolio, timestamp) {
     const item = Object.assign({}, portfolio)
@@ -18,19 +18,23 @@ class History {
     delete item.list
     const { list } = portfolio
     this.data[timestamp] = item
-		// item.list = {};
-    // Object.keys(list).forEach((symbol) => {
-    //   const z = list[symbol]
-    //   const template = Object.assign({}, z)
-    //   const stock = template.stock
-    //   delete template.stock
-		// 	Object.assign(template, stock)
-		// 	delete template.data;
-		// 	delete template.minMaxArr;
-		// 	delete template.settings;
-    //   item.list[symbol] = template
-    //   delete template.stock
-    // })
+    item.list = {}
+    if (this.full_history) {
+      Object.keys(list).forEach((symbol) => {
+        const z = list[symbol]
+        const template = Object.assign({}, z)
+        const stock = template.stock
+        const qty = template.qty
+        delete template.stock
+        Object.assign(template, stock)
+        template.qty = qty
+        delete template.data
+        delete template.minMaxArr
+        delete template.settings
+        item.list[symbol] = template
+        delete template.stock
+      })
+    }
   }
 }
 
