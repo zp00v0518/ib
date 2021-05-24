@@ -4,6 +4,9 @@ function splitDataByTime(arr) {
     const compareData = item.compareData;
 		if(!compareData) return;
     const meta = item.data[0].meta;
+    if (meta.symbol && meta.symbol.includes('.')) {
+      meta.symbol = meta.symbol.replace('.', '_')
+    }
     const { symbol } = meta;
     const { timestamp, indicators, events } = compareData;
     timestamp.forEach((timeValue, index) => {

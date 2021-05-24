@@ -9,6 +9,8 @@ class Portfolio {
     this.fixed = 0
     this.settings = settings
     this.sellCount = 0
+    this.bigSell = 0
+    this.extraCurcash = 0
   }
 
   addStockToPortfolio(stock, qty) {
@@ -36,6 +38,9 @@ class Portfolio {
   }
   addToCurCash(value) {
     this.curCash += value
+    if (this.curCash < 0) {
+      console.log()
+    }
   }
   countCost() {
     const { list, settings } = this
@@ -66,7 +71,7 @@ class Portfolio {
     const { price, lowPrice, maxPrice } = stock
     const { settings } = this
     if (price < settings.minPriceStock) return false
-    if (price > 1000) return false
+    // if (price > 1000) return false
     if (price > settings.partPrice) return false
     if (!lowPrice || !maxPrice) return false
     const { minMaxArr } = stock
@@ -91,8 +96,8 @@ class Portfolio {
 
     const topCoef = maxPrice / price
     if (topCoef < settings.checkBuyTop) return false
-    const bottomCoef = lowPrice / price
-    if (bottomCoef > settings.checkBuyBottom) return false
+    // const bottomCoef = lowPrice / price
+    // if (bottomCoef > settings.checkBuyBottom) return false
 
     return true
   }
@@ -109,15 +114,19 @@ class Portfolio {
   sellStock(item) {
     const { settings } = this
     const { checkSellTop } = settings
+    // const maxCoef = 1.3
+    const maxCoef = checkSellTop;
     // const sellPrice = item.buyPrice * item.change
-    // const sellPrice = item.change > 1.5 ? item.buyPrice * 1.5 : item.stock.price
-    
-    // const sellPrice = item.stock.price;
     const sellPrice =
-      +item.change > checkSellTop
-        ? item.buyPrice * checkSellTop
-        : item.stock.price
-    if (item.change > 4){
+      item.change > maxCoef ? item.buyPrice * maxCoef : item.stock.price
+    if (item.change > maxCoef) this.bigSell++
+
+    // const sellPrice = item.stock.price;
+    // const sellPrice =
+    //   +item.change > checkSellTop
+    //     ? item.buyPrice * checkSellTop
+    //     : item.stock.price
+    if (item.change > 4) {
       console.log()
     }
     const sum = item.qty * sellPrice
@@ -163,7 +172,29 @@ class Portfolio {
     const targetStock = this.getRandomStock(candidateToBy)
     if (!targetStock) return
     this.buyOneStock(targetStock)
+    // this.buyAllStock(candidateToBy)
   }
+  buyAllStock(arr) {
+    const { settings } = this
+    const { partPrice } = settings
+
+    arr.forEach((stock) => {
+      let qty = Math.floor(partPrice / stock.price)
+      let purchase = qty * stock.price
+      if (this.curCash < purchase) {
+        const add = 100
+        qty = Math.floor(add / stock.price)
+        if (qty < 0) return
+        purchase = qty * stock.price
+        this.addToCurCash(add)
+        this.extraCurcash += add
+      }
+      this.addStockToPortfolio(stock, qty)
+      this.reduceCurCash(purchase)
+      this.countCost()
+    })
+  }
+
   buyOneStock(stock) {
     const { settings, curCash } = this
     const { partPrice } = settings
@@ -174,7 +205,7 @@ class Portfolio {
     if (curCash < 0) {
       console.log()
     }
-    if(stock.price === 1){
+    if (stock.price === 1) {
       console.log()
     }
     this.addStockToPortfolio(stock, qty)
@@ -233,18 +264,15 @@ class Portfolio {
   checkBuyRenko(minMaxArr) {
     const { settings } = this
     const renkoChart = this.getRenkoChart(minMaxArr, settings.renkoGrow)
-    const checkValue = false
-    const downArr = []
+    const downArr = [false, false]
     const upArr = [true]
     let templateArr = []
     // templateArr = this.getDoubleVFigure();
-    // for (let i = 0; i < 2; i++) {
-    //   templateArr.push(...downArr)
-    //   templateArr.push(...upArr)
-    // }
-    templateArr.push(...upArr)
+    for (let i = 0; i < 3; i++) {
+      templateArr.push(...downArr)
+      templateArr.push(...upArr)
+    }
     if (renkoChart.length < templateArr.length) return false
-    // const flag = checkArr.every((i) => i === checkValue)
     const checkArr = renkoChart.splice(0 - templateArr.length)
     const flag = checkArr.every((i, index) => {
       return i === templateArr[index]

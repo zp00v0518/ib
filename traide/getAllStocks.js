@@ -31,10 +31,13 @@ async function getAllStocks() {
   }
   result = splitDataByTime(result)
   find.close()
-  await insertSplitr(result);
+  try {
+    await insertSplitr(result);
+  } catch (err) {
+    console.log(err)
+  }
   console.timeEnd('start')
 }
-
 const InsertDB = require('../backend/db/InsertDB')
 const ConnectMongoDB = require('../backend/db/connectMongoDB.js')
 const mongo = new ConnectMongoDB()
@@ -43,6 +46,9 @@ async function insertSplitr(obj) {
   const arr = Object.keys(obj).map((key) => {
     const item = obj[key]
     item.timestamp = +key
+    if(key.includes('.')){
+      console.log()
+    }
     return item
   })
   const insertMethod = new InsertDB(mongo)

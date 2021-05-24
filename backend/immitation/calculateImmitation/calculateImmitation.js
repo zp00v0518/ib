@@ -40,7 +40,7 @@ function calculateImmitation(allData, ops) {
       portfolio.buyStocksWhoDown()
     }
     settings.setPartPrice()
-    if (settings.partPrice < portfolio.cost){
+    if (settings.partPrice < portfolio.cost) {
       portfolio.buyStocks(allStocks, portfolio)
     }
     if (index % settings.additionPeriod === 0) {
@@ -59,7 +59,12 @@ function calculateImmitation(allData, ops) {
     portfolio.cost + portfolio.fixed
   )} 
   Кол-во продаж: ${portfolio.sellCount} 
+  Кол-во ТОП продаж: ${portfolio.bigSell} 
+  Сумма Extra пополнений: ${portfolio.extraCurcash} 
   Довложений:${count}
+  Доходность:${((portfolio.extraCurcash + settings.curCash) /
+    (portfolio.cost + portfolio.fixed)) *
+    100}
   `)
   return history
 }
