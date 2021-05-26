@@ -22,6 +22,7 @@
         <th>Now Cost</th>
         <th>Days in Portfolio</th>
         <th>BuyCount</th>
+        <th>TopBuyCount</th>
       </thead>
       <tbody>
         <tr
@@ -45,6 +46,7 @@
             {{ Math.floor((item.timestamp - item.dateBuy) / 60 / 60 / 24) }}
           </td>
           <td>{{item.buyCount}}</td>
+          <td class="topBuyCount">{{item.topBuyCount}}</td>
         </tr>
       </tbody>
     </table>
@@ -66,7 +68,7 @@ export default {
       lastIndex: 0,
       list: {},
       id: this.$route.params.id,
-      timeout: 300
+      timeout: 400
     }
   },
   watch: {

@@ -4,6 +4,6 @@ const handlerGetImmitationRequest = require('../backend/immitation/handlerGetImm
 
 
 setTimeout(() => {
-	getAllStocks();
-	// handlerGetImmitationRequest({ type: '', data: {} })
+	// getAllStocks();
+	handlerGetImmitationRequest({ type: '', data: {} })
 }, 1000);

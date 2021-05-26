@@ -1,13 +1,20 @@
 <template>
   <div class="history_chart" v-if="isReady">
-    <button @click="isGo = !isGo">{{isGo ? 'Pause': 'Play'}}</button>
+    <button @click="isGo = !isGo">{{ isGo ? 'Pause' : 'Play' }}</button>
     <div class="history_chart_body">
       <HistoryChart
         :data="history"
-        :id='$route.params.id'
+        :id="$route.params.id"
         local
+        class="history_chart_body__item"
       ></HistoryChart>
-      <PlayPortfolio :data="history" :isGo="isGo" @reset="handlerReset" @end-play="isGo = false"></PlayPortfolio>
+      <PlayPortfolio
+        :data="history"
+        :isGo="isGo"
+        @reset="handlerReset"
+        @end-play="isGo = false"
+        class="history_chart_body__item"
+      ></PlayPortfolio>
     </div>
   </div>
 </template>
@@ -46,7 +53,7 @@ export default {
         id,
       }
       try {
-        console.log("OneHistory sendrequest");
+        console.log('OneHistory sendrequest')
         const response = await this.$api.get(message)
         this.init(response.result)
       } catch (err) {
@@ -77,11 +84,16 @@ export default {
   &_body {
     display: flex;
     .history-elem__item {
-      width: 40%
+      width: 40%;
+      // flex-grow: unset;
     }
-    .play{
-      width: 40%
+    .play {
+      width: 40%;
+      // flex-grow: 2;
     }
+    // &__item {
+    //   width: 30%;
+    // }
   }
 }
 </style>

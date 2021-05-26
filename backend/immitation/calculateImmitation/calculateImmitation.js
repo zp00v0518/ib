@@ -84,8 +84,9 @@ function getDataByPeriod(range, data) {
 }
 
 function setStocksToList(dataByPeriod, allStocks, settings) {
-  Object.keys(dataByPeriod).forEach((timestamp) => {
-    const moment = dataByPeriod[timestamp]
+  // Object.keys(dataByPeriod).forEach((timestamp) => {
+    const moment = dataByPeriod;
+    // const moment = dataByPeriod[timestamp]
     Object.keys(moment).forEach((symbol) => {
       if (allStocks[symbol]) {
         const item = moment[symbol]
@@ -96,7 +97,7 @@ function setStocksToList(dataByPeriod, allStocks, settings) {
       item.addData(moment[symbol])
       allStocks[symbol] = item
     })
-  })
+  // })
   return allStocks
 }
 

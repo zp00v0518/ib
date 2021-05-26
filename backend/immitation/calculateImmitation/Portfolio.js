@@ -163,13 +163,11 @@ class Portfolio {
       if (change <= settings.middle) return true
       // if (change >= 1.03) return true
     }
-    const flag =
-      change <= settings.checkSellBottom || change >= settings.checkSellTop
-    return flag
-    // if (item.buyPrice >= item.stock.price) {
-    //   return +item.change < settings.checkSellBottom
-    // }
-    // return +item.change > settings.checkSellTop
+    if (change <= settings.checkSellBottom) return true;
+    if (change >= settings.checkSellTop && item.topBuyCount >= settings.topBuyCount) return true
+    // const flag =
+    //   change <= settings.checkSellBottom || change >= settings.checkSellTop
+    return false
   }
   buyStocks(allStocks) {
     const { curCash, settings } = this

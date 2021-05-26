@@ -314,6 +314,9 @@ export default {
         }
       }
     }
+    .topBuyCount {
+      color: blue;
+    }
   }
 }
 .content_wrap {
