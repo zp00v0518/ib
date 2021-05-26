@@ -11,6 +11,7 @@ const config = require('../../config')
 
 const stosks = new Set(list)
 const matrix = splitArrOnSmallArr(Array.from(stosks), 3)
+matrix.length = 650
 
 async function parse() {
   const browser = await puppeteer.launch(browserConfig)

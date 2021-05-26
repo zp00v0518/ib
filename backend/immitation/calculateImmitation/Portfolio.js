@@ -11,6 +11,7 @@ class Portfolio {
     this.sellCount = 0
     this.bigSell = 0
     this.extraCurcash = 0
+    this.sellCoefList = {}
   }
 
   addStockToPortfolio(stock, qty) {
@@ -96,8 +97,8 @@ class Portfolio {
 
     const topCoef = maxPrice / price
     if (topCoef < settings.checkBuyTop) return false
-    // const bottomCoef = lowPrice / price
-    // if (bottomCoef > settings.checkBuyBottom) return false
+    const bottomCoef = lowPrice / price
+    if (bottomCoef > settings.checkBuyBottom) return false
 
     return true
   }
@@ -112,10 +113,15 @@ class Portfolio {
     this.countCost()
   }
   sellStock(item) {
+    const {change} = item;
     const { settings } = this
     const { checkSellTop } = settings
-    // const maxCoef = 1.3
     const maxCoef = checkSellTop;
+    // const maxCoef = checkSellTop + 0.2
+    const key = change > maxCoef? maxCoef : change.toFixed(2);
+    if (!this.sellCoefList[key]) this.sellCoefList[key] = 0
+    this.sellCoefList[key]++;
+
     // const sellPrice = item.buyPrice * item.change
     const sellPrice =
       item.change > maxCoef ? item.buyPrice * maxCoef : item.stock.price
@@ -126,9 +132,6 @@ class Portfolio {
     //   +item.change > checkSellTop
     //     ? item.buyPrice * checkSellTop
     //     : item.stock.price
-    if (item.change > 4) {
-      console.log()
-    }
     const sum = item.qty * sellPrice
     let x = 0
     if (settings.fix) {
@@ -152,13 +155,10 @@ class Portfolio {
     // избавляюсь от акций, которые пришлось много докупать
     if (settings.buyCount && item.buyCount >= settings.buyCount) {
       if (change <= settings.middle) return true
-      if (change >= 1.03) return true
+      // if (change >= 1.03) return true
     }
     const flag =
       change <= settings.checkSellBottom || change >= settings.checkSellTop
-    if (flag) {
-      console.log()
-    }
     return flag
     // if (item.buyPrice >= item.stock.price) {
     //   return +item.change < settings.checkSellBottom
@@ -268,10 +268,11 @@ class Portfolio {
     const upArr = [true]
     let templateArr = []
     // templateArr = this.getDoubleVFigure();
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       templateArr.push(...downArr)
       templateArr.push(...upArr)
     }
+    templateArr.push(...upArr)
     if (renkoChart.length < templateArr.length) return false
     const checkArr = renkoChart.splice(0 - templateArr.length)
     const flag = checkArr.every((i, index) => {

@@ -3,7 +3,6 @@ const Stock = require('./Stock')
 const Settings = require('./Settings')
 const Portfolio = require('./Portfolio')
 const History = require('./History')
-// const time = require('../../../config').time
 
 function calculateImmitation(allData, ops) {
   // ops.checkSellTop = template_func.getRandomNumber(1.05, 10);
@@ -15,23 +14,19 @@ function calculateImmitation(allData, ops) {
   // ops.buyCount = template_func.getRandomNumber(0, 25)
   // ops.renkoGrow = template_func.getRandomNumber(1, 100)
 
+  const fixedCurcah = ops.curCash
   const settings = new Settings(ops)
   const portfolio = new Portfolio(settings)
   settings.addPortfolio(portfolio)
   settings.setPartPrice()
-  // const { maxLowPeriod, stepTime } = settings
-  // settings.currMoment = settings.currMoment + stepTime
   let allStocks = {}
-  // const log = getLogTemplate()
   console.time('s')
   let count = 0
   const history = new History(settings)
   Object.keys(allData).forEach((timestamp, index) => {
     settings.currMoment = +timestamp
     const start = settings.currMoment
-    // const end = start - maxLowPeriod * time.week
     const dataByPeriod = getDataByPeriod([start, start], allData)
-    // const dataByPeriod = getDataByPeriod([end, start], allData)
     setStocksToList(dataByPeriod, allStocks, settings)
     portfolio.countCost()
     portfolio.sellStocks(timestamp)
@@ -47,6 +42,9 @@ function calculateImmitation(allData, ops) {
       portfolio.addToCurCash(settings.addition)
       count += settings.addition
     }
+    // if (settings.buyCount > 0) {
+    //   portfolio.buyStocksWhoDown()
+    // }
     history.addItem(portfolio, timestamp)
     settings.incrementPortfoliLength(index)
   })
@@ -62,10 +60,12 @@ function calculateImmitation(allData, ops) {
   Кол-во ТОП продаж: ${portfolio.bigSell} 
   Сумма Extra пополнений: ${portfolio.extraCurcash} 
   Довложений:${count}
-  Доходность:${((portfolio.extraCurcash + settings.curCash) /
-    (portfolio.cost + portfolio.fixed)) *
-    100}
+  Доходность:${(
+    ((portfolio.cost + portfolio.fixed) / (count + fixedCurcah)) * 100 -
+    100
+  ).toFixed(2)}%
   `)
+  delete history.sellCoefList;
   return history
 }
 

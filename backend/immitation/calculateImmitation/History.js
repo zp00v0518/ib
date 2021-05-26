@@ -4,6 +4,7 @@ class History {
       this[key] = settings[key]
     })
     this.data = {}
+    this.sellCoefList = null;
     // this.itog = -1
     delete this.portfolio
   }
@@ -14,8 +15,11 @@ class History {
   }
   addItem(portfolio, timestamp) {
     const item = Object.assign({}, portfolio)
+    const sellCoefList = item.sellCoefList
+    this.sellCoefList = sellCoefList;
     delete item.settings
     delete item.list
+    delete item.sellCoefList
     const { list } = portfolio
     this.data[timestamp] = item
     item.list = {}
