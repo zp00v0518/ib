@@ -25,15 +25,19 @@ function calculateImmitation(allData, ops) {
   const history = new History(settings)
   Object.keys(allData).forEach((timestamp, index) => {
     settings.currMoment = +timestamp
-    const start = settings.currMoment
-    const dataByPeriod = getDataByPeriod([start, start], allData)
+    // const start = settings.currMoment
+    const dataByPeriod = allData[timestamp];
+    // const dataByPeriod = getDataByPeriod([start, start], allData)
     setStocksToList(dataByPeriod, allStocks, settings)
     portfolio.countCost()
     portfolio.sellStocks(timestamp)
     settings.setPartPrice()
-    if (settings.buyCount > 0) {
-      portfolio.buyStocksWhoDown()
+    if (settings.topBuyCount > 0) {
+      portfolio.buyStocksWho_UP()
     }
+    // if (settings.buyCount > 0) {
+    //   portfolio.buyStocksWhoDown()
+    // }
     settings.setPartPrice()
     if (settings.partPrice < portfolio.cost) {
       portfolio.buyStocks(allStocks, portfolio)
@@ -42,9 +46,9 @@ function calculateImmitation(allData, ops) {
       portfolio.addToCurCash(settings.addition)
       count += settings.addition
     }
-    // if (settings.buyCount > 0) {
-    //   portfolio.buyStocksWhoDown()
-    // }
+    if (settings.buyCount > 0) {
+      portfolio.buyStocksWhoDown()
+    }
     history.addItem(portfolio, timestamp)
     settings.incrementPortfoliLength(index)
   })

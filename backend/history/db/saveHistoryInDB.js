@@ -9,8 +9,8 @@ const collectionName = config.db.collections.history.name
 const dbName = config.db.name
 
 async function saveHistoryInDB(history) {
-  const updateMethod = new UpdateDB(mongo)
-  await updateMethod.connect(dbName)
+  // const updateMethod = new UpdateDB(mongo)
+  // await updateMethod.connect(dbName)
   const query = Object.assign({}, history)
   delete query.data
   delete query.addCount
@@ -22,10 +22,17 @@ async function saveHistoryInDB(history) {
   const insertMethod = new InsertDB(mongo)
   await insertMethod.connect(dbName)
   history.class = 'history'
-  const x = await insertMethod.one(collectionName, history)
-  await insertMethod.close();
-  const saveHistory = x.ops[0]
-  await updateSettings(saveHistory._id, query)
+  let x
+  try {
+    x = await insertMethod.one(collectionName, history)
+  } catch (err) {
+    console.log(err)
+  }
+  await insertMethod.close()
+  if (x) {
+    const saveHistory = x.ops[0]
+    await updateSettings(saveHistory._id, query)
+  }
 }
 
 async function updateSettings(historyId, query) {

@@ -5,7 +5,7 @@ const splitDataByTime = require('./splitDataByTime')
 
 async function getAllStocks() {
   const find = await getFindMethod()
-  const collectionName = config.db.collections.data2.name
+  const collectionName = config.db.collections.dataUSA.name
   let result = []
   // const findList = await find.one(collectionName, { query: { class: "list" } });
   const findAll = await find.all(collectionName, undefined, {
@@ -46,14 +46,11 @@ async function insertSplitr(obj) {
   const arr = Object.keys(obj).map((key) => {
     const item = obj[key]
     item.timestamp = +key
-    if(key.includes('.')){
-      console.log()
-    }
     return item
   })
   const insertMethod = new InsertDB(mongo)
   await insertMethod.connect(config.db.name)
-  const collectionName = config.db.collections.splitData2.name
+  const collectionName = config.db.collections.splitDataUSA.name
   await insertMethod.many(collectionName, arr)
   await insertMethod.close()
 }

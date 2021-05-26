@@ -6,8 +6,8 @@ const config = {
   db: {
     name: "ib",
     collections: {
-      data: { name: "data" },
-      splitByTime: { name: "splitByTime" },
+      dataUSA: { name: "dataUSA" },
+      splitDataUSA: { name: "splitDataUSA" },
       splitData2: { name: "splitdata2005" },
       checkToBuy: { name: "checkToBuy" },
       data2: { name: "data2005" },

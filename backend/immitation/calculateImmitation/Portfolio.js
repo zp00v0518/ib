@@ -18,12 +18,17 @@ class Portfolio {
     const { list } = this
     const isStock = list[stock.symbol]
     if (isStock) {
+      const { settings } = this
       // докупаю акции и устанавливаю среднюю цену
       const prevCost = isStock.qty * isStock.buyPrice
       isStock.qty += qty
       const middle = (stock.price * qty + prevCost) / isStock.qty
       isStock.buyPrice = middle
-      isStock.buyCount++
+      if (isStock.change <= settings.middle) {
+        isStock.buyCount++
+        return;
+      }
+      if (isStock.change >= settings.topMiddle) isStock.topBuyCount++
       return
     }
     list[stock.symbol] = {
@@ -32,6 +37,7 @@ class Portfolio {
       buyPrice: stock.price,
       dateBuy: stock.timestamp,
       buyCount: 0,
+      topBuyCount: 0,
     }
   }
   reduceCurCash(value) {
@@ -113,14 +119,14 @@ class Portfolio {
     this.countCost()
   }
   sellStock(item) {
-    const {change} = item;
+    const { change } = item
     const { settings } = this
     const { checkSellTop } = settings
-    const maxCoef = checkSellTop;
+    const maxCoef = checkSellTop
     // const maxCoef = checkSellTop + 0.2
-    const key = change > maxCoef? maxCoef : change.toFixed(2);
+    const key = change > maxCoef ? maxCoef : change.toFixed(2)
     if (!this.sellCoefList[key]) this.sellCoefList[key] = 0
-    this.sellCoefList[key]++;
+    this.sellCoefList[key]++
 
     // const sellPrice = item.buyPrice * item.change
     const sellPrice =
@@ -202,12 +208,6 @@ class Portfolio {
     const qty = Math.floor(partPrice / stock.price)
     const purchase = qty * stock.price
     if (curCash < purchase) return
-    if (curCash < 0) {
-      console.log()
-    }
-    if (stock.price === 1) {
-      console.log()
-    }
     this.addStockToPortfolio(stock, qty)
     this.reduceCurCash(purchase)
     this.countCost()
@@ -240,6 +240,21 @@ class Portfolio {
       const portFolioItem = list[symbol]
       if (portFolioItem.change > middle) return
       if (portFolioItem.buyCount >= settings.buyCount) return
+      const stock = portFolioItem.stock
+      if (!stock) return
+      this.buyOneStock(stock)
+      this.countCost()
+    })
+  }
+  buyStocksWho_UP() {
+    const { curCash, settings, list } = this
+    const { topMiddle } = settings
+    if (settings.partPrice > curCash) return
+    Object.keys(list).forEach((symbol) => {
+      if (settings.partPrice > curCash) return
+      const portFolioItem = list[symbol]
+      if (portFolioItem.change < topMiddle) return
+      if (portFolioItem.topBuyCount >= settings.topBuyCount) return
       const stock = portFolioItem.stock
       if (!stock) return
       this.buyOneStock(stock)

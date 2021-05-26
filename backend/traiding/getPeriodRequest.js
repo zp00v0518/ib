@@ -1,4 +1,5 @@
 const { getSymbolsFromPeriod } = require('./db')
+const config = require('../../config');
 
 async function getPeriodRequest(period) {
   const { range, symbols } = period
@@ -10,7 +11,8 @@ async function getPeriodRequest(period) {
     console.log('getPeriodRequest: range length must be 2')
     return
   }
-  const result = await getSymbolsFromPeriod(range, symbols);
+  const colectionName = config.db.collections.splitDataUSA.name
+  const result = await getSymbolsFromPeriod(colectionName, range, symbols);
   return result.result
 }
 

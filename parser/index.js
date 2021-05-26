@@ -23,7 +23,7 @@ async function parse() {
     ++count;
   }
   console.timeEnd("start");
-  const collectionName = config.db.collections.data2.name
+  const collectionName = config.db.collections.dataUSA.name
   await saveResultToDB(result, collectionName);
   // 2075887433
 }
