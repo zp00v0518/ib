@@ -10,7 +10,7 @@ class Portfolio {
     this.settings = settings
     this.sellCount = 0
     this.bigSell = 0
-    this.extraCurcash = 0
+    // this.extraCurcash = 0
     this.sellCoefList = {}
   }
 
@@ -26,7 +26,7 @@ class Portfolio {
       isStock.buyPrice = middle
       if (isStock.change <= settings.middle) {
         isStock.buyCount++
-        return;
+        return
       }
       if (isStock.change >= settings.topMiddle) isStock.topBuyCount++
       return
@@ -84,27 +84,14 @@ class Portfolio {
     const { minMaxArr } = stock
     if (minMaxArr.length < settings.maxLowPeriod) return false
 
-    // const topCoef = maxPrice / price
-    // if (topCoef < settings.checkBuyTop) return false
-
     // const renkoResult = this.checkBuyRenko(minMaxArr)
     // if (!renkoResult) return false
 
-    // const topIndex = 50
-    // const bottomIndex = 5
-    // const topPrice = minMaxArr[minMaxArr.length - topIndex]
-    // const bottomPrice = minMaxArr[minMaxArr.length - bottomIndex]
-    // if (!bottomPrice || !topPrice || !price) return false
-
-    // const bottomCoef = topPrice / bottomPrice
-    // if (bottomCoef < 1.9) return false
-    // const nowCoef = price / bottomPrice
-    // if (nowCoef < 1.1) return false
-
     const topCoef = maxPrice / price
     if (topCoef < settings.checkBuyTop) return false
-    const bottomCoef = lowPrice / price
-    if (bottomCoef > settings.checkBuyBottom) return false
+
+    // const bottomCoef = lowPrice / price
+    // if (bottomCoef > settings.checkBuyBottom) return false
 
     return true
   }
@@ -121,23 +108,16 @@ class Portfolio {
   sellStock(item) {
     const { change } = item
     const { settings } = this
-    const { checkSellTop } = settings
-    const maxCoef = checkSellTop
-    // const maxCoef = checkSellTop + 0.2
+    const { checkSellTop, maxCoef } = settings
+    // const maxCoef = checkSellTop
     const key = change > maxCoef ? maxCoef : change.toFixed(2)
     if (!this.sellCoefList[key]) this.sellCoefList[key] = 0
     this.sellCoefList[key]++
 
-    // const sellPrice = item.buyPrice * item.change
     const sellPrice =
-      item.change > maxCoef ? item.buyPrice * maxCoef : item.stock.price
-    if (item.change > maxCoef) this.bigSell++
+      change > maxCoef ? item.buyPrice * maxCoef : item.stock.price
+    if (change > checkSellTop) this.bigSell++
 
-    // const sellPrice = item.stock.price;
-    // const sellPrice =
-    //   +item.change > checkSellTop
-    //     ? item.buyPrice * checkSellTop
-    //     : item.stock.price
     const sum = item.qty * sellPrice
     let x = 0
     if (settings.fix) {
@@ -163,8 +143,12 @@ class Portfolio {
       if (change <= settings.middle) return true
       // if (change >= 1.03) return true
     }
-    if (change <= settings.checkSellBottom) return true;
-    if (change >= settings.checkSellTop && item.topBuyCount >= settings.topBuyCount) return true
+    if (change <= settings.checkSellBottom) return true
+    if (
+      change >= settings.checkSellTop &&
+      item.topBuyCount >= settings.topBuyCount
+    )
+      return true
     // const flag =
     //   change <= settings.checkSellBottom || change >= settings.checkSellTop
     return false
@@ -175,29 +159,32 @@ class Portfolio {
     const candidateToBy = this.getCandidateToBuy(allStocks)
     const targetStock = this.getRandomStock(candidateToBy)
     if (!targetStock) return
-    this.buyOneStock(targetStock)
+    candidateToBy.forEach(item => {
+      this.buyOneStock(item)
+    })
+    // this.buyOneStock(targetStock)
     // this.buyAllStock(candidateToBy)
   }
-  buyAllStock(arr) {
-    const { settings } = this
-    const { partPrice } = settings
+  // buyAllStock(arr) {
+  //   const { settings } = this
+  //   const { partPrice } = settings
 
-    arr.forEach((stock) => {
-      let qty = Math.floor(partPrice / stock.price)
-      let purchase = qty * stock.price
-      if (this.curCash < purchase) {
-        const add = 100
-        qty = Math.floor(add / stock.price)
-        if (qty < 0) return
-        purchase = qty * stock.price
-        this.addToCurCash(add)
-        this.extraCurcash += add
-      }
-      this.addStockToPortfolio(stock, qty)
-      this.reduceCurCash(purchase)
-      this.countCost()
-    })
-  }
+  //   arr.forEach((stock) => {
+  //     let qty = Math.floor(partPrice / stock.price)
+  //     let purchase = qty * stock.price
+  //     if (this.curCash < purchase) {
+  //       const add = 100
+  //       qty = Math.floor(add / stock.price)
+  //       if (qty < 0) return
+  //       purchase = qty * stock.price
+  //       this.addToCurCash(add)
+  //       this.extraCurcash += add
+  //     }
+  //     this.addStockToPortfolio(stock, qty)
+  //     this.reduceCurCash(purchase)
+  //     this.countCost()
+  //   })
+  // }
 
   buyOneStock(stock) {
     const { settings, curCash } = this

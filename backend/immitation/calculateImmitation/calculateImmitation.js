@@ -4,7 +4,7 @@ const Settings = require('./Settings')
 const Portfolio = require('./Portfolio')
 const History = require('./History')
 
-function calculateImmitation(allData, ops) {
+function calculateImmitation(allData, ops, index) {
   // ops.checkSellTop = template_func.getRandomNumber(1.05, 10);
   // ops.checkBuyTop = template_func.getRandomNumber(1.5, 10);
   // // ops.checkSellTop = +(Math.random()+1).toFixed(2);
@@ -62,14 +62,12 @@ function calculateImmitation(allData, ops) {
   )} 
   Кол-во продаж: ${portfolio.sellCount} 
   Кол-во ТОП продаж: ${portfolio.bigSell} 
-  Сумма Extra пополнений: ${portfolio.extraCurcash} 
   Довложений:${count}
   Доходность:${(
     ((portfolio.cost + portfolio.fixed) / (count + fixedCurcah)) * 100 -
     100
   ).toFixed(2)}%
   `)
-  delete history.sellCoefList;
   return history
 }
 

@@ -22,6 +22,8 @@ class History {
     delete item.sellCoefList
     delete item.bigSell
     delete item.sellCount
+    delete item.timestamp
+ 
     const { list } = portfolio
     this.data[timestamp] = item
     item.list = {}
@@ -38,6 +40,8 @@ class History {
         delete template.minMaxArr
         delete template.lastData
         delete template.settings
+        delete template.lowPrice
+        delete template.maxPrice
         item.list[symbol] = template
         delete template.stock
       })

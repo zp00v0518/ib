@@ -10,6 +10,9 @@
       <span class="play_header__item"
         >Размер портфолио: <span>{{ cost }}</span></span
       >
+      <span class="play_header__item"
+        >Наличные: <span>{{ curCash }}</span></span
+      >
     </div>
     <table class="portfolio__table">
       <thead>
@@ -95,6 +98,7 @@ export default {
       if (!this.isGo || !this.isPlay) return
       const key = this.timeLine[this.lastIndex]
       const item = this.data[key]
+      console.log(item)
       if(!item){
         this.$emit('end-play')
         return;
@@ -108,7 +112,8 @@ export default {
     },
     setCost(item) {
       if(!item) return;
-      this.cost = item.cost.toFixed(2)
+      this.cost = item.cost.toLocaleString()
+      this.curCash = item.curCash.toLocaleString()
       const payload = {
         id: this.id,
         data: [this.cost],
