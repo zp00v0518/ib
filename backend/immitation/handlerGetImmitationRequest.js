@@ -26,7 +26,9 @@ async function handlerGetImmitationRequest(requestData) {
     stockData[timestamp] = item
   })
   for (let i = 0; i < 5000; i++) {
-    let ops = Object.assign({}, settings)
+    delete require.cache[require.resolve('../../config/settings')]
+    const newSettings = require('../../config/settings')
+    let ops = Object.assign({}, newSettings)
     if (listSettings[i]) {
       ops = Object.assign(ops, listSettings[i])
     }

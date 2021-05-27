@@ -84,14 +84,20 @@ class Portfolio {
     const { minMaxArr } = stock
     if (minMaxArr.length < settings.maxLowPeriod) return false
 
-    // const renkoResult = this.checkBuyRenko(minMaxArr)
-    // if (!renkoResult) return false
+    if (settings.renkoArr && settings.renkoArr.length > 0) {
+      const renkoResult = this.checkBuyRenko(minMaxArr)
+      if (!renkoResult) return false
+    }
 
-    const topCoef = maxPrice / price
-    if (topCoef < settings.checkBuyTop) return false
+    if (settings.checkBuyTop > 0) {
+      const topCoef = maxPrice / price
+      if (topCoef < settings.checkBuyTop) return false
+    }
 
-    // const bottomCoef = lowPrice / price
-    // if (bottomCoef > settings.checkBuyBottom) return false
+    if (settings.checkBuyBottom > 0) {
+      const bottomCoef = lowPrice / price
+      if (bottomCoef > settings.checkBuyBottom) return false
+    }
 
     return true
   }
@@ -159,7 +165,7 @@ class Portfolio {
     const candidateToBy = this.getCandidateToBuy(allStocks)
     const targetStock = this.getRandomStock(candidateToBy)
     if (!targetStock) return
-    candidateToBy.forEach(item => {
+    candidateToBy.forEach((item) => {
       this.buyOneStock(item)
     })
     // this.buyOneStock(targetStock)
@@ -264,23 +270,12 @@ class Portfolio {
   checkBuyRenko(minMaxArr) {
     const { settings } = this
     const renkoChart = this.getRenkoChart(minMaxArr, settings.renkoGrow)
-    const downArr = [false, false]
-    const upArr = [true]
-    let templateArr = []
-    // templateArr = this.getDoubleVFigure();
-    for (let i = 0; i < 2; i++) {
-      templateArr.push(...downArr)
-      templateArr.push(...upArr)
-    }
-    templateArr.push(...upArr)
+    let templateArr = settings.renkoArr
     if (renkoChart.length < templateArr.length) return false
     const checkArr = renkoChart.splice(0 - templateArr.length)
     const flag = checkArr.every((i, index) => {
-      return i === templateArr[index]
+      return !!i === !!templateArr[index]
     })
-    if (flag) {
-      console.log()
-    }
     return flag
   }
   getDoubleVFigure(size = 2, length = 2) {
