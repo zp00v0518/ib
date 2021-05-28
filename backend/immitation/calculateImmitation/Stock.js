@@ -12,7 +12,7 @@ class Stock {
     this.lastData = {}
   }
   addData(data) {
-    if (this.data[data.timestamp] || !data.open) return
+    if (this.data[data.timestamp] || !data.open || !data.close) return
     this.data[data.timestamp] = data
     this.timestamp = data.timestamp
     this.lastData = data
@@ -22,32 +22,30 @@ class Stock {
   setPrice(data) {
     if (data.splits) {
       // this.setSplit(data)
-      if (data.splits.denominator < 3){
-        console.log()
-      }
     }
-    this.price = data.close * this.qty
+    // this.price = data.close * this.qty
+    this.price = (data.close + data.open) / 2
   }
   setSplit(data) {
     const { splits } = data
-    this.qty = splits.denominator * this.qty;
+    this.qty = splits.denominator * this.qty
   }
   setMaxLowPrice() {
-    const {minMaxArr, settings} = this;
-    minMaxArr.push(this.price);
-    if (minMaxArr.length > settings.maxLowPeriod){
-      minMaxArr.shift();
+    const { minMaxArr, settings } = this
+    minMaxArr.push(this.price)
+    if (minMaxArr.length > settings.maxLowPeriod) {
+      minMaxArr.shift()
     }
-    if (minMaxArr.length < settings.maxLowPeriod) return;
+    if (minMaxArr.length < settings.maxLowPeriod) return
     this.setMaxPrice()
     this.setLowPrice()
     return
   }
   setLowPrice() {
-    this.lowPrice = Math.min(...this.minMaxArr);
+    this.lowPrice = Math.min(...this.minMaxArr)
   }
   setMaxPrice() {
-    this.maxPrice = Math.max(...this.minMaxArr);
+    this.maxPrice = Math.max(...this.minMaxArr)
   }
 }
 

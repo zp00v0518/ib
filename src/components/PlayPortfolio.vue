@@ -98,7 +98,7 @@ export default {
       if (!this.isGo || !this.isPlay) return
       const key = this.timeLine[this.lastIndex]
       const item = this.data[key]
-      console.log(item)
+      // console.log(item)
       if(!item){
         this.$emit('end-play')
         return;
@@ -116,7 +116,7 @@ export default {
       this.curCash = item.curCash.toLocaleString()
       const payload = {
         id: this.id,
-        data: [this.cost],
+        data: [Math.round(item.cost)],
       }
       this.$store.commit('ADD_DATA_CHART', payload)
     },

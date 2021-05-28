@@ -84,10 +84,7 @@ class Portfolio {
     const { minMaxArr } = stock
     if (minMaxArr.length < settings.maxLowPeriod) return false
 
-    if (settings.renkoArr && settings.renkoArr.length > 0) {
-      const renkoResult = this.checkBuyRenko(minMaxArr)
-      if (!renkoResult) return false
-    }
+
 
     if (settings.checkBuyTop > 0) {
       const topCoef = maxPrice / price
@@ -97,6 +94,10 @@ class Portfolio {
     if (settings.checkBuyBottom > 0) {
       const bottomCoef = lowPrice / price
       if (bottomCoef > settings.checkBuyBottom) return false
+    }
+        if (settings.renkoArr && settings.renkoArr.length > 0) {
+      const renkoResult = this.checkBuyRenko(minMaxArr)
+      if (!renkoResult) return false
     }
 
     return true

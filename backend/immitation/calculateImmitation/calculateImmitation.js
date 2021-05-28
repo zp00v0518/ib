@@ -26,7 +26,7 @@ function calculateImmitation(allData, ops, index) {
   Object.keys(allData).forEach((timestamp, index) => {
     settings.currMoment = +timestamp
     // const start = settings.currMoment
-    const dataByPeriod = allData[timestamp];
+    const dataByPeriod = allData[timestamp]
     // const dataByPeriod = getDataByPeriod([start, start], allData)
     setStocksToList(dataByPeriod, allStocks, settings)
     portfolio.countCost()
@@ -56,17 +56,14 @@ function calculateImmitation(allData, ops, index) {
   history.addCount = count
   console.timeEnd('s')
   // Размер портфолио: ${Math.floor(portfolio.cost + portfolio.fixed)},00
+  const sum = portfolio.cost + portfolio.fixed
   console.log(`
-  Размер портфолио: ${new Intl.NumberFormat('ru-RU').format(
-    portfolio.cost + portfolio.fixed
-  )} 
+  Размер портфолио: ${new Intl.NumberFormat('ru-RU').format(sum)} 
   Кол-во продаж: ${portfolio.sellCount} 
   Кол-во ТОП продаж: ${portfolio.bigSell} 
   Довложений:${count}
-  Доходность:${(
-    ((portfolio.cost + portfolio.fixed) / (count + fixedCurcah)) * 100 -
-    100
-  ).toFixed(2)}%
+  Доходность:${((sum / (count + fixedCurcah)) * 100 - 100).toFixed(2)}%
+  Абсолютный доход: ${new Intl.NumberFormat('ru-RU').format(sum - (fixedCurcah + count))}
   `)
   return history
 }
@@ -83,18 +80,18 @@ function getDataByPeriod(range, data) {
 
 function setStocksToList(dataByPeriod, allStocks, settings) {
   // Object.keys(dataByPeriod).forEach((timestamp) => {
-    const moment = dataByPeriod;
-    // const moment = dataByPeriod[timestamp]
-    Object.keys(moment).forEach((symbol) => {
-      if (allStocks[symbol]) {
-        const item = moment[symbol]
-        allStocks[symbol].addData(item)
-        return
-      }
-      const item = new Stock(symbol, settings)
-      item.addData(moment[symbol])
-      allStocks[symbol] = item
-    })
+  const moment = dataByPeriod
+  // const moment = dataByPeriod[timestamp]
+  Object.keys(moment).forEach((symbol) => {
+    if (allStocks[symbol]) {
+      const item = moment[symbol]
+      allStocks[symbol].addData(item)
+      return
+    }
+    const item = new Stock(symbol, settings)
+    item.addData(moment[symbol])
+    allStocks[symbol] = item
+  })
   // })
   return allStocks
 }

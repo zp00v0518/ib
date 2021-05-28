@@ -8,8 +8,13 @@ function checkToBuy(values) {
   if (!min) return false
   const max = Math.max(...values)
 
-  // if (min / price > settings.checkBuyBottom) return false
-  if (max / price < settings.checkBuyTop) return false
+  if (settings.checkBuyBottom > 0) {
+    if (min / price > settings.checkBuyBottom) return false
+  }
+  
+  if (settings.checkBuyTop > 0) {
+    if (max / price < settings.checkBuyTop) return false
+  }
   console.log('Last price:', '  ', price)
   return true
 }

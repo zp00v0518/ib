@@ -7,8 +7,8 @@ const settings = {
   // currMoment: 1104762600,
   maxLowPeriod: 13 * 7,
   minPriceStock: 0.3,
-  checkBuyBottom: 0,
-  checkBuyTop: 0,
+  checkBuyBottom: 0.5,
+  checkBuyTop: 3,
   checkSellBottom: 0.1,
   middle: 0.4,
   buyCount: 2,
@@ -18,7 +18,7 @@ const settings = {
   topBuyCount: 0,
   fix: 0.1,
   addition: 500,
-  additionPeriod: 180*5,
+  additionPeriod: 180 * 5,
   withDividends: true,
   partPrice: 0,
   maxLengthPortfolio: 200,
@@ -26,7 +26,9 @@ const settings = {
   curCash: 20000,
   full_history: true,
   renkoGrow: 5,
-  renkoArr: [0,1,0,1,1 ]
+  // renkoArr: [],
+  // renkoArr: [0,1, 1],
+  renkoArr: [0, 0, 1, 1],
 }
 
 module.exports = settings
