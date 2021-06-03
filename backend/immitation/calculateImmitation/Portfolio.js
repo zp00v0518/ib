@@ -1,4 +1,5 @@
 const template_func = require('template_func')
+const methods = require('./methods')
 
 class Portfolio {
   constructor(settings) {
@@ -13,6 +14,9 @@ class Portfolio {
     // this.extraCurcash = 0
     this.sellCoefList = {}
   }
+  getRenkoChart = methods.getRenkoChart
+  checkBuyRenko = methods.checkBuyRenko
+  checkToBuy = methods.checkToBuy
 
   addStockToPortfolio(stock, qty) {
     const { list } = this
@@ -73,32 +77,6 @@ class Portfolio {
     const sum = portfolioItem.qty * momentData.dividends.amount
     this.dividends += sum
     this.addToCurCash(sum)
-  }
-  checkToBuy(stock) {
-    const { price, lowPrice, maxPrice } = stock
-    const { settings } = this
-    if (price < settings.minPriceStock) return false
-    // if (price > 1000) return false
-    if (price > settings.partPrice) return false
-    if (!lowPrice || !maxPrice) return false
-    const { minMaxArr } = stock
-    if (minMaxArr.length < settings.maxLowPeriod) return false
-
-    if (settings.checkBuyTop > 0) {
-      const topCoef = maxPrice / price
-      if (topCoef < settings.checkBuyTop) return false
-    }
-
-    if (settings.checkBuyBottom > 0) {
-      const bottomCoef = lowPrice / price
-      if (bottomCoef > settings.checkBuyBottom) return false
-    }
-    if (settings.renkoArr && settings.renkoArr.length > 0) {
-      const renkoResult = this.checkBuyRenko(minMaxArr)
-      if (!renkoResult) return false
-    }
-
-    return true
   }
   sellStocks(timestamp) {
     const { list } = this
@@ -171,6 +149,8 @@ class Portfolio {
     const { curCash, settings } = this
     if (curCash < settings.partPrice) return
     const candidateToBy = this.getCandidateToBuy(allStocks)
+    // const z = candidateToBy.map((i) => i.symbol)
+    // console.log(z)
     const targetStock = this.getRandomStock(candidateToBy)
     if (!targetStock) return
     // candidateToBy.forEach((item) => {
@@ -179,27 +159,6 @@ class Portfolio {
     this.buyOneStock(targetStock)
     // this.buyAllStock(candidateToBy)
   }
-  // buyAllStock(arr) {
-  //   const { settings } = this
-  //   const { partPrice } = settings
-
-  //   arr.forEach((stock) => {
-  //     let qty = Math.floor(partPrice / stock.price)
-  //     let purchase = qty * stock.price
-  //     if (this.curCash < purchase) {
-  //       const add = 100
-  //       qty = Math.floor(add / stock.price)
-  //       if (qty < 0) return
-  //       purchase = qty * stock.price
-  //       this.addToCurCash(add)
-  //       this.extraCurcash += add
-  //     }
-  //     this.addStockToPortfolio(stock, qty)
-  //     this.reduceCurCash(purchase)
-  //     this.countCost()
-  //   })
-  // }
-
   buyOneStock(stock) {
     const { settings, curCash } = this
     const { partPrice } = settings
@@ -222,8 +181,7 @@ class Portfolio {
     })
     const listUse = Object.keys(list)
     candidateToBy = candidateToBy.filter((i) => !listUse.includes(i.symbol))
-    const z = candidateToBy.map((i) => i.symbol)
-    // console.log(z)
+
     return candidateToBy
   }
   getRandomStock(arr) {
@@ -259,32 +217,6 @@ class Portfolio {
       this.buyOneStock(stock)
       this.countCost()
     })
-  }
-  getRenkoChart(arr, persent = 10) {
-    let step = (arr[0] / 100) * persent
-    const result = []
-    let lastValue = arr[0]
-    arr.forEach((i) => {
-      const dif = i - lastValue
-      if (Math.abs(dif) > step) {
-        const flag = dif > 0
-        result.push(flag)
-        lastValue = i
-        step = (i / 100) * persent
-      }
-    })
-    return result
-  }
-  checkBuyRenko(minMaxArr) {
-    const { settings } = this
-    const renkoChart = this.getRenkoChart(minMaxArr, settings.renkoGrow)
-    let templateArr = settings.renkoArr
-    if (renkoChart.length < templateArr.length) return false
-    const checkArr = renkoChart.splice(0 - templateArr.length)
-    const flag = checkArr.every((i, index) => {
-      return !!i === !!templateArr[index]
-    })
-    return flag
   }
   getDoubleVFigure(size = 2, length = 2) {
     const down = Array(size).fill(false)
