@@ -84,8 +84,6 @@ class Portfolio {
     const { minMaxArr } = stock
     if (minMaxArr.length < settings.maxLowPeriod) return false
 
-
-
     if (settings.checkBuyTop > 0) {
       const topCoef = maxPrice / price
       if (topCoef < settings.checkBuyTop) return false
@@ -95,7 +93,7 @@ class Portfolio {
       const bottomCoef = lowPrice / price
       if (bottomCoef > settings.checkBuyBottom) return false
     }
-        if (settings.renkoArr && settings.renkoArr.length > 0) {
+    if (settings.renkoArr && settings.renkoArr.length > 0) {
       const renkoResult = this.checkBuyRenko(minMaxArr)
       if (!renkoResult) return false
     }
@@ -117,12 +115,14 @@ class Portfolio {
     const { settings } = this
     const { checkSellTop, maxCoef } = settings
     // const maxCoef = checkSellTop
-    const key = change > maxCoef ? maxCoef : change.toFixed(2)
+    const key = change > maxCoef && maxCoef !== 0 ? maxCoef : change.toFixed(2)
     if (!this.sellCoefList[key]) this.sellCoefList[key] = 0
     this.sellCoefList[key]++
 
     const sellPrice =
-      change > maxCoef ? item.buyPrice * maxCoef : item.stock.price
+      change > maxCoef && maxCoef !== 0
+        ? item.buyPrice * maxCoef
+        : item.stock.price
     if (change > checkSellTop) this.bigSell++
 
     const sum = item.qty * sellPrice
@@ -142,22 +142,29 @@ class Portfolio {
   checkToSell(item, timestamp) {
     const { change } = item
     const { settings } = this
+    const { topBuyCount, checkSellTop, buyCount, sellRenkoArr } = settings
     // const daysIn = (+timestamp - item.dateBuy) / 60 / 60 / 24
     // if (daysIn > 370 && change > 1.03) return true
 
     // избавляюсь от акций, которые пришлось много докупать
-    if (settings.buyCount && item.buyCount >= settings.buyCount) {
+    if (buyCount && item.buyCount >= buyCount) {
       if (change <= settings.middle) return true
       // if (change >= 1.03) return true
     }
     if (change <= settings.checkSellBottom) return true
-    if (
-      change >= settings.checkSellTop &&
-      item.topBuyCount >= settings.topBuyCount
-    )
-      return true
-    // const flag =
-    //   change <= settings.checkSellBottom || change >= settings.checkSellTop
+    if (change >= checkSellTop) {
+      let flag = true
+      if (sellRenkoArr && sellRenkoArr.length > 0) {
+        const { minMaxArr } = item.stock
+        const renkoArr = this.getRenkoChart(minMaxArr)
+        flag = renkoArr.every((i, index) => {
+          return !!i === !!sellRenkoArr[index]
+        })
+        if (flag) return false
+      }
+      if (item.topBuyCount >= topBuyCount) return true
+    }
+
     return false
   }
   buyStocks(allStocks) {
@@ -166,10 +173,10 @@ class Portfolio {
     const candidateToBy = this.getCandidateToBuy(allStocks)
     const targetStock = this.getRandomStock(candidateToBy)
     if (!targetStock) return
-    candidateToBy.forEach((item) => {
-      this.buyOneStock(item)
-    })
-    // this.buyOneStock(targetStock)
+    // candidateToBy.forEach((item) => {
+    //   this.buyOneStock(item)
+    // })
+    this.buyOneStock(targetStock)
     // this.buyAllStock(candidateToBy)
   }
   // buyAllStock(arr) {
@@ -215,7 +222,7 @@ class Portfolio {
     })
     const listUse = Object.keys(list)
     candidateToBy = candidateToBy.filter((i) => !listUse.includes(i.symbol))
-    // const z = candidateToBy.map(i => i.symbol);
+    const z = candidateToBy.map((i) => i.symbol)
     // console.log(z)
     return candidateToBy
   }

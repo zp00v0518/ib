@@ -4,16 +4,7 @@ const Settings = require('./Settings')
 const Portfolio = require('./Portfolio')
 const History = require('./History')
 
-function calculateImmitation(allData, ops, index) {
-  // ops.checkSellTop = template_func.getRandomNumber(1.05, 10);
-  // ops.checkBuyTop = template_func.getRandomNumber(1.5, 10);
-  // // ops.checkSellTop = +(Math.random()+1).toFixed(2);
-  // // ops.middle = +(Math.random()).toFixed(1);
-  // ops.fix = template_func.getRandomNumber();
-  // // ops.fix = +(Math.random()).toFixed(1);
-  // ops.buyCount = template_func.getRandomNumber(0, 25)
-  // ops.renkoGrow = template_func.getRandomNumber(1, 100)
-
+function calculateImmitation(allData, ops) {
   const fixedCurcah = ops.curCash
   const settings = new Settings(ops)
   const portfolio = new Portfolio(settings)
@@ -35,9 +26,9 @@ function calculateImmitation(allData, ops, index) {
     if (settings.topBuyCount > 0) {
       portfolio.buyStocksWho_UP()
     }
-    // if (settings.buyCount > 0) {
-    //   portfolio.buyStocksWhoDown()
-    // }
+    if (settings.buyCount > 0) {
+      portfolio.buyStocksWhoDown()
+    }
     settings.setPartPrice()
     if (settings.partPrice < portfolio.cost) {
       portfolio.buyStocks(allStocks, portfolio)
@@ -46,9 +37,9 @@ function calculateImmitation(allData, ops, index) {
       portfolio.addToCurCash(settings.addition)
       count += settings.addition
     }
-    if (settings.buyCount > 0) {
-      portfolio.buyStocksWhoDown()
-    }
+    // if (settings.buyCount > 0) {
+    //   portfolio.buyStocksWhoDown()
+    // }
     history.addItem(portfolio, timestamp)
     settings.incrementPortfoliLength(index)
   })
@@ -62,10 +53,10 @@ function calculateImmitation(allData, ops, index) {
   Кол-во продаж: ${portfolio.sellCount} 
   Кол-во ТОП продаж: ${portfolio.bigSell} 
   Довложений:${count}
-  Доходность:${((sum / (count + fixedCurcah)) * 100 - 100).toFixed(2)}%
+  Доходность:${((sum / (count/1.5 + fixedCurcah)) * 100 - 100).toFixed(2)}%
   Абсолютный доход: ${new Intl.NumberFormat('ru-RU').format(sum - (fixedCurcah + count))}
   `)
-  return history
+return history
 }
 
 function getDataByPeriod(range, data) {

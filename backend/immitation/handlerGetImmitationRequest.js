@@ -15,7 +15,8 @@ async function handlerGetImmitationRequest(requestData) {
     data: settings,
   }
   console.time('Запрос')
-  const collectionName = config.db.collections.splitDataUSA.name
+  const collectionName = config.db.collections.splitMacroTrend.name
+  // const collectionName = config.db.collections.splitDataUSA.name
   const allData = await getAllSplitData(settings, collectionName)
   console.timeEnd('Запрос')
   const arr = {}
@@ -23,6 +24,7 @@ async function handlerGetImmitationRequest(requestData) {
     const timestamp = item.timestamp
     delete item._id
     delete item.timestamp
+    delete item.date
     stockData[timestamp] = item
   })
   for (let i = 0; i < 5000; i++) {

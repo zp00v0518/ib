@@ -12,6 +12,7 @@ const config = {
       checkToBuy: { name: "checkToBuy" },
       data2: { name: "data2005" },
       history: { name: "history" },
+      splitMacroTrend: { name: "splitMacroTrend" },
     },
   },
   server: {
