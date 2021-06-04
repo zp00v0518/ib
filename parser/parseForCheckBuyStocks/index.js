@@ -2,12 +2,21 @@ const fs = require('fs')
 const puppeteer = require('puppeteer')
 const browserConfig = require('../browserConfig')
 const parseOneItem = require('./parseOneItem')
-const checkToBuy = require('./checkToBuy')
+// const checkToBuy = require('./checkToBuy')
+const methods = require('../../backend/immitation/calculateImmitation/methods')
 const saveResultToDB = require('../saveResultToDB')
 const splitArrOnSmallArr = require('../splitArrOnSmallArr')
-const list = require('../list').flat(Infinity)
+// const list = require('../list').flat(Infinity)
 const config = require('../../config')
+const settings = require('../../config/settings')
+let list = require('../fromFile/symbol_list.json')
 // list.length = 9;
+
+list = list.map((i) => {
+  let name = i.s.split('/')[0]
+  // return name.replace('.', '_')
+  return name
+})
 
 const stosks = new Set(list)
 const matrix = splitArrOnSmallArr(Array.from(stosks), 3)
@@ -27,6 +36,16 @@ async function parse() {
     })
     const f = await Promise.all(promises)
     result.push(...f)
+    result = result.filter((item) => {
+      const data = item.data[0]
+      if (!data || !data.indicators || !data.indicators.quote || !data.indicators.quote[0] || !data.indicators.quote[0].close) return false;
+      const check = methods.checkToBuy(data.indicators.quote[0].close, settings)
+      // const check = checkToBuy(data.indicators.quote[0].open)
+      return check
+    });
+    const symbolsList = result.map(i => i.symbol);
+    console.log(symbolsList)
+
     ++count
   }
   console.timeEnd('start')
@@ -34,7 +53,7 @@ async function parse() {
   result = result.filter((item) => {
     const data = item.data[0]
     if (!data || !data.indicators || !data.indicators.quote || !data.indicators.quote[0]) return false;
-    const check = checkToBuy(data.indicators.quote[0].close)
+    const check = methods.checkToBuy(data.indicators.quote[0].close, settings)
     // const check = checkToBuy(data.indicators.quote[0].open)
     return check
   });

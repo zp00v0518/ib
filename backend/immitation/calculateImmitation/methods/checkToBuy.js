@@ -1,13 +1,11 @@
 const checkBuyRenko = require('./checkBuyRenko')
 
-function checkToBuy(stock) {
-  const { price, lowPrice, maxPrice } = stock
-  const { settings } = this
+function checkToBuy(stock, settings) {
+  const vars = getVariables(stock)
+  const { price, lowPrice, maxPrice, minMaxArr } = vars
   if (price < settings.minPriceStock) return false
-  // if (price > 1000) return false
-  if (price > settings.partPrice) return false
+  if (settings.partPrice > 0 && price > settings.partPrice) return false
   if (!lowPrice || !maxPrice) return false
-  const { minMaxArr } = stock
   if (minMaxArr.length < settings.maxLowPeriod) return false
 
   if (settings.checkBuyTop > 0) {
@@ -20,11 +18,25 @@ function checkToBuy(stock) {
     if (bottomCoef > settings.checkBuyBottom) return false
   }
   if (settings.renkoArr && settings.renkoArr.length > 0) {
-    const renkoResult = checkBuyRenko(minMaxArr, this.settings)
+    const renkoResult = checkBuyRenko(minMaxArr, settings)
     if (!renkoResult) return false
   }
 
   return true
+}
+
+function getVariables(elem) {
+  if (!Array.isArray(elem)) return elem
+  const price = elem[elem.length - 1]
+  const lowPrice = Math.min(...elem)
+  const maxPrice = Math.max(...elem)
+  const minMaxArr = elem
+  return {
+    price,
+    lowPrice,
+    maxPrice,
+    minMaxArr,
+  }
 }
 
 module.exports = checkToBuy

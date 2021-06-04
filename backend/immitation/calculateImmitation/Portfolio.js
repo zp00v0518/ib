@@ -135,7 +135,8 @@ class Portfolio {
       if (sellRenkoArr && sellRenkoArr.length > 0) {
         const { minMaxArr } = item.stock
         const renkoArr = this.getRenkoChart(minMaxArr)
-        flag = renkoArr.every((i, index) => {
+        const checkArr = renkoArr.splice(0 - sellRenkoArr.length)
+        flag = checkArr.every((i, index) => {
           return !!i === !!sellRenkoArr[index]
         })
         if (flag) return false
@@ -171,11 +172,11 @@ class Portfolio {
     this.countCost()
   }
   getCandidateToBuy(allStocks) {
-    const { list } = this
+    const { list, settings } = this
     let candidateToBy = []
     Object.keys(allStocks).forEach((symbol) => {
       const stock = allStocks[symbol]
-      if (this.checkToBuy(stock)) {
+      if (this.checkToBuy(stock, settings)) {
         candidateToBy.push(stock)
       }
     })
