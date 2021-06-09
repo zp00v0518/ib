@@ -17,7 +17,6 @@ list = list.map((i) => {
   // return name.replace('.', '_')
   return name
 })
-
 const stosks = new Set(list)
 const matrix = splitArrOnSmallArr(Array.from(stosks), 3)
 // matrix.length = 650
@@ -27,6 +26,7 @@ async function parse() {
   let result = []
   let count = 0
   console.time('start')
+  const targetPrice = 'close'
   for (const arr of matrix) {
     console.log(`${count}:  ${arr}`)
     const promises = arr.map(async (symbol) => {
@@ -38,12 +38,24 @@ async function parse() {
     result.push(...f)
     result = result.filter((item) => {
       const data = item.data[0]
-      if (!data || !data.indicators || !data.indicators.quote || !data.indicators.quote[0] || !data.indicators.quote[0].close) return false;
-      const check = methods.checkToBuy(data.indicators.quote[0].close, settings)
+      if (!data?.indicators?.quote?.[0]?.[targetPrice]) return false
+      const check = methods.checkToBuy(
+        data.indicators.quote[0][targetPrice],
+        settings
+      )
       // const check = checkToBuy(data.indicators.quote[0].open)
       return check
-    });
-    const symbolsList = result.map(i => i.symbol);
+    })
+    const symbolsList = result.map((i) => {
+      const data = i.data[0]
+      const arrPrice = data?.indicators?.quote?.[0]?.[targetPrice]
+      const price = arrPrice[arrPrice.length - 1]
+      const item = {
+        symbol: i.symbol,
+        price: new Intl.NumberFormat('ru-RU').format(price)
+      }
+      return item
+    })
     console.log(symbolsList)
 
     ++count
@@ -52,13 +64,26 @@ async function parse() {
   const collectionName = config.db.collections.checkToBuy.name
   result = result.filter((item) => {
     const data = item.data[0]
-    if (!data || !data.indicators || !data.indicators.quote || !data.indicators.quote[0]) return false;
-    const check = methods.checkToBuy(data.indicators.quote[0].close, settings)
+    if (!data?.indicators?.quote?.[0]?.[targetPrice]) return false
+    const check = methods.checkToBuy(data.indicators.quote[0][targetPrice], settings)
     // const check = checkToBuy(data.indicators.quote[0].open)
     return check
-  });
-  const symbolsList = result.map(i => i.symbol);
-  fs.writeFileSync('./parser/parseForCheckBuyStocks/parseResult.json', JSON.stringify(symbolsList));
+  })
+  // const symbolsList = result.map((i) => i.symbol)
+  const symbolsList = result.map((i) => {
+    const data = i.data[0]
+    const arrPrice = data?.indicators?.quote?.[0]?.[targetPrice]
+    const price = arrPrice[arrPrice.length - 1]
+    const item = {
+      symbol: i.symbol,
+      price: new Intl.NumberFormat('ru-RU').format(price)
+    }
+    return item
+  })
+  fs.writeFileSync(
+    './parser/parseForCheckBuyStocks/parseResult.json',
+    JSON.stringify(symbolsList, null, ' ')
+  )
   await saveResultToDB(result, collectionName)
 }
 parse()

@@ -42,6 +42,7 @@ class Portfolio {
       dateBuy: stock.timestamp,
       buyCount: 0,
       topBuyCount: 0,
+      selfCheckSellTop: -999999,
     }
   }
   reduceCurCash(value) {
@@ -105,7 +106,7 @@ class Portfolio {
 
     const sum = item.qty * sellPrice
     let x = 0
-    if (settings.fix) {
+    if (settings.fixSum < this.cost && settings.fix) {
       if (item.change >= checkSellTop) {
         const cream = sum - item.buyPrice * item.qty
         x = cream * settings.fix
@@ -130,9 +131,24 @@ class Portfolio {
       // if (change >= 1.03) return true
     }
     if (change <= settings.checkSellBottom) return true
+    if (change < item.selfCheckSellTop) {
+      if (change <= 1 && change > settings.checkSellBottom){
+        item.selfCheckSellTop = -99999;
+        return false 
+      }
+      return true
+    }
     if (change >= checkSellTop) {
-      let flag = true
+      const coef = (change - 1) / 1.4 + 1
+      const prev = item.selfCheckSellTop
+      item.selfCheckSellTop = prev > coef ? prev : coef
+      if (item.selfCheckSellTop > checkSellTop){
+        const z = Math.random() - 0.3
+        return z < 0;
+      }
+
       if (sellRenkoArr && sellRenkoArr.length > 0) {
+        let flag = true
         const { minMaxArr } = item.stock
         const renkoArr = this.getRenkoChart(minMaxArr)
         const checkArr = renkoArr.splice(0 - sellRenkoArr.length)
@@ -141,7 +157,7 @@ class Portfolio {
         })
         if (flag) return false
       }
-      if (item.topBuyCount >= topBuyCount) return true
+      if (topBuyCount > 0 && item.topBuyCount >= topBuyCount) return true
     }
 
     return false
