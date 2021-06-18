@@ -147,16 +147,16 @@ class Portfolio {
         return z < 0;
       }
 
-      if (sellRenkoArr && sellRenkoArr.length > 0) {
-        let flag = true
-        const { minMaxArr } = item.stock
-        const renkoArr = this.getRenkoChart(minMaxArr)
-        const checkArr = renkoArr.splice(0 - sellRenkoArr.length)
-        flag = checkArr.every((i, index) => {
-          return !!i === !!sellRenkoArr[index]
-        })
-        if (flag) return false
-      }
+      // if (sellRenkoArr && sellRenkoArr.length > 0) {
+      //   let flag = true
+      //   const { minMaxArr } = item.stock
+      //   const renkoArr = this.getRenkoChart(minMaxArr)
+      //   const checkArr = renkoArr.splice(0 - sellRenkoArr.length)
+      //   flag = checkArr.every((i, index) => {
+      //     return !!i === !!sellRenkoArr[index]
+      //   })
+      //   if (flag) return false
+      // }
       if (topBuyCount > 0 && item.topBuyCount >= topBuyCount) return true
     }
 

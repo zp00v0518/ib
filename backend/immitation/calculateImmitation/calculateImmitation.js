@@ -30,7 +30,7 @@ function calculateImmitation(allData, ops) {
       portfolio.buyStocksWhoDown()
     }
     settings.setPartPrice()
-    if (settings.partPrice < portfolio.cost) {
+    if (settings.partPrice < portfolio.cost && Object.values(portfolio.list).length < settings.maxLengthPortfolio) {
       portfolio.buyStocks(allStocks, portfolio)
     }
     if (index % settings.additionPeriod === 0) {
@@ -53,7 +53,7 @@ function calculateImmitation(allData, ops) {
   Кол-во продаж: ${portfolio.sellCount} 
   Кол-во ТОП продаж: ${portfolio.bigSell} 
   Довложений:${count}
-  Доходность:${((sum / (count/1.5 + fixedCurcah)) * 100 - 100).toFixed(2)}%
+  Доходность:${((sum / (count/2 + fixedCurcah)) * 100 - 100).toFixed(2)}%
   Абсолютный доход: ${new Intl.NumberFormat('ru-RU').format(sum - (fixedCurcah + count))}
   `)
 return history

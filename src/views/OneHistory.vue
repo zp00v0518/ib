@@ -77,14 +77,16 @@ export default {
 
 <style lang="scss">
 .history_chart {
-  padding-right: 24px;
+  padding: 24px;
   .history-elem__item {
     width: 100%;
   }
   &_body {
     display: flex;
+    flex-wrap: wrap;
     .history-elem__item {
       width: 40%;
+      min-width: 800px;
       // flex-grow: unset;
     }
     .play {

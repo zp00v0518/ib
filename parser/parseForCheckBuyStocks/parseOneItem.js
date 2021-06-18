@@ -7,7 +7,8 @@ async function parseOneItem(page, symbol) {
   let endPeriod = Math.floor(Date.now() / 1000)
   const weekCount = settings.maxLowPeriod / 7
   const day = 60 * 60 * 24
-  const stepToPast = day * settings.maxLowPeriod + day * 3 * (weekCount + 1)
+  const stepToPast = day * settings.maxLowPeriod + (weekCount + 2 )* 3 * day
+  // const stepToPast = day * settings.maxLowPeriod + day * 3 * (weekCount + 1)
   const pastPeriod = endPeriod - stepToPast
   const query = {
     symbol,

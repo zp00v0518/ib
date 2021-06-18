@@ -6,19 +6,22 @@
           <th>#</th>
           <th>Max result</th>
           <th>Min result</th>
-          <th>Min stock price</th>
-          <th>Add Sum</th>
-          <th>Add Period</th>
           <th>Extra Buy Count</th>
           <th>Extra buy coef</th>
           <th>buy bottom</th>
           <th>buy top</th>
           <th>Renko</th>
+          <th>Renko Arr</th>
+          <th>Max Volatility</th>
+          <th>Min Volatility</th>
           <th>Sell bottom</th>
           <th>Sell top</th>
           <th>Fix</th>
           <th>Portfolio length</th>
           <th>Max-Low period</th>
+          <th>Min stock price</th>
+          <th>Add Sum</th>
+          <th>Add Period</th>
           <th>Include Dividends</th>
         </tr>
       </thead>
@@ -31,19 +34,22 @@
           <td>{{ index + 1 }}</td>
           <td>{{ item.maxCost.toLocaleString(2) }}</td>
           <td>{{ item.minCost.toLocaleString(2) }}</td>
-          <td>{{ item.minPriceStock }}</td>
-          <td>{{ item.addition }}</td>
-          <td>{{ item.additionPeriod }}</td>
           <td>{{ item.buyCount }}</td>
           <td>{{ item.middle }}</td>
           <td>{{ item.checkBuyBottom }}</td>
           <td>{{ item.checkBuyTop }}</td>
           <td>{{ item.renkoGrow }}</td>
+          <td>{{ item.renkoArr.join('-') }}</td>
+          <td>{{ item.minVolatility }}</td>
+          <td>{{ item.maxVolatility }}</td>
           <td>{{ item.checkSellBottom }}</td>
           <td>{{ item.checkSellTop }}</td>
           <td>{{ item.fix.toFixed(2) }}</td>
           <td>{{ item.maxLengthPortfolio }}</td>
           <td>{{ item.maxLowPeriod / 7 }}</td>
+          <td>{{ item.minPriceStock }}</td>
+          <td>{{ item.addition }}</td>
+          <td>{{ item.additionPeriod }}</td>
           <td>{{ item.withDividends ? 'Yes' : 'No' }}</td>
         </tr>
       </tbody>
@@ -80,6 +86,7 @@ export default {
       }
     },
     init(arr) {
+      console.log(arr)
       this.$store.commit('SET_TABLE', arr)
     },
     goToHistory(item) {

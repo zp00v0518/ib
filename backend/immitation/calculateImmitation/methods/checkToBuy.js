@@ -1,4 +1,5 @@
 const checkBuyRenko = require('./checkBuyRenko')
+const checkVolatility = require('./checkVolatility')
 
 function checkToBuy(stock, settings) {
   const vars = getVariables(stock)
@@ -8,12 +9,12 @@ function checkToBuy(stock, settings) {
   if (!lowPrice || !maxPrice) return false
   if (minMaxArr.length < settings.maxLowPeriod) return false
 
-  if (settings.checkBuyTop > 0) {
+  if (settings.checkBuyTop !== undefined && settings.checkBuyTop > 0) {
     const topCoef = maxPrice / price
     if (topCoef < settings.checkBuyTop) return false
   }
 
-  if (settings.checkBuyBottom > 0) {
+  if (settings.checkBuyBottom !== undefined && settings.checkBuyBottom > 0) {
     const bottomCoef = lowPrice / price
     if (bottomCoef > settings.checkBuyBottom) return false
   }
@@ -21,7 +22,11 @@ function checkToBuy(stock, settings) {
     const renkoResult = checkBuyRenko(minMaxArr, settings)
     if (!renkoResult) return false
   }
-
+  const volatility = checkVolatility(minMaxArr)
+  if (settings.minVolatility && volatility < settings.minVolatility)
+    return false
+  if (settings.maxVolatility && volatility > settings.maxVolatility)
+    return false
   return true
 }
 
