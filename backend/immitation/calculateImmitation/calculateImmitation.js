@@ -55,6 +55,7 @@ function calculateImmitation(allData, ops) {
   Довложений:${count}
   Доходность:${((sum / (count/2 + fixedCurcah)) * 100 - 100).toFixed(2)}%
   Абсолютный доход: ${new Intl.NumberFormat('ru-RU').format(sum - (fixedCurcah + count))}
+  Ежегодная доходность: ${((Math.pow(sum /(count/2 + fixedCurcah), 0.1) - 1) * 100).toFixed(2)}%
   `)
 return history
 }

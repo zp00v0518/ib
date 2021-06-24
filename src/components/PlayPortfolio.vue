@@ -10,9 +10,12 @@
       <span class="play_header__item"
         >Размер портфолио: <span>{{ cost }}</span></span
       >
-      <span class="play_header__item"
-        >Наличные: <span>{{ curCash }}</span></span
-      >
+      <span class="play_header__item">
+        Наличные: <span>{{ curCash }}</span>
+      </span>
+      <span class="play_header__item">
+        Потенциал: <span>{{ getPotencial().toFixed(2) }}</span>
+      </span>
     </div>
     <table class="portfolio__table">
       <thead>
@@ -48,8 +51,8 @@
           <td>
             {{ Math.floor((item.timestamp - item.dateBuy) / 60 / 60 / 24) }}
           </td>
-          <td>{{item.buyCount}}</td>
-          <td class="topBuyCount">{{item.topBuyCount}}</td>
+          <td>{{ item.buyCount }}</td>
+          <td class="topBuyCount">{{ item.topBuyCount }}</td>
         </tr>
       </tbody>
     </table>
@@ -71,7 +74,7 @@ export default {
       lastIndex: 0,
       list: {},
       id: this.$route.params.id,
-      timeout: 400
+      timeout: 400,
     }
   },
   watch: {
@@ -99,9 +102,9 @@ export default {
       const key = this.timeLine[this.lastIndex]
       const item = this.data[key]
       // console.log(item)
-      if(!item){
+      if (!item) {
         this.$emit('end-play')
-        return;
+        return
       }
       this.setCost(item)
       this.setList(item)
@@ -111,7 +114,7 @@ export default {
       }, this.timeout)
     },
     setCost(item) {
-      if(!item) return;
+      if (!item) return
       this.cost = item.cost.toLocaleString()
       this.curCash = item.curCash.toLocaleString()
       const payload = {
@@ -121,10 +124,21 @@ export default {
       this.$store.commit('ADD_DATA_CHART', payload)
     },
     setList(item) {
-      if(!item) return;
+      if (!item) return
       const { list } = item
       if (Object.keys(list).length === 0) return
       this.list = list
+    },
+    getPotencial() {
+      const { list } = this
+     let sum = 0;
+     Object.values(list).forEach(stock => {
+       const z = stock.buyPrice * stock.qty
+       const now = z * stock.change;
+       const dif = z - now;
+       sum += dif
+     })
+      return sum
     },
   },
 }

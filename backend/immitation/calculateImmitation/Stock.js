@@ -26,7 +26,8 @@ class Stock {
       // this.setSplit(data)
     }
     // this.price = data.close * this.qty
-    this.price = (data.c + data.o) / 2
+    this.price = data.o
+    // this.price = (data.c + data.o) / 2
     // this.price = (data.close + data.open) / 2
   }
   setSplit(data) {
