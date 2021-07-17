@@ -27,7 +27,7 @@ class Settings {
   }
   incrementPortfoliLength(index) {
     if (!this.icrementPortfolio) return
-    if (index % 365*3 !== 0) return
+    if (index % 365*6 !== 0) return
     this.maxLengthPortfolio++
   }
 }

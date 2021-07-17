@@ -41,6 +41,7 @@ async function handlerGetImmitationRequest(requestData) {
     const key = Math.floor(history.cost + history.fixed)
     arr[key] = z
     delete history.sellCoefList
+    delete history.annualYield
     // arr.push(Math.floor(history.cost + history.fixed))
     await saveHistoryInDB(history)
   }

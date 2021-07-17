@@ -1,298 +1,46 @@
 [
  {
-  "symbol": "PBI",
-  "price": "8,7"
- },
- {
-  "symbol": "IMGN",
-  "price": "6,875"
- },
- {
-  "symbol": "OGI",
-  "price": "3,14"
- },
- {
-  "symbol": "SIFY",
-  "price": "3,73"
- },
- {
-  "symbol": "CLVS",
-  "price": "6,09"
- },
- {
-  "symbol": "VKTX",
-  "price": "6,13"
- },
- {
-  "symbol": "WVE",
-  "price": "7,24"
- },
- {
-  "symbol": "NBEV",
-  "price": "2,488"
- },
- {
-  "symbol": "NH",
-  "price": "2,7"
- },
- {
-  "symbol": "INFI",
-  "price": "3,41"
- },
- {
-  "symbol": "CBAY",
-  "price": "4,84"
- },
- {
   "symbol": "OVID",
-  "price": "4,47"
+  "price": "3,68"
  },
  {
-  "symbol": "CRNT",
-  "price": "4"
- },
- {
-  "symbol": "MBII",
-  "price": "1,81"
- },
- {
-  "symbol": "SQNS",
-  "price": "5,911"
- },
- {
-  "symbol": "LCI",
-  "price": "5,02"
- },
- {
-  "symbol": "ESGC",
-  "price": "1,35"
- },
- {
-  "symbol": "TUSK",
-  "price": "3,93"
- },
- {
-  "symbol": "AGTC",
-  "price": "4,43"
- },
- {
-  "symbol": "OBSV",
-  "price": "3,02"
- },
- {
-  "symbol": "MARK",
-  "price": "1,995"
+  "symbol": "GRTX",
+  "price": "9,4"
  },
  {
   "symbol": "MYMD",
-  "price": "5,805"
+  "price": "5,42"
  },
  {
-  "symbol": "CFRX",
+  "symbol": "EXTN",
   "price": "4,29"
  },
  {
-  "symbol": "SHIP",
-  "price": "1,33"
+  "symbol": "AYLA",
+  "price": "11,62"
  },
  {
-  "symbol": "AQST",
-  "price": "4,13"
- },
- {
-  "symbol": "OTIC",
-  "price": "2,495"
- },
- {
-  "symbol": "HEPA",
-  "price": "2,165"
- },
- {
-  "symbol": "ANIX",
-  "price": "4,24"
- },
- {
-  "symbol": "INPX",
-  "price": "1,18"
- },
- {
-  "symbol": "PETZ",
-  "price": "3,07"
- },
- {
-  "symbol": "COCP",
-  "price": "1,33"
- },
- {
-  "symbol": "BIOL",
-  "price": "0,798"
- },
- {
-  "symbol": "VISL",
-  "price": "2,96"
- },
- {
-  "symbol": "VYNT",
-  "price": "3,95"
- },
- {
-  "symbol": "AVGR",
-  "price": "1,14"
- },
- {
-  "symbol": "LPTX",
-  "price": "1,735"
- },
- {
-  "symbol": "PTE",
-  "price": "1,16"
- },
- {
-  "symbol": "ZSAN",
-  "price": "0,999"
- },
- {
-  "symbol": "ADXN",
-  "price": "10,87"
+  "symbol": "RCAT",
+  "price": "4,51"
  },
  {
   "symbol": "ENTX",
-  "price": "4,43"
- },
- {
-  "symbol": "ELOX",
-  "price": "2,139"
- },
- {
-  "symbol": "CHEK",
-  "price": "1,63"
- },
- {
-  "symbol": "LIFE",
-  "price": "4,855"
+  "price": "5,041"
  },
  {
   "symbol": "SPRT",
-  "price": "4,127"
- },
- {
-  "symbol": "AZRX",
-  "price": "0,877"
- },
- {
-  "symbol": "TOPS",
-  "price": "1,798"
- },
- {
-  "symbol": "RKDA",
-  "price": "2,91"
- },
- {
-  "symbol": "TBLT",
-  "price": "0,867"
- },
- {
-  "symbol": "IO",
-  "price": "2,188"
- },
- {
-  "symbol": "CNET",
-  "price": "2,02"
- },
- {
-  "symbol": "QLGN",
-  "price": "2,11"
- },
- {
-  "symbol": "PULM",
-  "price": "1,07"
- },
- {
-  "symbol": "TLGT",
-  "price": "0,616"
- },
- {
-  "symbol": "CATB",
-  "price": "2,17"
- },
- {
-  "symbol": "CNSP",
-  "price": "2"
- },
- {
-  "symbol": "MTC",
-  "price": "1,865"
- },
- {
-  "symbol": "SNGX",
-  "price": "1,2"
- },
- {
-  "symbol": "AIHS",
-  "price": "1,003"
- },
- {
-  "symbol": "BPTH",
-  "price": "6,6"
- },
- {
-  "symbol": "GHSI",
-  "price": "1,751"
- },
- {
-  "symbol": "ACOR",
-  "price": "4,77"
- },
- {
-  "symbol": "CHNR",
-  "price": "1,52"
- },
- {
-  "symbol": "ATHE",
-  "price": "1,41"
- },
- {
-  "symbol": "PHIO",
-  "price": "2,33"
+  "price": "4,1"
  },
  {
   "symbol": "HTGM",
-  "price": "4,825"
+  "price": "5,05"
  },
  {
-  "symbol": "EVOL",
-  "price": "2,34"
+  "symbol": "CLWT",
+  "price": "4,156"
  },
  {
-  "symbol": "MLND",
-  "price": "1,494"
- },
- {
-  "symbol": "NVFY",
-  "price": "3,25"
- },
- {
-  "symbol": "LYL",
-  "price": "1,68"
- },
- {
-  "symbol": "NTEC",
-  "price": "4,31"
- },
- {
-  "symbol": "ISIG",
-  "price": "7,87"
- },
- {
-  "symbol": "MARPS",
-  "price": "4,755"
- },
- {
-  "symbol": "ADTX",
-  "price": "2,89"
- },
- {
-  "symbol": "SIOX",
-  "price": "2,739"
+  "symbol": "OXBR",
+  "price": "3,049"
  }
 ]

@@ -8,13 +8,13 @@
         }}</span></span
       >
       <span class="play_header__item"
-        >Размер портфолио: <span>{{ cost }}</span></span
+        >Размер портфолио: <span>{{ cost.toLocaleString() }}</span></span
       >
       <span class="play_header__item">
         Наличные: <span>{{ curCash }}</span>
       </span>
       <span class="play_header__item">
-        Потенциал: <span>{{ getPotencial().toFixed(2) }}</span>
+        Потенциал: <span>{{ getPotencial().toFixed(2) }}%</span>
       </span>
     </div>
     <table class="portfolio__table">
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       isPlay: this.isGo,
-      cost: 0,
+      cost: '0',
       timeLine: [],
       lastIndex: 0,
       list: {},
@@ -115,7 +115,7 @@ export default {
     },
     setCost(item) {
       if (!item) return
-      this.cost = item.cost.toLocaleString()
+      this.cost = item.cost
       this.curCash = item.curCash.toLocaleString()
       const payload = {
         id: this.id,
@@ -131,14 +131,15 @@ export default {
     },
     getPotencial() {
       const { list } = this
-     let sum = 0;
-     Object.values(list).forEach(stock => {
-       const z = stock.buyPrice * stock.qty
-       const now = z * stock.change;
-       const dif = z - now;
-       sum += dif
-     })
-      return sum
+      let sum = 0
+      Object.values(list).forEach((stock) => {
+        const z = stock.buyPrice * stock.qty
+        const now = z * stock.change
+        const dif = z - now
+        sum += dif
+      })
+      const percent = (sum / this.cost) * 100
+      return percent
     },
   },
 }

@@ -6,6 +6,7 @@ const History = require('./History')
 
 function calculateImmitation(allData, ops) {
   const fixedCurcah = ops.curCash
+  const startMoment = ops.currMoment
   const settings = new Settings(ops)
   const portfolio = new Portfolio(settings)
   settings.addPortfolio(portfolio)
@@ -30,7 +31,10 @@ function calculateImmitation(allData, ops) {
       portfolio.buyStocksWhoDown()
     }
     settings.setPartPrice()
-    if (settings.partPrice < portfolio.cost && Object.values(portfolio.list).length < settings.maxLengthPortfolio) {
+    if (
+      settings.partPrice < portfolio.cost &&
+      Object.values(portfolio.list).length < settings.maxLengthPortfolio
+    ) {
       portfolio.buyStocks(allStocks, portfolio)
     }
     if (index % settings.additionPeriod === 0) {
@@ -48,16 +52,26 @@ function calculateImmitation(allData, ops) {
   console.timeEnd('s')
   // Размер портфолио: ${Math.floor(portfolio.cost + portfolio.fixed)},00
   const sum = portfolio.cost + portfolio.fixed
+  // ЕКжегодня доходность считается по формуле XIRR
+  const year =
+    new Date().getFullYear() - new Date(startMoment * 1000).getFullYear();
+  console.log('Кол-во лет: ', year)
+  // ежегодня доходность
+  const annualYield =
+    (Math.pow(sum / (count / 2 + fixedCurcah), 1 / year) - 1) * 100
+  history.annualYield = annualYield
   console.log(`
   Размер портфолио: ${new Intl.NumberFormat('ru-RU').format(sum)} 
   Кол-во продаж: ${portfolio.sellCount} 
   Кол-во ТОП продаж: ${portfolio.bigSell} 
   Довложений:${count}
-  Доходность:${((sum / (count/2 + fixedCurcah)) * 100 - 100).toFixed(2)}%
-  Абсолютный доход: ${new Intl.NumberFormat('ru-RU').format(sum - (fixedCurcah + count))}
-  Ежегодная доходность: ${((Math.pow(sum /(count/2 + fixedCurcah), 0.1) - 1) * 100).toFixed(2)}%
+  Доходность:${((sum / (count / 2 + fixedCurcah)) * 100 - 100).toFixed(2)}%
+  Абсолютный доход: ${new Intl.NumberFormat('ru-RU').format(
+    sum - (fixedCurcah + count)
+  )}
+  Ежегодная доходность: ${annualYield.toFixed(2)}%
   `)
-return history
+  return history
 }
 
 function getDataByPeriod(range, data) {
