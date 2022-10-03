@@ -1,6 +1,6 @@
 <template>
   <div class="history_chart" v-if="isReady">
-    <button @click="isGo = !isGo">{{ isGo ? 'Pause' : 'Play' }}</button>
+    <button @click="goPlay">{{ isGo ? 'Pause' : 'Play' }}</button>
     <div class="history_chart_body">
       <HistoryChart
         :data="history"
@@ -28,6 +28,10 @@ export default {
   components: { HistoryChart, PlayPortfolio },
   created() {
     this.getData()
+    document.addEventListener('keyup', this.goPlay)
+  },
+  beforeUnmount(){
+    document.removeEventListener('keyup', this.goPlay)
   },
   data() {
     return {
@@ -42,6 +46,10 @@ export default {
     },
   },
   methods: {
+    goPlay(e){
+      if (e.code !== 'Space') return
+      this.isGo = !this.isGo
+    },
     async getData() {
       const id = this.$route.params.id
       if (this.saveHistory[id]) {

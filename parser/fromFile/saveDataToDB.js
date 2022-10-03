@@ -1,6 +1,7 @@
 const BulkWriteDB = require('../../backend/db/BulkWriteDB')
 const ConnectMongoDB = require('../../backend/db/connectMongoDB.js')
 const config = require('../../config')
+const splitArrOnSmallArr = require('../splitArrOnSmallArr')
 const mongo = new ConnectMongoDB()
 
 async function saveDataToDB(arr = [], collectionName = 'data') {
@@ -11,8 +12,13 @@ async function saveDataToDB(arr = [], collectionName = 'data') {
   const bulkMethod = new BulkWriteDB(mongo)
   await bulkMethod.connect(config.db.name)
   const modifyData = modifyDataForSave(arr)
-  const bulkList = createListBulkWrite(modifyData)
-  await bulkMethod.set(collectionName, bulkList);
+  let bulkList = createListBulkWrite(modifyData)
+  bulkList = splitArrOnSmallArr(bulkList, 100)
+  let count = 0
+  for (const arr of bulkList) {
+    await bulkMethod.set(collectionName, arr);
+    count++
+  }
   await bulkMethod.close();
 }
 

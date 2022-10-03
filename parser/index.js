@@ -3,7 +3,7 @@ const parseOneItem = require("./parseOneItem");
 const saveResultToDB = require("./saveResultToDB");
 const browserConfig = require("./browserConfig");
 const list = require("./list").flat(Infinity);
-const config = require('../config')
+const config = require("../config");
 // list.length = 20;
 
 const stosks = new Set(list);
@@ -17,13 +17,13 @@ async function parse() {
     console.log(`${count}:  ${value}`);
     const page = await browser.newPage();
     const data = await parseOneItem(page, value);
-    if(data){
+    if (data) {
       result.push(data);
     }
     ++count;
   }
   console.timeEnd("start");
-  const collectionName = config.db.collections.dataUSA.name
+  const collectionName = config.db.collections.dataUSA.name;
   await saveResultToDB(result, collectionName);
   // 2075887433
 }

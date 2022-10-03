@@ -39,7 +39,7 @@
           <td>{{ item.checkBuyBottom }}</td>
           <td>{{ item.checkBuyTop }}</td>
           <td>{{ item.renkoGrow }}</td>
-          <td>{{ item.renkoArr.join('-') }}</td>
+          <td>{{ item.renkoArr ? item.renkoArr.join('-') : '-'}}</td>
           <td>{{ item.minVolatility }}</td>
           <td>{{ item.maxVolatility }}</td>
           <td>{{ item.checkSellBottom }}</td>
