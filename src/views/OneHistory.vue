@@ -1,6 +1,10 @@
 <template>
   <div class="history_chart" v-if="isReady">
-    <button @click="goPlay">{{ isGo ? 'Pause' : 'Play' }}</button>
+    <div class="history_chart__btns">
+      <button @click="goPlay">{{ isGo ? 'Pause' : 'Play' }}</button>
+      <button @click="previousStep" :disabled="isGo">Previous Step</button>
+      <button @click="nextStep" :disabled="isGo">Next Step</button>
+    </div>
     <div class="history_chart_body">
       <HistoryChart
         :data="history"
@@ -9,6 +13,7 @@
         class="history_chart_body__item"
       ></HistoryChart>
       <PlayPortfolio
+        ref="playComponent"
         :data="history"
         :isGo="isGo"
         @reset="handlerReset"
@@ -46,8 +51,14 @@ export default {
     },
   },
   methods: {
+    nextStep(){
+      this.$refs.playComponent.nextStep()
+    },
+    previousStep(){
+      this.$refs.playComponent.previousStep()
+    },
     goPlay(e){
-      if (e.code !== 'Space') return
+      if (e.type === "keyup" && e.code !== 'Space') return
       this.isGo = !this.isGo
     },
     async getData() {
@@ -104,6 +115,15 @@ export default {
     // &__item {
     //   width: 30%;
     // }
+  }
+  &__btns{
+    text-align: center;
+    & > button {
+      margin-right: 8px;
+      padding: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
   }
 }
 </style>

@@ -14,15 +14,17 @@ list = list.map((i) => {
 })
 const stosks = new Set(list)
 const matrix = splitArrOnSmallArr(Array.from(stosks), 3)
+const indexStopLastParse = 1850;
+matrix.splice(0, indexStopLastParse-1)
 
 // 997: CO,BOWX,CAPL
 // 996:IDT, ATHA, CLAR
 
 async function parse() {
   const browser = await puppeteer.launch(browserConfig)
-  let count = 1
-  console.time('start')
+  let count = indexStopLastParse
   for (const arr of matrix) {
+    console.time('start')
     let result = []
     console.log(`${count}:  ${arr}`)
     const promises = arr.map(async (symbol) => {
@@ -37,9 +39,9 @@ async function parse() {
     ++count
     const collectionName = config.db.collections.splitMacroTrend.name
     await saveDataToDB(result, collectionName)
+    console.timeEnd('start')
   }
   await browser.close()
-  console.timeEnd('start')
   return
 }
 

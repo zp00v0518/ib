@@ -74,7 +74,7 @@ export default {
       lastIndex: 0,
       list: {},
       id: this.$route.params.id,
-      timeout: 400,
+      timeout: 200,
     }
   },
   watch: {
@@ -82,7 +82,7 @@ export default {
       if (e) {
         this.isPlay = true
       }
-      this.play()
+      this.playWrapper()
     },
     isPlay(e) {
       if (!e) return
@@ -93,27 +93,40 @@ export default {
     this.createTimeline()
   },
   methods: {
+    nextStep(){
+      const nextItem = this.play(this.lastIndex++)
+      this.setCost(nextItem)
+      this.setList(nextItem)
+    },
+    previousStep(){
+      const nextItem = this.play(this.lastIndex--)
+      this.setCost(nextItem, false)
+      this.setList(nextItem)
+    },
     createTimeline() {
       const { data } = this
       this.timeLine = Object.keys(data).sort((a, b) => +a - +b)
     },
-    play() {
+    playWrapper(){
       if (!this.isGo || !this.isPlay) return
-      const key = this.timeLine[this.lastIndex]
+      const nextItem = this.play(this.lastIndex++)
+      this.setCost(nextItem)
+      this.setList(nextItem)
+      setTimeout(() => {
+        this.playWrapper()
+      }, this.timeout)
+
+    },
+    play(index = this.lastIndex) {
+      const key = this.timeLine[index]
       const item = this.data[key]
-      // console.log(item)
       if (!item) {
         this.$emit('end-play')
         return
       }
-      this.setCost(item)
-      this.setList(item)
-      this.lastIndex++
-      setTimeout(() => {
-        this.play()
-      }, this.timeout)
+      return item
     },
-    setCost(item) {
+    setCost(item, step = true) {
       if (!item) return
       this.cost = item.cost
       this.curCash = item.curCash.toLocaleString()
@@ -121,7 +134,8 @@ export default {
         id: this.id,
         data: [Math.round(item.cost)],
       }
-      this.$store.commit('ADD_DATA_CHART', payload)
+      if (step) this.$store.commit('ADD_DATA_CHART', payload)
+      if (!step) this.$store.commit('REMOVE_LAST_DATA_CHART', payload)
     },
     setList(item) {
       if (!item) return
