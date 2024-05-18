@@ -4,6 +4,7 @@ const calculateImmitation = require('./calculateImmitation')
 let settings = require('../../config/settings')
 const { ObjectID } = require('bson')
 const config = require('../../config')
+const newSettings = require('../../config/settings')
 const listSettings = require('./listSettings')
 
 const stockData = {}
@@ -27,10 +28,12 @@ async function handlerGetImmitationRequest(requestData) {
     delete item.date
     stockData[timestamp] = item
   })
-  for (let i = 0; i < 5000; i++) {
-    delete require.cache[require.resolve('../../config/settings')]
-    const newSettings = require('../../config/settings')
-    let ops = Object.assign({}, newSettings)
+  for (let i = 0; i < 111; i++) {
+    console.log('count: ', i)
+    // delete require.cache[require.resolve('../../config/settings')]
+    // const newSettings = require('../../config/settings')
+    // let ops = Object.assign({}, newSettings)
+    let ops = newSettings
     if (listSettings[i]) {
       ops = Object.assign(ops, listSettings[i])
     }

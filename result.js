@@ -1,7 +1,7 @@
-const startSum = 10000
-const persentByYear = 6
+const startSum = 100
+const persentByYear =  10
 const years = 10
-const addSum = 500
+const addSum = 27
 const addsPeriod = 'month'
 // const addsPeriod = 'quater'
 // const addsPeriod = 'years'
@@ -11,6 +11,7 @@ const addsPeriod = 'month'
 // calculateWithAdds(startSum, persentByYear, years, 'quater')
 // calculateWithAdds(startSum, persentByYear, years, 'month')
 // calculateWithAdds(startSum, persentByYear, years, 'quater', { addSum: addSum, period: addsPeriod })
+// calculateWithAdds(startSum, persentByYear, years, 'years', { addSum: addSum, period: addsPeriod })
 
 
 function calculateWithAdds(startSum, persentByYear, years, reinvest = 'years', adds) {
@@ -76,10 +77,18 @@ function l(value) {
   return new Intl.NumberFormat('ru-RU').format(value);
 }
 
-// расчет сложного процента исходя из реальных сум, полученных на начало и конец периода
-const start = 7000
-const end = 7500
-const period = 0.5
-console.log((Math.pow(end / start, 1 / period) - 1) * 100)
+
+const f = 15000
+const start = 16500
+const end = 147000 - f
+const period = 8
+// calcHardPercent(start, end, period)
+// calcHardPercent(25000, 100000, 20)
+
+function calcHardPercent(start, end, period){
+  // расчет сложного процента исходя из реальных сум, полученных на начало и конец периода
+  console.log('Складний відсоток: ',(Math.pow(end / start, 1 / period) - 1) * 100)
 // тоже самое, только простой процент
-console.log((end/start -1)*100)
+console.log('Загальний відсоток: ',((end/start -1)*100))
+console.log('Помісячний відсоток: ', ((end/start -1)*100)/period)
+}

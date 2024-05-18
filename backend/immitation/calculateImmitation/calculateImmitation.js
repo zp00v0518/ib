@@ -12,7 +12,7 @@ function calculateImmitation(allData, ops) {
   settings.addPortfolio(portfolio)
   settings.setPartPrice()
   let allStocks = {}
-  console.time('s')
+  console.time('calculation time')
   let count = 0
   const history = new History(settings)
   Object.keys(allData).forEach((timestamp, index) => {
@@ -49,7 +49,7 @@ function calculateImmitation(allData, ops) {
   })
   history.setItog(portfolio)
   history.addCount = count
-  console.timeEnd('s')
+  console.timeEnd('calculation time')
   // Размер портфолио: ${Math.floor(portfolio.cost + portfolio.fixed)},00
   const sum = portfolio.cost + portfolio.fixed
   // ЕКжегодня доходность считается по формуле XIRR

@@ -14,7 +14,7 @@ list = list.map((i) => {
 })
 const stosks = new Set(list)
 const matrix = splitArrOnSmallArr(Array.from(stosks), 3)
-const indexStopLastParse = 1850;
+const indexStopLastParse = 1872;
 matrix.splice(0, indexStopLastParse-1)
 
 // 997: CO,BOWX,CAPL
