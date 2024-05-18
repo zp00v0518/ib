@@ -6,19 +6,19 @@ const parseOneItem = require('./parseOneItem')
 const saveDataToDB = require('./saveDataToDB')
 const splitArrOnSmallArr = require('../splitArrOnSmallArr')
 const config = require('../../config')
-let list = require('./symbol_list.json')
+// let list = require('./symbol_list.json')
+let list = require('./s&p500_ally_year.json')
 
 list = list.map((i) => {
   let name = i.s.split('/')[0]
   return name.replace('.', '_')
 })
+// console.log(list)
 const stosks = new Set(list)
 const matrix = splitArrOnSmallArr(Array.from(stosks), 3)
-const indexStopLastParse = 1872;
+const indexStopLastParse = 0;
 matrix.splice(0, indexStopLastParse-1)
 
-// 997: CO,BOWX,CAPL
-// 996:IDT, ATHA, CLAR
 
 async function parse() {
   const browser = await puppeteer.launch(browserConfig)

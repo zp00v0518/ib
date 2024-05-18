@@ -56,11 +56,11 @@
 // }
 
 const listSettings = {
-  0: {
-    checkSellTop: 1.1,
-    checkBuyBottom: 0.4,
-    checkBuyTop: 1.5
-  },
+  // 0: {
+  //   checkSellTop: 1.1,
+  //   checkBuyBottom: 0.4,
+  //   checkBuyTop: 1.5
+  // },
   // 30: {
   //   topBuyCount: 2,
   //   checkSellTop: 1.1,

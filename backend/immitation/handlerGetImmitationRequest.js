@@ -28,13 +28,13 @@ async function handlerGetImmitationRequest(requestData) {
     delete item.date
     stockData[timestamp] = item
   })
-  for (let i = 0; i < 111; i++) {
+  for (let i = 0; i < 15; i++) {
     console.log('count: ', i)
     // delete require.cache[require.resolve('../../config/settings')]
     // const newSettings = require('../../config/settings')
     // let ops = Object.assign({}, newSettings)
     let ops = newSettings
-    if (listSettings[i]) {
+    if (listSettings[i] && listSettings[i]) {
       ops = Object.assign(ops, listSettings[i])
     }
     const history = calculateImmitation(stockData, ops, i)
