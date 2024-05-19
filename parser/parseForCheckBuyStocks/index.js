@@ -2,24 +2,31 @@ const fs = require('fs')
 const puppeteer = require('puppeteer')
 const browserConfig = require('../browserConfig')
 const parseOneItem = require('./parseOneItem')
-// const checkToBuy = require('./checkToBuy')
 const methods = require('../../backend/immitation/calculateImmitation/methods')
 const saveResultToDB = require('../saveResultToDB')
 const splitArrOnSmallArr = require('../splitArrOnSmallArr')
 // const list = require('../list').flat(Infinity)
 const config = require('../../config')
 const settings = require('../../config/settings')
-let list = require('../fromFile/symbol_list.json')
-// list.length = 9;
+let list = require('../fromFile/s&p500_ally_year.json')
+const sp500AllYear = require('../fromFile/s&p500_by_year.json')
+// let list = require('../fromFile/symbol_list.json')
 
 list = list.map((i) => {
   let name = i.s.split('/')[0]
   // return name.replace('.', '_')
   return name
 })
-const stosks = new Set(list)
+
+let stosks = new Set(list)
+if(settings.sp500Mode){
+  let lastKey = Object.keys(sp500AllYear)
+  lastKey = lastKey[lastKey.length -1]
+  stosks = sp500AllYear[lastKey].arr
+  console.log(123)
+
+}
 const matrix = splitArrOnSmallArr(Array.from(stosks), 3)
-// matrix.length = 650
 
 async function parse() {
   const browser = await puppeteer.launch(browserConfig)
@@ -43,7 +50,6 @@ async function parse() {
         data.indicators.quote[0][targetPrice],
         settings
       )
-      // const check = checkToBuy(data.indicators.quote[0].open)
       return check
     })
     const symbolsList = result.map((i) => {
@@ -66,7 +72,6 @@ async function parse() {
     const data = item.data[0]
     if (!data?.indicators?.quote?.[0]?.[targetPrice]) return false
     const check = methods.checkToBuy(data.indicators.quote[0][targetPrice], settings)
-    // const check = checkToBuy(data.indicators.quote[0].open)
     return check
   })
   // const symbolsList = result.map((i) => i.symbol)
@@ -87,15 +92,3 @@ async function parse() {
   await saveResultToDB(result, collectionName)
 }
 parse()
-
-// function checkToBuy(values) {
-//   if (!values) return false;
-//   const price = values[values.length - 1]
-//   if (!price || price > 90) return false;
-//   const min = Math.min(...values)
-//   if(!min || min < 0.01) return false;
-//   const max = Math.max(...values)
-//   if (min / price > 0.8) return false
-//   if (max / price < 1.3) return false
-//   return true
-// }

@@ -9,7 +9,7 @@ const listSettings = require('./listSettings')
 
 const stockData = {}
 async function handlerGetImmitationRequest(requestData) {
-  const { type, data } = requestData
+  const { type, data, sp500AllYear } = requestData
   settings = Object.assign(settings, data)
   const message = {
     type,
@@ -28,7 +28,7 @@ async function handlerGetImmitationRequest(requestData) {
     delete item.date
     stockData[timestamp] = item
   })
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 150; i++) {
     console.log('count: ', i)
     // delete require.cache[require.resolve('../../config/settings')]
     // const newSettings = require('../../config/settings')
@@ -37,6 +37,7 @@ async function handlerGetImmitationRequest(requestData) {
     if (listSettings[i] && listSettings[i]) {
       ops = Object.assign(ops, listSettings[i])
     }
+    ops.sp500AllYear = sp500AllYear;
     const history = calculateImmitation(stockData, ops, i)
     const z = Object.assign({}, history)
     delete z.list
@@ -45,6 +46,7 @@ async function handlerGetImmitationRequest(requestData) {
     arr[key] = z
     delete history.sellCoefList
     delete history.annualYield
+    delete history.sp500AllYear
     // arr.push(Math.floor(history.cost + history.fixed))
     await saveHistoryInDB(history)
   }

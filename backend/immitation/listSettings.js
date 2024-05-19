@@ -62,17 +62,18 @@ const listSettings = {
   //   checkBuyTop: 1.5
   // },
   // 30: {
-  //   topBuyCount: 2,
-  //   checkSellTop: 1.1,
-  //   checkBuyBottom: 0.4,
-  //   checkBuyTop: 1.5
+  //   checkSellTop: 1.5,
   // },
   // 60: {
-  //   topBuyCount: 2,
-  //   topMiddle: 1.05,
-  //   checkSellTop: 1.1,
-  //   checkBuyBottom: 0.4,
-  //   checkBuyTop: 1.5
+  //   checkSellTop: 1.6,
+  //   middle: 0.5,
+  // },
+  // 90: {
+  //   checkSellTop: 1.3,
+  // },
+  // 120: {
+  //   checkSellTop: 1.3,
+  //   middle: 0.5,
   // },
 }
 

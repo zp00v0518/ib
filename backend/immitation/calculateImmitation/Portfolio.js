@@ -155,7 +155,8 @@ class Portfolio {
       //   flag = checkArr.every((i, index) => {
       //     return !!i === !!sellRenkoArr[index]
       //   })
-      //   if (flag) return false
+      //   return !flag
+      //   // if (flag) return false
       // }
       if (topBuyCount > 0 && item.topBuyCount >= topBuyCount) return true
     }

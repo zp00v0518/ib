@@ -35,7 +35,13 @@ function calculateImmitation(allData, ops) {
       settings.partPrice < portfolio.cost &&
       Object.values(portfolio.list).length < settings.maxLengthPortfolio
     ) {
-      portfolio.buyStocks(allStocks, portfolio)
+      let stocksFroCheck = allStocks
+      if (settings.sp500Mode) {
+        const newList = getSP500StockByDate(settings, allStocks);
+        if (newList) stocksFroCheck = newList
+      }
+      const g = Object.keys(stocksFroCheck)
+      portfolio.buyStocks(stocksFroCheck, portfolio)
     }
     if (index % settings.additionPeriod === 0) {
       portfolio.addToCurCash(settings.addition)
@@ -85,9 +91,7 @@ function getDataByPeriod(range, data) {
 }
 
 function setStocksToList(dataByPeriod, allStocks, settings) {
-  // Object.keys(dataByPeriod).forEach((timestamp) => {
   const moment = dataByPeriod
-  // const moment = dataByPeriod[timestamp]
   Object.keys(moment).forEach((symbol) => {
     if (allStocks[symbol]) {
       const item = moment[symbol]
@@ -98,8 +102,21 @@ function setStocksToList(dataByPeriod, allStocks, settings) {
     item.addData(moment[symbol])
     allStocks[symbol] = item
   })
-  // })
   return allStocks
+}
+
+function getSP500StockByDate(settings, allStocks) {
+  const { currMoment, sp500AllYear } = settings
+  const list = Object.keys(sp500AllYear).filter(time => +time <= currMoment)
+  if (list.length > 0) {
+    const result = {}
+    const curList = sp500AllYear[list[list.length - 1]].arr
+    curList.forEach(tickerName => {
+      if (allStocks[tickerName]) result[tickerName] = allStocks[tickerName]
+    })
+    return result
+  }
+  return false
 }
 
 module.exports = calculateImmitation

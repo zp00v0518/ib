@@ -1,46 +1,30 @@
 [
  {
-  "symbol": "OVID",
-  "price": "3,68"
+  "symbol": "AMD",
+  "price": "164,47"
  },
  {
-  "symbol": "GRTX",
-  "price": "9,4"
+  "symbol": "BBWI",
+  "price": "50,16"
  },
  {
-  "symbol": "MYMD",
-  "price": "5,42"
+  "symbol": "CTRA",
+  "price": "28,19"
  },
  {
-  "symbol": "EXTN",
-  "price": "4,29"
+  "symbol": "CVX",
+  "price": "162,67"
  },
  {
-  "symbol": "AYLA",
-  "price": "11,62"
+  "symbol": "PEP",
+  "price": "182,19"
  },
  {
-  "symbol": "RCAT",
-  "price": "4,51"
+  "symbol": "PM",
+  "price": "99,83"
  },
  {
-  "symbol": "ENTX",
-  "price": "5,041"
- },
- {
-  "symbol": "SPRT",
-  "price": "4,1"
- },
- {
-  "symbol": "HTGM",
-  "price": "5,05"
- },
- {
-  "symbol": "CLWT",
-  "price": "4,156"
- },
- {
-  "symbol": "OXBR",
-  "price": "3,049"
+  "symbol": "PNW",
+  "price": "78,44"
  }
 ]
