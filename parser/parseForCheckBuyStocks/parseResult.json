@@ -1,30 +1,78 @@
 [
  {
-  "symbol": "AMD",
-  "price": "164,47"
+  "symbol": "ABNB",
+  "price": "130,05"
  },
  {
-  "symbol": "BBWI",
-  "price": "50,16"
+  "symbol": "ALB",
+  "price": "173,405"
  },
  {
-  "symbol": "CTRA",
-  "price": "28,19"
+  "symbol": "AOS",
+  "price": "67,64"
  },
  {
-  "symbol": "CVX",
-  "price": "162,67"
+  "symbol": "APTV",
+  "price": "60,7"
  },
  {
-  "symbol": "PEP",
-  "price": "182,19"
+  "symbol": "BKNG",
+  "price": "176,1"
+ },
+ {
+  "symbol": "BMY",
+  "price": "59,375"
+ },
+ {
+  "symbol": "CHTR",
+  "price": "222,27"
+ },
+ {
+  "symbol": "DAL",
+  "price": "68,682"
+ },
+ {
+  "symbol": "DHR",
+  "price": "194,3"
+ },
+ {
+  "symbol": "HPQ",
+  "price": "18,515"
+ },
+ {
+  "symbol": "HUM",
+  "price": "197,32"
+ },
+ {
+  "symbol": "MTCH",
+  "price": "32,54"
+ },
+ {
+  "symbol": "PANW",
+  "price": "165,09"
  },
  {
   "symbol": "PM",
-  "price": "99,83"
+  "price": "162,095"
  },
  {
-  "symbol": "PNW",
-  "price": "78,44"
+  "symbol": "POOL",
+  "price": "213,61"
+ },
+ {
+  "symbol": "TFX",
+  "price": "119,085"
+ },
+ {
+  "symbol": "TGT",
+  "price": "122,82"
+ },
+ {
+  "symbol": "WELL",
+  "price": "210,21"
+ },
+ {
+  "symbol": "XEL",
+  "price": "83,045"
  }
 ]
